@@ -32,7 +32,7 @@ public class DimensionManageCommand {
 	private static Command<CommandSource> manageCommand() {
 		
 		return context -> {
-			DimensionType dimension = DimensionArgument.func_212592_a( context, "dimension" );
+			DimensionType dimension = DimensionArgument.getDimensionArgument( context, "dimension" );
 			context.getSource().sendFeedback( new StringTextComponent( "Access of " )
 					.appendText( TextHelper.dimensionTypeToName( dimension ) )
 					.appendText( TextHelper.getIsAccessText( ModConfig.isAllowedDimision( dimension ) ) ), false );
@@ -43,7 +43,7 @@ public class DimensionManageCommand {
 	private static Command<CommandSource> grantCommand() {
 		
 		return context -> {
-			DimensionType dimension = DimensionArgument.func_212592_a( context, "dimension" );
+			DimensionType dimension = DimensionArgument.getDimensionArgument( context, "dimension" );
 			ModConfig.setAccess( dimension, true );
 			context.getSource().sendFeedback( new StringTextComponent( "Access of " )
 					.appendText( TextHelper.dimensionTypeToName( dimension ) ).appendText( " is now granted." ),
@@ -55,7 +55,7 @@ public class DimensionManageCommand {
 	private static Command<CommandSource> lockCommand() {
 		
 		return context -> {
-			DimensionType dimension = DimensionArgument.func_212592_a( context, "dimension" );
+			DimensionType dimension = DimensionArgument.getDimensionArgument( context, "dimension" );
 			ModConfig.setAccess( dimension, false );
 			context.getSource().sendFeedback( new StringTextComponent( "Access of " )
 					.appendText( TextHelper.dimensionTypeToName( dimension ) ).appendText( " is now locked." ), true );
