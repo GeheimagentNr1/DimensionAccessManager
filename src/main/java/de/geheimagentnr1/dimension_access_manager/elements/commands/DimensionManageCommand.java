@@ -8,8 +8,9 @@ import de.geheimagentnr1.dimension_access_manager.util.TextHelper;
 import net.minecraft.command.CommandSource;
 import net.minecraft.command.Commands;
 import net.minecraft.command.arguments.DimensionArgument;
+import net.minecraft.util.RegistryKey;
 import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.world.dimension.DimensionType;
+import net.minecraft.world.World;
 
 
 public class DimensionManageCommand {
@@ -32,10 +33,11 @@ public class DimensionManageCommand {
 	private static Command<CommandSource> manageCommand() {
 		
 		return context -> {
-			DimensionType dimension = DimensionArgument.getDimensionArgument( context, "dimension" );
+			RegistryKey<World> dimension = DimensionArgument.getDimensionArgument( context, "dimension" )
+				.func_234923_W_();
 			context.getSource().sendFeedback( new StringTextComponent( "Access of " )
-					.appendText( TextHelper.dimensionTypeToName( dimension ) )
-					.appendText( TextHelper.getIsAccessText( ModConfig.isAllowedDimision( dimension ) ) ), false );
+				.func_240702_b_( TextHelper.dimensionTypeToName( dimension ) )
+				.func_240702_b_( TextHelper.getIsAccessText( ModConfig.isAllowedDimision( dimension ) ) ), false );
 			return 0;
 		};
 	}
@@ -43,10 +45,12 @@ public class DimensionManageCommand {
 	private static Command<CommandSource> grantCommand() {
 		
 		return context -> {
-			DimensionType dimension = DimensionArgument.getDimensionArgument( context, "dimension" );
+			RegistryKey<World> dimension = DimensionArgument.getDimensionArgument( context, "dimension" )
+				.func_234923_W_();
 			ModConfig.setAccess( dimension, true );
 			context.getSource().sendFeedback( new StringTextComponent( "Access of " )
-					.appendText( TextHelper.dimensionTypeToName( dimension ) ).appendText( " is now granted." ),
+					.func_240702_b_( TextHelper.dimensionTypeToName( dimension ) ).func_240702_b_( " is now granted" +
+						"." ),
 				true );
 			return 0;
 		};
@@ -55,10 +59,12 @@ public class DimensionManageCommand {
 	private static Command<CommandSource> lockCommand() {
 		
 		return context -> {
-			DimensionType dimension = DimensionArgument.getDimensionArgument( context, "dimension" );
+			RegistryKey<World> dimension = DimensionArgument.getDimensionArgument( context, "dimension" )
+				.func_234923_W_();
 			ModConfig.setAccess( dimension, false );
 			context.getSource().sendFeedback( new StringTextComponent( "Access of " )
-					.appendText( TextHelper.dimensionTypeToName( dimension ) ).appendText( " is now locked." ), true );
+					.func_240702_b_( TextHelper.dimensionTypeToName( dimension ) ).func_240702_b_( " is now locked." ),
+				true );
 			return 0;
 		};
 	}

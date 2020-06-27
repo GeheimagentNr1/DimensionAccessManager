@@ -5,7 +5,8 @@ import com.electronwill.nightconfig.core.io.WritingMode;
 import de.geheimagentnr1.dimension_access_manager.DimensionAccessManager;
 import de.geheimagentnr1.dimension_access_manager.util.TextHelper;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.world.dimension.DimensionType;
+import net.minecraft.util.RegistryKey;
+import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.fml.loading.FMLPaths;
 import org.apache.logging.log4j.LogManager;
@@ -25,18 +26,16 @@ public class ModConfig {
 	
 	private static ForgeConfigSpec CONFIG;
 	
-	private final static HashMap<DimensionType, ForgeConfigSpec.BooleanValue> DIMENSION_ACCESSES = new HashMap<>();
+	private final static HashMap<RegistryKey<World>, ForgeConfigSpec.BooleanValue> DIMENSION_ACCESSES =
+		new HashMap<>();
 	
 	
 	public static void initConfig( MinecraftServer server ) {
 		
 		BUILDER.comment( "Option for every dimension if the access for the dimension is granted or not:" );
 		BUILDER.push( "dimensions" );
-		server.getWorlds().forEach( serverWorld -> {
-			DimensionType dimension = serverWorld.dimension.getType();
-			DIMENSION_ACCESSES.put( dimension, BUILDER.define( TextHelper.dimensionTypeToName( dimension ),
-				true ) );
-		} );
+		server.getWorlds().forEach( serverWorld -> DIMENSION_ACCESSES.put( serverWorld.func_234923_W_(),
+			BUILDER.define( TextHelper.dimensionTypeToName( serverWorld ), true ) ) );
 		BUILDER.pop();
 		CONFIG = BUILDER.build();
 	}
@@ -54,17 +53,17 @@ public class ModConfig {
 		LOGGER.info( "\"{}\" Config loaded", mod_name );
 	}
 	
-	public static HashMap<DimensionType, ForgeConfigSpec.BooleanValue> getAccessMap() {
+	public static HashMap<RegistryKey<World>, ForgeConfigSpec.BooleanValue> getAccessMap() {
 		
 		return DIMENSION_ACCESSES;
 	}
 	
-	public static void setAccess( DimensionType dimension, boolean granted ) {
+	public static void setAccess( RegistryKey<World> dimension, boolean granted ) {
 		
 		DIMENSION_ACCESSES.get( dimension ).set( granted );
 	}
 	
-	public static boolean isAllowedDimision( DimensionType dimension ) {
+	public static boolean isAllowedDimision( RegistryKey<World> dimension ) {
 		
 		return DIMENSION_ACCESSES.get( dimension ).get();
 	}

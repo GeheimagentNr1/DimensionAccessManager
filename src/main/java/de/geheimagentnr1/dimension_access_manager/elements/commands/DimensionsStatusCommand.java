@@ -19,7 +19,7 @@ public class DimensionsStatusCommand {
 			CommandSource source = context.getSource();
 			ModConfig.getAccessMap().forEach( ( dimensionType, access ) ->
 				source.sendFeedback( new StringTextComponent( TextHelper.dimensionTypeToName( dimensionType ) )
-					.appendText( TextHelper.getIsAccessText( access.get() ) ), false ) );
+					.func_240702_b_( TextHelper.getIsAccessText( access.get() ) ), false ) );
 			return 0;
 		} );
 		dispatcher.register( granted_dimensions );
