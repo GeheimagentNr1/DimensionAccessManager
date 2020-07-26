@@ -18,15 +18,15 @@ import java.util.HashMap;
 public class ModConfig {
 	
 	
-	private final static Logger LOGGER = LogManager.getLogger();
+	private static final Logger LOGGER = LogManager.getLogger();
 	
-	private final static String mod_name = "Dimension Access Manager";
+	private static final String mod_name = "Dimension Access Manager";
 	
-	private final static ForgeConfigSpec.Builder BUILDER = new ForgeConfigSpec.Builder();
+	private static final ForgeConfigSpec.Builder BUILDER = new ForgeConfigSpec.Builder();
 	
 	private static ForgeConfigSpec CONFIG;
 	
-	private final static HashMap<RegistryKey<World>, ForgeConfigSpec.BooleanValue> DIMENSION_ACCESSES =
+	private static final HashMap<RegistryKey<World>, ForgeConfigSpec.BooleanValue> DIMENSION_ACCESSES =
 		new HashMap<>();
 	
 	
