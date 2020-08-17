@@ -3,7 +3,7 @@ package de.geheimagentnr1.dimension_access_manager.elements.commands;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
-import de.geheimagentnr1.dimension_access_manager.config.MainConfig;
+import de.geheimagentnr1.dimension_access_manager.config.ModConfig;
 import de.geheimagentnr1.dimension_access_manager.util.TextHelper;
 import net.minecraft.command.CommandSource;
 import net.minecraft.command.Commands;
@@ -36,8 +36,8 @@ public class DimensionManageCommand {
 			RegistryKey<World> dimension = DimensionArgument.getDimensionArgument( context, "dimension" )
 				.func_234923_W_();
 			context.getSource().sendFeedback( new StringTextComponent( "Access of " )
-				.func_240702_b_( TextHelper.dimensionTypeToName( dimension ) )
-				.func_240702_b_( TextHelper.getIsAccessText( MainConfig.isAllowedDimision( dimension ) ) ), false );
+					.func_240702_b_( TextHelper.dimensionTypeToName( dimension ) )
+					.func_240702_b_( TextHelper.getIsAccessText( ModConfig.isAllowedDimision( dimension ) ) ), false );
 			return 0;
 		};
 	}
@@ -47,7 +47,7 @@ public class DimensionManageCommand {
 		return context -> {
 			RegistryKey<World> dimension = DimensionArgument.getDimensionArgument( context, "dimension" )
 				.func_234923_W_();
-			MainConfig.setAccess( dimension, true );
+			ModConfig.setAccess( dimension, true );
 			context.getSource().sendFeedback( new StringTextComponent( "Access of " )
 					.func_240702_b_( TextHelper.dimensionTypeToName( dimension ) ).func_240702_b_( " is now granted" +
 						"." ),
@@ -61,9 +61,9 @@ public class DimensionManageCommand {
 		return context -> {
 			RegistryKey<World> dimension = DimensionArgument.getDimensionArgument( context, "dimension" )
 				.func_234923_W_();
-			MainConfig.setAccess( dimension, false );
+			ModConfig.setAccess( dimension, false );
 			context.getSource().sendFeedback( new StringTextComponent( "Access of " )
-				.func_240702_b_( TextHelper.dimensionTypeToName( dimension ) ).func_240702_b_( " is now locked." ),
+					.func_240702_b_( TextHelper.dimensionTypeToName( dimension ) ).func_240702_b_( " is now locked." ),
 				true );
 			return 0;
 		};

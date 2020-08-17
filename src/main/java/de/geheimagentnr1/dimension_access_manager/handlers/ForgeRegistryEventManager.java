@@ -1,5 +1,6 @@
 package de.geheimagentnr1.dimension_access_manager.handlers;
 
+import de.geheimagentnr1.dimension_access_manager.config.ModConfig;
 import de.geheimagentnr1.dimension_access_manager.elements.commands.DimensionManageCommand;
 import de.geheimagentnr1.dimension_access_manager.elements.commands.DimensionsStatusCommand;
 import net.minecraftforge.event.RegisterCommandsEvent;
@@ -10,12 +11,14 @@ import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 
 @SuppressWarnings( "unused" )
 @Mod.EventBusSubscriber( bus = Mod.EventBusSubscriber.Bus.FORGE )
-public class ForgeEventManager {
+public class ForgeRegistryEventManager {
 	
 	
 	@SubscribeEvent
 	public static void handlerRegisterCommandsEvent( RegisterCommandsEvent event ) {
 		
+		ModConfig.initConfig( event.getServer() );
+		ModConfig.load();
 		DimensionManageCommand.register( event.getDispatcher() );
 		DimensionsStatusCommand.register( event.getDispatcher() );
 	}
