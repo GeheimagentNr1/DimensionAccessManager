@@ -1,7 +1,8 @@
 package de.geheimagentnr1.dimension_access_manager.util;
 
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.dimension.DimensionType;
+
+import java.util.Objects;
 
 
 public class TextHelper {
@@ -9,11 +10,7 @@ public class TextHelper {
 	
 	public static String dimensionTypeToName( DimensionType dimension ) {
 		
-		ResourceLocation registry_name = dimension.getRegistryName();
-		if( registry_name == null ) {
-			throw new NullPointerException( "Registry Name is null" );
-		}
-		return registry_name.toString();
+		return Objects.requireNonNull( dimension.getRegistryName(), "Registry Name is null" ).toString();
 	}
 	
 	public static String getIsAccessText( boolean granted ) {

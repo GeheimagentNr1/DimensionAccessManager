@@ -17,15 +17,15 @@ import java.util.HashMap;
 public class ModConfig {
 	
 	
-	private final static Logger LOGGER = LogManager.getLogger();
+	private static final Logger LOGGER = LogManager.getLogger();
 	
-	private final static String mod_name = "Dimension Access Manager";
+	private static final String mod_name = "Dimension Access Manager";
 	
-	private final static ForgeConfigSpec.Builder BUILDER = new ForgeConfigSpec.Builder();
+	private static final ForgeConfigSpec.Builder BUILDER = new ForgeConfigSpec.Builder();
 	
 	private static ForgeConfigSpec CONFIG;
 	
-	private final static HashMap<DimensionType, ForgeConfigSpec.BooleanValue> DIMENSION_ACCESSES = new HashMap<>();
+	private static final HashMap<DimensionType, ForgeConfigSpec.BooleanValue> DIMENSION_ACCESSES = new HashMap<>();
 	
 	
 	public static void initConfig( MinecraftServer server ) {

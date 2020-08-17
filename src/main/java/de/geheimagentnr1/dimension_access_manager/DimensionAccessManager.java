@@ -7,5 +7,5 @@ import net.minecraftforge.fml.common.Mod;
 public class DimensionAccessManager {
 	
 	
-	public final static String MODID = "dimension_access_manager";
+	public static final String MODID = "dimension_access_manager";
 }
