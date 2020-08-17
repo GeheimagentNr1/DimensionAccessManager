@@ -2,7 +2,7 @@ package de.geheimagentnr1.dimension_access_manager.elements.commands;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
-import de.geheimagentnr1.dimension_access_manager.config.ModConfig;
+import de.geheimagentnr1.dimension_access_manager.config.MainConfig;
 import de.geheimagentnr1.dimension_access_manager.util.TextHelper;
 import net.minecraft.command.CommandSource;
 import net.minecraft.command.Commands;
@@ -17,7 +17,7 @@ public class DimensionsStatusCommand {
 		LiteralArgumentBuilder<CommandSource> granted_dimensions = Commands.literal( "dimensions_status" );
 		granted_dimensions.executes( context -> {
 			CommandSource source = context.getSource();
-			ModConfig.getAccessMap().forEach( ( dimensionType, access ) ->
+			MainConfig.getAccessMap().forEach( ( dimensionType, access ) ->
 				source.sendFeedback( new StringTextComponent( TextHelper.dimensionTypeToName( dimensionType ) )
 					.func_240702_b_( TextHelper.getIsAccessText( access.get() ) ), false ) );
 			return 0;

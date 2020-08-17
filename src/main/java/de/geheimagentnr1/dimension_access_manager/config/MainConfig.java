@@ -4,7 +4,6 @@ import com.electronwill.nightconfig.core.file.CommentedFileConfig;
 import com.electronwill.nightconfig.core.io.WritingMode;
 import de.geheimagentnr1.dimension_access_manager.DimensionAccessManager;
 import de.geheimagentnr1.dimension_access_manager.util.TextHelper;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.RegistryKey;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeConfigSpec;
@@ -15,7 +14,7 @@ import org.apache.logging.log4j.Logger;
 import java.util.HashMap;
 
 
-public class ModConfig {
+public class MainConfig {
 	
 	
 	private static final Logger LOGGER = LogManager.getLogger();
@@ -24,23 +23,27 @@ public class ModConfig {
 	
 	private static final ForgeConfigSpec.Builder BUILDER = new ForgeConfigSpec.Builder();
 	
-	private static ForgeConfigSpec CONFIG;
+	@SuppressWarnings( "StaticNonFinalField" )
+	public static ForgeConfigSpec CONFIG;
 	
 	private static final HashMap<RegistryKey<World>, ForgeConfigSpec.BooleanValue> DIMENSION_ACCESSES =
 		new HashMap<>();
 	
 	
-	public static void initConfig( MinecraftServer server ) {
+	public static void initConfig() {
 		
 		BUILDER.comment( "Option for every dimension if the access for the dimension is granted or not:" );
 		BUILDER.push( "dimensions" );
+		//TODO
 		server.getWorlds().forEach( serverWorld -> DIMENSION_ACCESSES.put( serverWorld.func_234923_W_(),
 			BUILDER.define( TextHelper.dimensionTypeToName( serverWorld ), true ) ) );
+		DimensionType.getAll().forEach( dimensionType -> DIMENSION_ACCESSES.put( dimensionType,
+			BUILDER.define( TextHelper.dimensionTypeToName( dimensionType ), true ) ) );
 		BUILDER.pop();
 		CONFIG = BUILDER.build();
 	}
 	
-	public static void load() {
+	public static void printConfig() {
 		
 		CommentedFileConfig configData = CommentedFileConfig.builder( FMLPaths.CONFIGDIR.get().resolve(
 			DimensionAccessManager.MODID + ".toml" ) ).sync().autosave().writingMode( WritingMode.REPLACE ).build();
@@ -60,11 +63,19 @@ public class ModConfig {
 	
 	public static void setAccess( RegistryKey<World> dimension, boolean granted ) {
 		
-		DIMENSION_ACCESSES.get( dimension ).set( granted );
+		ForgeConfigSpec.BooleanValue spec = DIMENSION_ACCESSES.get( dimension );
+		if( spec != null ) {
+			spec.set( granted );
+		}
 	}
 	
 	public static boolean isAllowedDimision( RegistryKey<World> dimension ) {
 		
-		return DIMENSION_ACCESSES.get( dimension ).get();
+		ForgeConfigSpec.BooleanValue spec = DIMENSION_ACCESSES.get( dimension );
+		if( spec == null ) {
+			return true;
+		} else {
+			return spec.get();
+		}
 	}
 }
