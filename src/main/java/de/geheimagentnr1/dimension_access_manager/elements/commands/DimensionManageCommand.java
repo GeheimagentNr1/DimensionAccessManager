@@ -34,8 +34,8 @@ public class DimensionManageCommand {
 		return context -> {
 			DimensionType dimension = DimensionArgument.getDimensionArgument( context, "dimension" );
 			context.getSource().sendFeedback( new StringTextComponent( "Access of " )
-					.appendText( TextHelper.dimensionTypeToName( dimension ) )
-					.appendText( TextHelper.getIsAccessText( ModConfig.isAllowedDimision( dimension ) ) ), false );
+				.appendText( TextHelper.dimensionTypeToName( dimension ) )
+				.appendText( TextHelper.getIsAccessText( ModConfig.isAllowedDimision( dimension ) ) ), false );
 			return 0;
 		};
 	}
@@ -58,7 +58,7 @@ public class DimensionManageCommand {
 			DimensionType dimension = DimensionArgument.getDimensionArgument( context, "dimension" );
 			ModConfig.setAccess( dimension, false );
 			context.getSource().sendFeedback( new StringTextComponent( "Access of " )
-					.appendText( TextHelper.dimensionTypeToName( dimension ) ).appendText( " is now locked." ), true );
+				.appendText( TextHelper.dimensionTypeToName( dimension ) ).appendText( " is now locked." ), true );
 			return 0;
 		};
 	}
