@@ -60,11 +60,19 @@ public class ModConfig {
 	
 	public static void setAccess( RegistryKey<World> dimension, boolean granted ) {
 		
-		DIMENSION_ACCESSES.get( dimension ).set( granted );
+		ForgeConfigSpec.BooleanValue value = DIMENSION_ACCESSES.get( dimension );
+		if( value != null ) {
+			value.set( granted );
+		}
 	}
 	
 	public static boolean isAllowedDimision( RegistryKey<World> dimension ) {
 		
-		return DIMENSION_ACCESSES.get( dimension ).get();
+		ForgeConfigSpec.BooleanValue value = DIMENSION_ACCESSES.get( dimension );
+		if( value == null ) {
+			return true;
+		} else {
+			return value.get();
+		}
 	}
 }

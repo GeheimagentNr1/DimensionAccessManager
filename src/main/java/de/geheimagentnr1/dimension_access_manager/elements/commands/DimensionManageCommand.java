@@ -36,8 +36,8 @@ public class DimensionManageCommand {
 			RegistryKey<World> dimension = DimensionArgument.getDimensionArgument( context, "dimension" )
 				.func_234923_W_();
 			context.getSource().sendFeedback( new StringTextComponent( "Access of " )
-					.func_240702_b_( TextHelper.dimensionTypeToName( dimension ) )
-					.func_240702_b_( TextHelper.getIsAccessText( ModConfig.isAllowedDimision( dimension ) ) ), false );
+				.func_240702_b_( TextHelper.dimensionTypeToName( dimension ) )
+				.func_240702_b_( TextHelper.getIsAccessText( ModConfig.isAllowedDimision( dimension ) ) ), false );
 			return 0;
 		};
 	}
@@ -63,7 +63,7 @@ public class DimensionManageCommand {
 				.func_234923_W_();
 			ModConfig.setAccess( dimension, false );
 			context.getSource().sendFeedback( new StringTextComponent( "Access of " )
-					.func_240702_b_( TextHelper.dimensionTypeToName( dimension ) ).func_240702_b_( " is now locked." ),
+				.func_240702_b_( TextHelper.dimensionTypeToName( dimension ) ).func_240702_b_( " is now locked." ),
 				true );
 			return 0;
 		};
