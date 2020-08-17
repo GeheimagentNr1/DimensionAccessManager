@@ -1,6 +1,6 @@
 package de.geheimagentnr1.dimension_access_manager.handlers;
 
-import de.geheimagentnr1.dimension_access_manager.config.ModConfig;
+import de.geheimagentnr1.dimension_access_manager.config.MainConfig;
 import net.minecraftforge.event.entity.EntityTravelToDimensionEvent;
 import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -15,7 +15,7 @@ public class DimensionChangeHandler {
 	@SubscribeEvent
 	public static void handleTravelToDimension( EntityTravelToDimensionEvent event ) {
 		
-		if( !ModConfig.isAllowedDimision( event.getDimension() ) ) {
+		if( !MainConfig.isAllowedDimision( event.getDimension() ) ) {
 			event.setResult( Event.Result.DENY );
 			event.setCanceled( true );
 		}
