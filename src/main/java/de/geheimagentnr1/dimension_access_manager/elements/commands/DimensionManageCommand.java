@@ -3,7 +3,7 @@ package de.geheimagentnr1.dimension_access_manager.elements.commands;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
-import de.geheimagentnr1.dimension_access_manager.config.MainConfig;
+import de.geheimagentnr1.dimension_access_manager.config.ModConfig;
 import de.geheimagentnr1.dimension_access_manager.util.TextHelper;
 import net.minecraft.command.CommandSource;
 import net.minecraft.command.Commands;
@@ -34,8 +34,8 @@ public class DimensionManageCommand {
 		return context -> {
 			DimensionType dimension = DimensionArgument.getDimensionArgument( context, "dimension" );
 			context.getSource().sendFeedback( new StringTextComponent( "Access of " )
-				.appendText( TextHelper.dimensionTypeToName( dimension ) )
-				.appendText( TextHelper.getIsAccessText( MainConfig.isAllowedDimision( dimension ) ) ), false );
+					.appendText( TextHelper.dimensionTypeToName( dimension ) )
+					.appendText( TextHelper.getIsAccessText( ModConfig.isAllowedDimision( dimension ) ) ), false );
 			return 0;
 		};
 	}
@@ -44,7 +44,7 @@ public class DimensionManageCommand {
 		
 		return context -> {
 			DimensionType dimension = DimensionArgument.getDimensionArgument( context, "dimension" );
-			MainConfig.setAccess( dimension, true );
+			ModConfig.setAccess( dimension, true );
 			context.getSource().sendFeedback( new StringTextComponent( "Access of " )
 					.appendText( TextHelper.dimensionTypeToName( dimension ) ).appendText( " is now granted." ),
 				true );
@@ -56,9 +56,9 @@ public class DimensionManageCommand {
 		
 		return context -> {
 			DimensionType dimension = DimensionArgument.getDimensionArgument( context, "dimension" );
-			MainConfig.setAccess( dimension, false );
+			ModConfig.setAccess( dimension, false );
 			context.getSource().sendFeedback( new StringTextComponent( "Access of " )
-				.appendText( TextHelper.dimensionTypeToName( dimension ) ).appendText( " is now locked." ), true );
+					.appendText( TextHelper.dimensionTypeToName( dimension ) ).appendText( " is now locked." ), true );
 			return 0;
 		};
 	}
