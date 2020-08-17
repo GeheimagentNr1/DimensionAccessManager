@@ -13,12 +13,16 @@ import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 @Mod.EventBusSubscriber( bus = Mod.EventBusSubscriber.Bus.FORGE )
 public class ForgeRegistryEventManager {
 	
+	@SubscribeEvent
+	public static void handleServerStartingEvent( FMLServerStartingEvent event ) {
+		
+		ModConfig.initConfig( event.getServer() );
+		ModConfig.load();
+	}
 	
 	@SubscribeEvent
 	public static void handlerRegisterCommandsEvent( RegisterCommandsEvent event ) {
 		
-		ModConfig.initConfig( event.getServer() );
-		ModConfig.load();
 		DimensionManageCommand.register( event.getDispatcher() );
 		DimensionsStatusCommand.register( event.getDispatcher() );
 	}
