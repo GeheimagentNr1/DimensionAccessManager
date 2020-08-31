@@ -8,7 +8,7 @@ import de.geheimagentnr1.dimension_access_manager.util.TextHelper;
 import net.minecraft.command.CommandSource;
 import net.minecraft.command.Commands;
 import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.world.dimension.DimensionType;
+import net.minecraftforge.fml.server.ServerLifecycleHooks;
 
 
 public class DimensionsStatusCommand {
@@ -19,9 +19,9 @@ public class DimensionsStatusCommand {
 		LiteralArgumentBuilder<CommandSource> granted_dimensions = Commands.literal( "dimensions_status" );
 		granted_dimensions.executes( context -> {
 			CommandSource source = context.getSource();
-			DimensionType.getAll().forEach( dimensionType ->
-				source.sendFeedback( new StringTextComponent( TextHelper.dimensionTypeToName( dimensionType ) )
-						.func_240702_b_( TextHelper.getIsAccessText( MainConfig.isAllowedDimision( dimensionType ) ) ),
+			ServerLifecycleHooks.getCurrentServer().getWorlds().forEach( dimension ->
+				source.sendFeedback( new StringTextComponent( TextHelper.dimensionTypeToName( dimension ) )
+						.func_240702_b_( TextHelper.getIsAccessText( MainConfig.isAllowedDimision( dimension ) ) ),
 					false ) );
 			return Command.SINGLE_SUCCESS;
 		} );

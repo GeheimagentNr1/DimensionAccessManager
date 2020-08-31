@@ -1,12 +1,19 @@
 package de.geheimagentnr1.dimension_access_manager.config;
 
+import net.minecraft.util.RegistryKey;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.dimension.DimensionType;
+import net.minecraft.util.registry.Registry;
+import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.ForgeConfigSpec;
+import net.minecraftforge.fml.server.ServerLifecycleHooks;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.TreeSet;
 
 
 @SuppressWarnings( "SynchronizationOnStaticField" )
@@ -25,8 +32,7 @@ public class MainConfig {
 	
 	private static final ForgeConfigSpec.EnumValue<DimensionListType> DIMENSION_LIST_TYPE;
 	
-	private static final TreeSet<DimensionType> dimensions = new TreeSet<>(
-		Comparator.comparingInt( DimensionType::getId ) );
+	private static final TreeSet<RegistryKey<World>> dimensions = new TreeSet<>();
 	
 	static {
 		
@@ -66,11 +72,13 @@ public class MainConfig {
 			for( String read_dimension : read_dimensions ) {
 				ResourceLocation registry_name = ResourceLocation.tryCreate( read_dimension );
 				if( registry_name != null ) {
-					DimensionType dimension = DimensionType.byName( registry_name );
-					if( dimension == null ) {
+					RegistryKey<World> registrykey = RegistryKey.func_240903_a_( Registry.field_239699_ae_,
+						registry_name );
+					ServerWorld serverworld = ServerLifecycleHooks.getCurrentServer().getWorld( registrykey );
+					if( serverworld == null ) {
 						LOGGER.warn( "Removed unknown dimension: {}", read_dimension );
 					} else {
-						dimensions.add( dimension );
+						dimensions.add( registrykey );
 					}
 				} else {
 					LOGGER.warn( "Removed invalid dimension registry name {}", read_dimension );
@@ -87,8 +95,8 @@ public class MainConfig {
 		ArrayList<String> registryNames = new ArrayList<>();
 		
 		synchronized( dimensions ) {
-			for( DimensionType dimension : dimensions ) {
-				registryNames.add( Objects.requireNonNull( dimension.getRegistryName() ).toString() );
+			for( RegistryKey<World> dimension : dimensions ) {
+				registryNames.add( dimension.func_240901_a_().toString() );
 			}
 		}
 		return registryNames;
@@ -99,10 +107,10 @@ public class MainConfig {
 		ArrayList<String> newDimensionRegistryNames = new ArrayList<>();
 		
 		synchronized( dimensions ) {
-			for( DimensionType dimensionType : DimensionType.getAll() ) {
-				if( !dimensions.contains( dimensionType ) ) {
-					newDimensionRegistryNames.add(
-						Objects.requireNonNull( dimensionType.getRegistryName() ).toString() );
+			for( ServerWorld serverWorld : ServerLifecycleHooks.getCurrentServer().getWorlds() ) {
+				RegistryKey<World> registryKey = serverWorld.func_234923_W_();
+				if( !dimensions.contains( registryKey ) ) {
+					newDimensionRegistryNames.add( registryKey.func_240901_a_().toString() );
 				}
 			}
 		}
@@ -111,7 +119,7 @@ public class MainConfig {
 		checkAndPrintConfig();
 	}
 	
-	public static boolean isAllowedDimision( DimensionType dimension ) {
+	public static boolean isAllowedDimision( RegistryKey<World> dimension ) {
 		
 		boolean isInList;
 		
@@ -125,25 +133,32 @@ public class MainConfig {
 		}
 	}
 	
-	public static void grantDimensionAccess( DimensionType dimension ) {
+	public static boolean isAllowedDimision( ServerWorld dimension ) {
 		
+		return isAllowedDimision( dimension.func_234923_W_() );
+	}
+	
+	public static void grantDimensionAccess( ServerWorld dimension ) {
+		
+		RegistryKey<World> dimensionKey = dimension.func_234923_W_();
 		synchronized( dimensions ) {
 			if( getDimensionListType() == DimensionListType.LOCK_LIST ) {
-				dimensions.remove( dimension );
+				dimensions.remove( dimensionKey );
 			} else {
-				dimensions.add( dimension );
+				dimensions.add( dimensionKey );
 			}
 			DIMENSIONS.set( dimensionsToRegistryNameList() );
 		}
 	}
 	
-	public static void lockDimensionAccess( DimensionType dimension ) {
+	public static void lockDimensionAccess( ServerWorld dimension ) {
 		
+		RegistryKey<World> dimensionKey = dimension.func_234923_W_();
 		synchronized( dimensions ) {
 			if( getDimensionListType() == DimensionListType.GRANT_LIST ) {
-				dimensions.remove( dimension );
+				dimensions.remove( dimensionKey );
 			} else {
-				dimensions.add( dimension );
+				dimensions.add( dimensionKey );
 			}
 			DIMENSIONS.set( dimensionsToRegistryNameList() );
 		}

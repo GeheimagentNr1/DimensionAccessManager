@@ -5,7 +5,6 @@ import net.minecraftforge.event.RegisterCommandsEvent;
 import de.geheimagentnr1.dimension_access_manager.elements.commands.dimension.DimensionManageCommand;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 
 
 @SuppressWarnings( "unused" )

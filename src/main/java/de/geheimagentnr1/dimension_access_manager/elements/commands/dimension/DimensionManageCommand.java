@@ -5,6 +5,7 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.BoolArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import de.geheimagentnr1.dimension_access_manager.config.DimensionListType;
 import de.geheimagentnr1.dimension_access_manager.config.MainConfig;
 import de.geheimagentnr1.dimension_access_manager.util.TextHelper;
@@ -12,7 +13,8 @@ import net.minecraft.command.CommandSource;
 import net.minecraft.command.Commands;
 import net.minecraft.command.arguments.DimensionArgument;
 import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.world.dimension.DimensionType;
+import net.minecraft.world.server.ServerWorld;
+import net.minecraftforge.fml.server.ServerLifecycleHooks;
 
 
 @SuppressWarnings( "SameReturnValue" )
@@ -40,34 +42,34 @@ public class DimensionManageCommand {
 		dispatcher.register( dimension );
 	}
 	
-	private static int showDimensionStatus( CommandContext<CommandSource> context ) {
+	private static int showDimensionStatus( CommandContext<CommandSource> context ) throws CommandSyntaxException {
 		
 		CommandSource source = context.getSource();
-		DimensionType dimension = DimensionArgument.getDimensionArgument( context, "dimension" );
+		ServerWorld dimension = DimensionArgument.getDimensionArgument( context, "dimension" );
 		source.sendFeedback( new StringTextComponent( "Access of " )
-			.appendText( TextHelper.dimensionTypeToName( dimension ) )
-			.appendText( TextHelper.getIsAccessText( MainConfig.isAllowedDimision( dimension ) ) ), false );
+			.func_240702_b_( TextHelper.dimensionTypeToName( dimension ) )
+			.func_240702_b_( TextHelper.getIsAccessText( MainConfig.isAllowedDimision( dimension ) ) ), false );
 		return Command.SINGLE_SUCCESS;
 	}
 	
-	private static int grantDimension( CommandContext<CommandSource> context ) {
+	private static int grantDimension( CommandContext<CommandSource> context ) throws CommandSyntaxException {
 		
 		CommandSource source = context.getSource();
-		DimensionType dimension = DimensionArgument.getDimensionArgument( context, "dimension" );
+		ServerWorld dimension = DimensionArgument.getDimensionArgument( context, "dimension" );
 		MainConfig.grantDimensionAccess( dimension );
 		source.sendFeedback( new StringTextComponent( "Access of " )
-				.appendText( TextHelper.dimensionTypeToName( dimension ) ).appendText( " is now granted." ),
+				.func_240702_b_( TextHelper.dimensionTypeToName( dimension ) ).func_240702_b_( " is now granted." ),
 			true );
 		return Command.SINGLE_SUCCESS;
 	}
 	
-	private static int lockDimension( CommandContext<CommandSource> context ) {
+	private static int lockDimension( CommandContext<CommandSource> context ) throws CommandSyntaxException {
 		
 		CommandSource source = context.getSource();
-		DimensionType dimension = DimensionArgument.getDimensionArgument( context, "dimension" );
+		ServerWorld dimension = DimensionArgument.getDimensionArgument( context, "dimension" );
 		MainConfig.lockDimensionAccess( dimension );
 		source.sendFeedback( new StringTextComponent( "Access of " )
-			.appendText( TextHelper.dimensionTypeToName( dimension ) ).appendText( " is now locked." ), true );
+			.func_240702_b_( TextHelper.dimensionTypeToName( dimension ) ).func_240702_b_( " is now locked." ), true );
 		return Command.SINGLE_SUCCESS;
 	}
 	
@@ -76,7 +78,7 @@ public class DimensionManageCommand {
 		CommandSource source = context.getSource();
 		
 		source.sendFeedback( new StringTextComponent( "Dimension List Type: " )
-			.appendText( MainConfig.getDimensionListType().name() ), false );
+			.func_240702_b_( MainConfig.getDimensionListType().name() ), false );
 		return Command.SINGLE_SUCCESS;
 	}
 	
@@ -91,10 +93,10 @@ public class DimensionManageCommand {
 			MainConfig.invertDimensions();
 		}
 		source.sendFeedback( new StringTextComponent( "Dimension List Type set to: " )
-			.appendText( MainConfig.getDimensionListType().name() ), false );
-		DimensionType.getAll().forEach( dimensionType ->
-			source.sendFeedback( new StringTextComponent( TextHelper.dimensionTypeToName( dimensionType ) )
-					.appendText( TextHelper.getIsAccessText( MainConfig.isAllowedDimision( dimensionType ) ) ),
+			.func_240702_b_( MainConfig.getDimensionListType().name() ), false );
+		ServerLifecycleHooks.getCurrentServer().getWorlds().forEach( dimension ->
+			source.sendFeedback( new StringTextComponent( TextHelper.dimensionTypeToName( dimension ) )
+					.func_240702_b_( TextHelper.getIsAccessText( MainConfig.isAllowedDimision( dimension ) ) ),
 				false ) );
 		return Command.SINGLE_SUCCESS;
 	}
