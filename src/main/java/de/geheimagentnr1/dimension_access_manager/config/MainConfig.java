@@ -113,15 +113,13 @@ public class MainConfig {
 	
 	public static boolean isAllowedDimision( DimensionType dimension ) {
 		
-		boolean isInList;
-		
 		synchronized( dimensions ) {
-			isInList = dimensions.contains( dimension );
-		}
-		if( getDimensionListType() == DimensionListType.GRANT_LIST ) {
-			return isInList;
-		} else {
-			return !isInList;
+			boolean isInList = dimensions.contains( dimension );
+			if( getDimensionListType() == DimensionListType.GRANT_LIST ) {
+				return isInList;
+			} else {
+				return !isInList;
+			}
 		}
 	}
 	
