@@ -54,16 +54,28 @@ public class MainConfig {
 		CONFIG = BUILDER.build();
 	}
 	
-	public static void checkAndPrintConfig() {
+	private static void printConfig() {
 		
-		checkCorrectAndReadDimensions();
-		LOGGER.info( "Loading \"{}\" Config", mod_name );
 		LOGGER.info( "{} = {}", DIMENSIONS.getPath(), DIMENSIONS.get() );
 		LOGGER.info( "{} = {}", DIMENSION_LIST_TYPE.getPath(), DIMENSION_LIST_TYPE.get() );
+	}
+	
+	public static void printLoadedConfig() {
+		
+		LOGGER.info( "Loading \"{}\" Config", mod_name );
+		printConfig();
 		LOGGER.info( "\"{}\" Config loaded", mod_name );
 	}
 	
-	private static void checkCorrectAndReadDimensions() {
+	public static void checkAndPrintConfig() {
+		
+		if( checkCorrectAndReadDimensions() ) {
+			LOGGER.info( "\"{}\" Config corrected", mod_name );
+			printConfig();
+		}
+	}
+	
+	private static boolean checkCorrectAndReadDimensions() {
 		
 		ArrayList<String> read_dimensions = new ArrayList<>( DIMENSIONS.get() );
 		
@@ -86,7 +98,9 @@ public class MainConfig {
 			}
 			if( DIMENSIONS.get().size() != dimensions.size() ) {
 				DIMENSIONS.set( dimensionsToRegistryNameList() );
+				return true;
 			}
+			return false;
 		}
 	}
 	

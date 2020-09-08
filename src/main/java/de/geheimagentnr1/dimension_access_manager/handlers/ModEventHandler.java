@@ -14,12 +14,12 @@ public class ModEventHandler {
 	@SubscribeEvent
 	public static void handleModConfigLoadingEvent( ModConfig.Loading event ) {
 		
-		MainConfig.checkAndPrintConfig();
+		MainConfig.printLoadedConfig();
 	}
 	
 	@SubscribeEvent
 	public static void handleModConfigReloadingEvent( ModConfig.Reloading event ) {
 		
-		MainConfig.checkAndPrintConfig();
+		MainConfig.printLoadedConfig();
 	}
 }
