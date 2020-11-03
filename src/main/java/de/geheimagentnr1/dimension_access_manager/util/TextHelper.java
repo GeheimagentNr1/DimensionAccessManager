@@ -8,7 +8,7 @@ public class TextHelper {
 	
 	public static String dimensionTypeToName( ServerWorld dimension ) {
 		
-		return dimension.func_234923_W_().func_240901_a_().toString();
+		return dimension.getDimensionKey().getLocation().toString();
 	}
 	
 	public static String getIsAccessText( boolean granted ) {

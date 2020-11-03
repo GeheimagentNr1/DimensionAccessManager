@@ -21,7 +21,7 @@ public class DimensionsStatusCommand {
 			CommandSource source = context.getSource();
 			ServerLifecycleHooks.getCurrentServer().getWorlds().forEach( dimension ->
 				source.sendFeedback( new StringTextComponent( TextHelper.dimensionTypeToName( dimension ) )
-						.func_240702_b_( TextHelper.getIsAccessText( MainConfig.isAllowedDimision( dimension ) ) ),
+						.appendString( TextHelper.getIsAccessText( MainConfig.isAllowedDimision( dimension ) ) ),
 					false ) );
 			return Command.SINGLE_SUCCESS;
 		} );

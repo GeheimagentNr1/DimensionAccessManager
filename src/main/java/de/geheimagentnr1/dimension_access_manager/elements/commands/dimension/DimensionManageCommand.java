@@ -47,8 +47,8 @@ public class DimensionManageCommand {
 		CommandSource source = context.getSource();
 		ServerWorld dimension = DimensionArgument.getDimensionArgument( context, "dimension" );
 		source.sendFeedback( new StringTextComponent( "Access of " )
-			.func_240702_b_( TextHelper.dimensionTypeToName( dimension ) )
-			.func_240702_b_( TextHelper.getIsAccessText( MainConfig.isAllowedDimision( dimension ) ) ), false );
+			.appendString( TextHelper.dimensionTypeToName( dimension ) )
+			.appendString( TextHelper.getIsAccessText( MainConfig.isAllowedDimision( dimension ) ) ), false );
 		return Command.SINGLE_SUCCESS;
 	}
 	
@@ -58,8 +58,7 @@ public class DimensionManageCommand {
 		ServerWorld dimension = DimensionArgument.getDimensionArgument( context, "dimension" );
 		MainConfig.grantDimensionAccess( dimension );
 		source.sendFeedback( new StringTextComponent( "Access of " )
-				.func_240702_b_( TextHelper.dimensionTypeToName( dimension ) ).func_240702_b_( " is now granted." ),
-			true );
+				.appendString( TextHelper.dimensionTypeToName( dimension ) ).appendString( " is now granted." ), true );
 		return Command.SINGLE_SUCCESS;
 	}
 	
@@ -69,7 +68,7 @@ public class DimensionManageCommand {
 		ServerWorld dimension = DimensionArgument.getDimensionArgument( context, "dimension" );
 		MainConfig.lockDimensionAccess( dimension );
 		source.sendFeedback( new StringTextComponent( "Access of " )
-			.func_240702_b_( TextHelper.dimensionTypeToName( dimension ) ).func_240702_b_( " is now locked." ), true );
+			.appendString( TextHelper.dimensionTypeToName( dimension ) ).appendString( " is now locked." ), true );
 		return Command.SINGLE_SUCCESS;
 	}
 	
@@ -78,7 +77,7 @@ public class DimensionManageCommand {
 		CommandSource source = context.getSource();
 		
 		source.sendFeedback( new StringTextComponent( "Dimension List Type: " )
-			.func_240702_b_( MainConfig.getDimensionListType().name() ), false );
+			.appendString( MainConfig.getDimensionListType().name() ), false );
 		return Command.SINGLE_SUCCESS;
 	}
 	
@@ -93,10 +92,10 @@ public class DimensionManageCommand {
 			MainConfig.invertDimensions();
 		}
 		source.sendFeedback( new StringTextComponent( "Dimension List Type set to: " )
-			.func_240702_b_( MainConfig.getDimensionListType().name() ), false );
+			.appendString( MainConfig.getDimensionListType().name() ), false );
 		ServerLifecycleHooks.getCurrentServer().getWorlds().forEach( dimension ->
 			source.sendFeedback( new StringTextComponent( TextHelper.dimensionTypeToName( dimension ) )
-					.func_240702_b_( TextHelper.getIsAccessText( MainConfig.isAllowedDimision( dimension ) ) ),
+					.appendString( TextHelper.getIsAccessText( MainConfig.isAllowedDimision( dimension ) ) ),
 				false ) );
 		return Command.SINGLE_SUCCESS;
 	}
