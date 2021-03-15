@@ -52,7 +52,7 @@ public class ForgeEventManager {
 	public static void handleTravelToDimension( EntityTravelToDimensionEvent event ) {
 		
 		Entity entity = event.getEntity();
-		ServerWorld serverWorld = ServerLifecycleHooks.getCurrentServer().func_71218_a( event.getDimension() );
+		ServerWorld serverWorld = ServerLifecycleHooks.getCurrentServer().getWorld( event.getDimension() );
 		
 		if( entity instanceof ServerPlayerEntity ) {
 			GameProfile gameProfile = ( (ServerPlayerEntity)entity ).getGameProfile();

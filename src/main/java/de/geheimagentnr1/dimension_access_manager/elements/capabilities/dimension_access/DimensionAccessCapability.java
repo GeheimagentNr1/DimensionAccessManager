@@ -46,7 +46,7 @@ public class DimensionAccessCapability implements ICapabilitySerializable<IntNBT
 	@Override
 	public IntNBT serializeNBT() {
 		
-		return new IntNBT( (byte)dimensionAccess.ordinal() );
+		return IntNBT.valueOf( dimensionAccess.ordinal() );
 	}
 	
 	@Override

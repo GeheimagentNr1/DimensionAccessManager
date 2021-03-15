@@ -26,7 +26,7 @@ interface DimensionCommandRunner {
 		CommandSource source = context.getSource();
 		DimensionType dimension = DimensionArgument.getDimensionArgument( context, "dimension" );
 		MinecraftServer server = source.getServer();
-		ServerWorld serverWorld = server.func_71218_a( dimension );
+		ServerWorld serverWorld = server.getWorld( dimension );
 		
 		runner.run( context, source, dimension, server, serverWorld );
 	}
