@@ -28,7 +28,7 @@ public class DimensionAccessTypeArgument implements ArgumentType<DimensionAccess
 	
 	//package-private
 	@SuppressWarnings( "SameParameterValue" )
-	static <S> DimensionAccessType getDimensionAccessType( CommandContext<S> context, String name ) {
+	public static <S> DimensionAccessType getDimensionAccessType( CommandContext<S> context, String name ) {
 		
 		return context.getArgument( name, DimensionAccessType.class );
 	}

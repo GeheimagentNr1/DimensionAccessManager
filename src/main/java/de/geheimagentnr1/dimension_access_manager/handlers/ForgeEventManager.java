@@ -6,7 +6,7 @@ import de.geheimagentnr1.dimension_access_manager.elements.capabilities.dimensio
 import de.geheimagentnr1.dimension_access_manager.elements.capabilities.dimension_access.DimensionAccessType;
 import de.geheimagentnr1.dimension_access_manager.elements.capabilities.dimension_access_list.dimension_access_blacklist.DimensionAccessBlacklistCapability;
 import de.geheimagentnr1.dimension_access_manager.elements.capabilities.dimension_access_list.dimension_access_whitelist.DimensionAccessWhitelistCapability;
-import de.geheimagentnr1.dimension_access_manager.elements.commands.DimensionsStatusCommand;
+import de.geheimagentnr1.dimension_access_manager.elements.commands.DimensionsCommand;
 import de.geheimagentnr1.dimension_access_manager.elements.commands.ModArgumentTypes;
 import de.geheimagentnr1.dimension_access_manager.elements.commands.dimension.DimensionCommand;
 import net.minecraft.entity.Entity;
@@ -45,7 +45,7 @@ public class ForgeEventManager {
 		
 		ModArgumentTypes.registerArgumentTypes();
 		DimensionCommand.register( event.getCommandDispatcher() );
-		DimensionsStatusCommand.register( event.getCommandDispatcher() );
+		DimensionsCommand.register( event.getCommandDispatcher() );
 	}
 	
 	@SubscribeEvent
