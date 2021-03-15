@@ -11,8 +11,6 @@ import net.minecraft.command.CommandSource;
 import net.minecraft.command.Commands;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.world.dimension.DimensionType;
-import net.minecraft.world.server.ServerWorld;
 
 
 @SuppressWarnings( "SameReturnValue" )
@@ -39,10 +37,9 @@ public class DimensionsCommand {
 		
 		CommandSource source = context.getSource();
 		MinecraftServer server = source.getServer();
-		DimensionType.getAll().forEach( dimension -> {
-			ServerWorld serverWorld = server.getWorld( dimension );
-			DimensionCommandAccessHelper.showDimensionStatus( source, serverWorld );
-		} );
+		server.getWorlds().forEach( serverWorld ->
+			DimensionCommandAccessHelper.showDimensionStatus( source, serverWorld )
+		);
 		return Command.SINGLE_SUCCESS;
 	}
 	

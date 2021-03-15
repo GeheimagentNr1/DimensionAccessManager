@@ -1,10 +1,10 @@
 package de.geheimagentnr1.dimension_access_manager.elements.commands.dimension;
 
 import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.minecraft.command.CommandSource;
 import net.minecraft.command.arguments.DimensionArgument;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.world.dimension.DimensionType;
 import net.minecraft.world.server.ServerWorld;
 
 
@@ -20,12 +20,12 @@ interface DimensionCommandRunner {
 		MinecraftServer server,
 		ServerWorld serverWorld );
 	//public
-	static void run( CommandContext<CommandSource> context, DimensionCommandRunner runner ) {
+	static void run( CommandContext<CommandSource> context, DimensionCommandRunner runner )
+		throws CommandSyntaxException {
 		
 		CommandSource source = context.getSource();
-		DimensionType dimension = DimensionArgument.getDimensionArgument( context, "dimension" );
 		MinecraftServer server = source.getServer();
-		ServerWorld serverWorld = server.getWorld( dimension );
+		ServerWorld serverWorld = DimensionArgument.getDimensionArgument( context, "dimension" );
 		
 		runner.run( context, source, server, serverWorld );
 	}

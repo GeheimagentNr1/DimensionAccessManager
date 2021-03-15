@@ -60,7 +60,8 @@ public class DimensionCommand {
 		dispatcher.register( dimension );
 	}
 	
-	private static int showDimensionStatus( CommandContext<CommandSource> commandContext ) {
+	private static int showDimensionStatus( CommandContext<CommandSource> commandContext )
+		throws CommandSyntaxException {
 		
 		DimensionCommandRunner.run(
 			commandContext,
@@ -70,7 +71,7 @@ public class DimensionCommand {
 		return Command.SINGLE_SUCCESS;
 	}
 	
-	private static int grantDimension( CommandContext<CommandSource> commandContext ) {
+	private static int grantDimension( CommandContext<CommandSource> commandContext ) throws CommandSyntaxException {
 		
 		DimensionCommandRunner.run(
 			commandContext,
@@ -91,7 +92,7 @@ public class DimensionCommand {
 		return Command.SINGLE_SUCCESS;
 	}
 	
-	private static int lockDimension( CommandContext<CommandSource> commandContext ) {
+	private static int lockDimension( CommandContext<CommandSource> commandContext ) throws CommandSyntaxException {
 		
 		DimensionCommandRunner.run(
 			commandContext,
@@ -112,7 +113,7 @@ public class DimensionCommand {
 		return Command.SINGLE_SUCCESS;
 	}
 	
-	private static int showLists( CommandContext<CommandSource> commandContext ) {
+	private static int showLists( CommandContext<CommandSource> commandContext ) throws CommandSyntaxException {
 		
 		DimensionCommandRunner.run(
 			commandContext,
@@ -140,7 +141,7 @@ public class DimensionCommand {
 		return Command.SINGLE_SUCCESS;
 	}
 	
-	private static int showWhitelist( CommandContext<CommandSource> commandContext ) {
+	private static int showWhitelist( CommandContext<CommandSource> commandContext ) throws CommandSyntaxException {
 		
 		DimensionCommandRunner.run(
 			commandContext,
@@ -195,7 +196,7 @@ public class DimensionCommand {
 		return gameProfiles.size();
 	}
 	
-	private static int showBlacklist( CommandContext<CommandSource> commandContext ) {
+	private static int showBlacklist( CommandContext<CommandSource> commandContext ) throws CommandSyntaxException {
 		
 		DimensionCommandRunner.run(
 			commandContext,
