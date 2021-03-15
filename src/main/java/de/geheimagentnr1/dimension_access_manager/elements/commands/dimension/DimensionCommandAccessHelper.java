@@ -4,12 +4,11 @@ import de.geheimagentnr1.dimension_access_manager.elements.capabilities.ModCapab
 import de.geheimagentnr1.dimension_access_manager.elements.capabilities.dimension_access.DimensionAccessCapability;
 import de.geheimagentnr1.dimension_access_manager.elements.capabilities.dimension_access.DimensionAccessType;
 import de.geheimagentnr1.dimension_access_manager.elements.capabilities.dimension_access_list.DimensionAccessListCapability;
-import de.geheimagentnr1.dimension_access_manager.util.DimensionHelper;
+import de.geheimagentnr1.dimension_access_manager.util.ResourceLocationHelper;
 import net.minecraft.command.CommandSource;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.world.dimension.DimensionType;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.util.NonNullConsumer;
 
@@ -26,7 +25,7 @@ public class DimensionCommandAccessHelper {
 		serverWorld.getCapability( ModCapabilities.DIMENSION_ACCESS ).ifPresent( runner );
 	}
 	
-	public static void showDimensionStatus( CommandSource source, DimensionType dimension, ServerWorld serverWorld ) {
+	public static void showDimensionStatus( CommandSource source, ServerWorld serverWorld ) {
 		
 		runForAccess( serverWorld, dimensionAccessCapability -> {
 			if( dimensionAccessCapability.getDimensionAccess() == DimensionAccessType.GRANTED ) {
@@ -35,7 +34,7 @@ public class DimensionCommandAccessHelper {
 					dimensionAccessBlacklistCapability ->
 						sendDimensionStatusFeedback(
 							source,
-							dimension,
+							serverWorld,
 							DimensionAccessType.GRANTED,
 							isListed( source, dimensionAccessBlacklistCapability )
 						)
@@ -46,7 +45,7 @@ public class DimensionCommandAccessHelper {
 					dimensionAccessWhitelistCapability ->
 						sendDimensionStatusFeedback(
 							source,
-							dimension,
+							serverWorld,
 							DimensionAccessType.LOCKED,
 							isListed( source, dimensionAccessWhitelistCapability )
 						)
@@ -68,7 +67,7 @@ public class DimensionCommandAccessHelper {
 	
 	private static void sendDimensionStatusFeedback(
 		CommandSource source,
-		DimensionType dimension,
+		ServerWorld serverWorld,
 		DimensionAccessType dimensionStatus,
 		boolean isListed ) {
 		
@@ -76,7 +75,7 @@ public class DimensionCommandAccessHelper {
 			source.sendFeedback(
 				new StringTextComponent( String.format(
 					"\"%s\": Access is %s. For you %s",
-					DimensionHelper.dimensionTypeToName( dimension ),
+					ResourceLocationHelper.serverWorldToName( serverWorld ),
 					dimensionStatus.getLowerCase(),
 					( dimensionStatus == DimensionAccessType.GRANTED
 						? DimensionAccessType.LOCKED
@@ -88,7 +87,7 @@ public class DimensionCommandAccessHelper {
 			source.sendFeedback(
 				new StringTextComponent( String.format(
 					"\"%s\": Access is %s.",
-					DimensionHelper.dimensionTypeToName( dimension ),
+					ResourceLocationHelper.serverWorldToName( serverWorld ),
 					dimensionStatus.getLowerCase()
 				) ),
 				false
@@ -99,13 +98,13 @@ public class DimensionCommandAccessHelper {
 	//package-private
 	static void sendDimensionAccessChangedFeedback(
 		CommandSource source,
-		DimensionType dimension,
+		ServerWorld serverWorld,
 		DimensionAccessCapability dimensionAccessCapability ) {
 		
 		source.sendFeedback(
 			new StringTextComponent( String.format(
 				"%s is now %s.",
-				DimensionHelper.dimensionTypeToName( dimension ),
+				ResourceLocationHelper.serverWorldToName( serverWorld ),
 				dimensionAccessCapability.getDimensionAccess().getLowerCase()
 			) ),
 			true

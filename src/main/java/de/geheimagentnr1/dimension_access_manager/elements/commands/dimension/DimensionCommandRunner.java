@@ -17,7 +17,6 @@ interface DimensionCommandRunner {
 	void run(
 		CommandContext<CommandSource> context,
 		CommandSource source,
-		DimensionType dimension,
 		MinecraftServer server,
 		ServerWorld serverWorld );
 	//public
@@ -28,6 +27,6 @@ interface DimensionCommandRunner {
 		MinecraftServer server = source.getServer();
 		ServerWorld serverWorld = server.getWorld( dimension );
 		
-		runner.run( context, source, dimension, server, serverWorld );
+		runner.run( context, source, server, serverWorld );
 	}
 }
