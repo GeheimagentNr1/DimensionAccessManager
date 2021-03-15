@@ -17,6 +17,6 @@ public class ResourceLocationHelper {
 	
 	public static String serverWorldToName( ServerWorld serverWorld ) {
 		
-		return Objects.requireNonNull( serverWorld.func_234922_V_().getRegistryName() ).toString();
+		return Objects.requireNonNull( serverWorld.func_234923_W_().getRegistryName() ).toString();
 	}
 }
