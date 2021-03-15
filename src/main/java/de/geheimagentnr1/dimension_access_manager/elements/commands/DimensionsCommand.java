@@ -41,7 +41,7 @@ public class DimensionsCommand {
 		MinecraftServer server = source.getServer();
 		DimensionType.getAll().forEach( dimension -> {
 			ServerWorld serverWorld = server.func_71218_a( dimension );
-			DimensionCommandAccessHelper.showDimensionStatus( source, dimension, serverWorld );
+			DimensionCommandAccessHelper.showDimensionStatus( source, serverWorld );
 		} );
 		return Command.SINGLE_SUCCESS;
 	}

@@ -2,7 +2,7 @@ package de.geheimagentnr1.dimension_access_manager.elements.capabilities.dimensi
 
 import de.geheimagentnr1.dimension_access_manager.config.ServerConfig;
 import de.geheimagentnr1.dimension_access_manager.elements.capabilities.ModCapabilities;
-import de.geheimagentnr1.dimension_access_manager.util.ResourceLocationBuilder;
+import de.geheimagentnr1.dimension_access_manager.util.ResourceLocationHelper;
 import net.minecraft.nbt.IntNBT;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
@@ -17,7 +17,7 @@ import javax.annotation.Nullable;
 public class DimensionAccessCapability implements ICapabilitySerializable<IntNBT> {
 	
 	
-	public static final ResourceLocation registry_name = ResourceLocationBuilder.build( "dimension_access" );
+	public static final ResourceLocation registry_name = ResourceLocationHelper.build( "dimension_access" );
 	
 	private final LazyOptional<DimensionAccessCapability> capability = LazyOptional.of( () -> this );
 	
