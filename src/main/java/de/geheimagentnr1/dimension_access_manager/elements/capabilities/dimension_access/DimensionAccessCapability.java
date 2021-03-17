@@ -53,7 +53,7 @@ public class DimensionAccessCapability implements ICapabilitySerializable<IntNBT
 	public void deserializeNBT( IntNBT nbt ) {
 		
 		DimensionAccessType[] dimensionAccessTypes = DimensionAccessType.values();
-		int value = nbt.getInt();
+		int value = nbt.getAsInt();
 		if( value >= 0 && value < dimensionAccessTypes.length ) {
 			dimensionAccess = dimensionAccessTypes[value];
 		} else {

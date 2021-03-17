@@ -72,7 +72,7 @@ public class DimensionCommandAccessHelper {
 		boolean isListed ) {
 		
 		if( isListed ) {
-			source.sendFeedback(
+			source.sendSuccess(
 				new StringTextComponent( String.format(
 					"\"%s\": Access is %s. For you %s",
 					ResourceLocationHelper.serverWorldToName( serverWorld ),
@@ -84,7 +84,7 @@ public class DimensionCommandAccessHelper {
 				false
 			);
 		} else {
-			source.sendFeedback(
+			source.sendSuccess(
 				new StringTextComponent( String.format(
 					"\"%s\": Access is %s.",
 					ResourceLocationHelper.serverWorldToName( serverWorld ),
@@ -101,7 +101,7 @@ public class DimensionCommandAccessHelper {
 		ServerWorld serverWorld,
 		DimensionAccessCapability dimensionAccessCapability ) {
 		
-		source.sendFeedback(
+		source.sendSuccess(
 			new StringTextComponent( String.format(
 				"%s is now %s.",
 				ResourceLocationHelper.serverWorldToName( serverWorld ),

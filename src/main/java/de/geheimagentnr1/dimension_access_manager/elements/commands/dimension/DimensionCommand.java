@@ -22,15 +22,15 @@ public class DimensionCommand {
 	public static void register( CommandDispatcher<CommandSource> dispatcher ) {
 		
 		LiteralArgumentBuilder<CommandSource> dimension = Commands.literal( "dimension" );
-		dimension.then( Commands.argument( "dimension", DimensionArgument.getDimension() )
+		dimension.then( Commands.argument( "dimension", DimensionArgument.dimension() )
 			.then( Commands.literal( "access" )
 				.then( Commands.literal( "status" )
 					.executes( DimensionCommand::showDimensionStatus ) ) ) );
 		
 		LiteralArgumentBuilder<CommandSource> manageDimension = dimension.requires(
-			source -> source.hasPermissionLevel( 3 )
+			source -> source.hasPermission( 3 )
 		);
-		manageDimension.then( Commands.argument( "dimension", DimensionArgument.getDimension() )
+		manageDimension.then( Commands.argument( "dimension", DimensionArgument.dimension() )
 			.then( Commands.literal( "access" )
 				.then( Commands.literal( "grant" )
 					.executes( DimensionCommand::grantDimension ) )
@@ -85,7 +85,7 @@ public class DimensionCommand {
 							serverWorld,
 							dimensionAccessCapability
 						);
-						server.save( false, true, true );
+						server.saveAllChunks( false, true, true );
 					}
 				)
 		);
@@ -106,7 +106,7 @@ public class DimensionCommand {
 							serverWorld,
 							dimensionAccessCapability
 						);
-						server.save( false, true, true );
+						server.saveAllChunks( false, true, true );
 					}
 				)
 		);
@@ -172,7 +172,7 @@ public class DimensionCommand {
 					gameProfiles
 				);
 				DimensionCommandPlayersHelper.addTargetsToWhitelist( source, serverWorld, gameProfiles );
-				server.save( false, true, true );
+				server.saveAllChunks( false, true, true );
 			}
 		);
 		return gameProfiles.size();
@@ -190,7 +190,7 @@ public class DimensionCommand {
 					serverWorld,
 					gameProfiles
 				);
-				server.save( false, true, true );
+				server.saveAllChunks( false, true, true );
 			}
 		);
 		return gameProfiles.size();
@@ -227,7 +227,7 @@ public class DimensionCommand {
 					gameProfiles
 				);
 				DimensionCommandPlayersHelper.addTargetsToBlacklist( source, serverWorld, gameProfiles );
-				server.save( false, true, true );
+				server.saveAllChunks( false, true, true );
 			}
 		);
 		return gameProfiles.size();
@@ -245,7 +245,7 @@ public class DimensionCommand {
 					serverWorld,
 					gameProfiles
 				);
-				server.save( false, true, true );
+				server.saveAllChunks( false, true, true );
 			}
 		);
 		return gameProfiles.size();

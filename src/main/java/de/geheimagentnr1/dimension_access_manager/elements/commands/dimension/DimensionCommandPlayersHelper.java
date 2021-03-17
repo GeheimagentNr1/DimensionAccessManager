@@ -64,7 +64,7 @@ class DimensionCommandPlayersHelper {
 		
 		String gameProfiles = gameProfilesToString( dimensionAccessWhitelistCapability.getGameProfiles() );
 		if( gameProfiles.isEmpty() ) {
-			source.sendFeedback(
+			source.sendSuccess(
 				new StringTextComponent( String.format(
 					"Whitelist \"%s\" is empty.",
 					ResourceLocationHelper.serverWorldToName( serverWorld )
@@ -72,7 +72,7 @@ class DimensionCommandPlayersHelper {
 				false
 			);
 		} else {
-			source.sendFeedback(
+			source.sendSuccess(
 				new StringTextComponent( String.format(
 					"Whitelist \"%s\": %s",
 					ResourceLocationHelper.serverWorldToName( serverWorld ),
@@ -91,7 +91,7 @@ class DimensionCommandPlayersHelper {
 		
 		runForWhitelist(
 			serverWorld,
-			dimensionAccessWhitelistCapability -> source.sendFeedback(
+			dimensionAccessWhitelistCapability -> source.sendSuccess(
 				new StringTextComponent( String.format(
 					"Added to dimension \"%s\" whitelist: %s",
 					ResourceLocationHelper.serverWorldToName( serverWorld ),
@@ -114,7 +114,7 @@ class DimensionCommandPlayersHelper {
 		
 		runForWhitelist(
 			serverWorld,
-			dimensionAccessWhitelistCapability -> source.sendFeedback(
+			dimensionAccessWhitelistCapability -> source.sendSuccess(
 				new StringTextComponent( String.format(
 					"Removed from dimension \"%s\" whitelist: %s",
 					ResourceLocationHelper.serverWorldToName( serverWorld ),
@@ -145,7 +145,7 @@ class DimensionCommandPlayersHelper {
 		
 		String gameProfiles = gameProfilesToString( dimensionAccessBlacklistCapability.getGameProfiles() );
 		if( gameProfiles.isEmpty() ) {
-			source.sendFeedback(
+			source.sendSuccess(
 				new StringTextComponent( String.format(
 					"Blacklist \"%s\" is empty.",
 					ResourceLocationHelper.serverWorldToName( serverWorld )
@@ -153,7 +153,7 @@ class DimensionCommandPlayersHelper {
 				false
 			);
 		} else {
-			source.sendFeedback(
+			source.sendSuccess(
 				new StringTextComponent( String.format(
 					"Blacklist \"%s\": %s",
 					ResourceLocationHelper.serverWorldToName( serverWorld ),
@@ -172,7 +172,7 @@ class DimensionCommandPlayersHelper {
 		
 		runForBlacklist(
 			serverWorld,
-			dimensionAccessBlacklistCapability -> source.sendFeedback(
+			dimensionAccessBlacklistCapability -> source.sendSuccess(
 				new StringTextComponent( String.format(
 					"Added to dimension \"%s\" blacklist: %s",
 					ResourceLocationHelper.serverWorldToName( serverWorld ),
@@ -195,7 +195,7 @@ class DimensionCommandPlayersHelper {
 		
 		runForBlacklist(
 			serverWorld,
-			dimensionAccessBlacklistCapability -> source.sendFeedback(
+			dimensionAccessBlacklistCapability -> source.sendSuccess(
 				new StringTextComponent( String.format(
 					"Removed from dimension \"%s\" blacklist: %s",
 					ResourceLocationHelper.serverWorldToName( serverWorld ),

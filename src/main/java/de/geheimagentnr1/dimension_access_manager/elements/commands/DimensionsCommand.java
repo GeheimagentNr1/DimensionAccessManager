@@ -23,7 +23,7 @@ public class DimensionsCommand {
 		dimensions.then( Commands.literal( "status" )
 			.executes( DimensionsCommand::showDimensionsStatus ) );
 		LiteralArgumentBuilder<CommandSource> manageDimensions = dimensions.requires(
-			source -> source.hasPermissionLevel( 3 )
+			source -> source.hasPermission( 3 )
 		);
 		manageDimensions.then( Commands.literal( "default" )
 			.then( Commands.literal( "defaultDimensionAccessType" )
@@ -37,7 +37,7 @@ public class DimensionsCommand {
 		
 		CommandSource source = context.getSource();
 		MinecraftServer server = source.getServer();
-		server.getWorlds().forEach( serverWorld ->
+		server.getAllLevels().forEach( serverWorld ->
 			DimensionCommandAccessHelper.showDimensionStatus( source, serverWorld )
 		);
 		return Command.SINGLE_SUCCESS;
@@ -46,7 +46,7 @@ public class DimensionsCommand {
 	private static int showDefaultDimensionAccessType( CommandContext<CommandSource> context ) {
 		
 		CommandSource source = context.getSource();
-		source.sendFeedback(
+		source.sendSuccess(
 			new StringTextComponent( String.format(
 				"The default dimension access type is %s.",
 				ServerConfig.getDefaultDimensionAccessType()
@@ -62,7 +62,7 @@ public class DimensionsCommand {
 		ServerConfig.setDefaultDimensionAccessType(
 			DimensionAccessTypeArgument.getDimensionAccessType( context, "dimensionAccessType" )
 		);
-		source.sendFeedback(
+		source.sendSuccess(
 			new StringTextComponent( String.format(
 				"The default dimension access type is now %s.",
 				ServerConfig.getDefaultDimensionAccessType()
