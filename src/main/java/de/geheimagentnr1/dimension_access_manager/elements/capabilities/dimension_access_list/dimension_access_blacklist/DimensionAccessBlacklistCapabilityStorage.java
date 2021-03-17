@@ -1,0 +1,11 @@
+package de.geheimagentnr1.dimension_access_manager.elements.capabilities.dimension_access_list.dimension_access_blacklist;
+
+
+import de.geheimagentnr1.dimension_access_manager.elements.capabilities.dimension_access_list.DimensionAccessListCapabilityStorage;
+
+
+public class DimensionAccessBlacklistCapabilityStorage
+	extends DimensionAccessListCapabilityStorage<DimensionAccessBlacklistCapability> {
+	
+	
+}
