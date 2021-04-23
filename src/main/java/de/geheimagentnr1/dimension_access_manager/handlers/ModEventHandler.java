@@ -1,5 +1,6 @@
 package de.geheimagentnr1.dimension_access_manager.handlers;
 
+import de.geheimagentnr1.dimension_access_manager.DimensionAccessManager;
 import de.geheimagentnr1.dimension_access_manager.config.ServerConfig;
 import de.geheimagentnr1.dimension_access_manager.elements.capabilities.dimension_access.DimensionAccessCapability;
 import de.geheimagentnr1.dimension_access_manager.elements.capabilities.dimension_access.DimensionAccessCapabilityStorage;
@@ -14,7 +15,7 @@ import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 
 
-@Mod.EventBusSubscriber( bus = Mod.EventBusSubscriber.Bus.MOD )
+@Mod.EventBusSubscriber( modid = DimensionAccessManager.MODID, bus = Mod.EventBusSubscriber.Bus.MOD )
 public class ModEventHandler {
 	
 	
