@@ -42,7 +42,7 @@ public class ForgeEventManager {
 	}
 	
 	@SubscribeEvent
-	public static void handlerRegisterCommandsEvent( RegisterCommandsEvent event ) {
+	public static void handleRegisterCommandsEvent( RegisterCommandsEvent event ) {
 		
 		ModArgumentTypes.registerArgumentTypes();
 		DimensionCommand.register( event.getDispatcher() );
