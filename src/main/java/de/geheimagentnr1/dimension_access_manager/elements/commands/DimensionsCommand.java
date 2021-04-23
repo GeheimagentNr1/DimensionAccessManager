@@ -24,9 +24,8 @@ public class DimensionsCommand {
 		LiteralArgumentBuilder<CommandSource> dimensions = Commands.literal( "dimensions" );
 		dimensions.then( Commands.literal( "status" )
 			.executes( DimensionsCommand::showDimensionsStatus ) );
-		LiteralArgumentBuilder<CommandSource> manageDimensions = dimensions.requires(
-			source -> source.hasPermissionLevel( 3 )
-		);
+		LiteralArgumentBuilder<CommandSource> manageDimensions = dimensions
+			.requires( source -> source.hasPermissionLevel( 3 ) );
 		manageDimensions.then( Commands.literal( "default" )
 			.then( Commands.literal( "defaultDimensionAccessType" )
 				.executes( DimensionsCommand::showDefaultDimensionAccessType )

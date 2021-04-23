@@ -19,6 +19,7 @@ interface DimensionCommandRunner {
 		CommandSource source,
 		MinecraftServer server,
 		ServerWorld serverWorld );
+	
 	//public
 	static void run( CommandContext<CommandSource> context, DimensionCommandRunner runner ) {
 		
