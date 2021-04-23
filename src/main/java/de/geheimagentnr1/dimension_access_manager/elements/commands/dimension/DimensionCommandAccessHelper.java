@@ -16,11 +16,8 @@ import net.minecraftforge.common.util.NonNullConsumer;
 public class DimensionCommandAccessHelper {
 	
 	
-	
 	//package-private
-	static void runForAccess(
-		ServerWorld serverWorld,
-		NonNullConsumer<DimensionAccessCapability> runner ) {
+	static void runForAccess( ServerWorld serverWorld, NonNullConsumer<DimensionAccessCapability> runner ) {
 		
 		serverWorld.getCapability( ModCapabilities.DIMENSION_ACCESS ).ifPresent( runner );
 	}
@@ -31,24 +28,22 @@ public class DimensionCommandAccessHelper {
 			if( dimensionAccessCapability.getDimensionAccess() == DimensionAccessType.GRANTED ) {
 				DimensionCommandPlayersHelper.runForBlacklist(
 					serverWorld,
-					dimensionAccessBlacklistCapability ->
-						sendDimensionStatusFeedback(
-							source,
-							serverWorld,
-							DimensionAccessType.GRANTED,
-							isListed( source, dimensionAccessBlacklistCapability )
-						)
+					dimensionAccessBlacklistCapability -> sendDimensionStatusFeedback(
+						source,
+						serverWorld,
+						DimensionAccessType.GRANTED,
+						isListed( source, dimensionAccessBlacklistCapability )
+					)
 				);
 			} else {
 				DimensionCommandPlayersHelper.runForWhitelist(
 					serverWorld,
-					dimensionAccessWhitelistCapability ->
-						sendDimensionStatusFeedback(
-							source,
-							serverWorld,
-							DimensionAccessType.LOCKED,
-							isListed( source, dimensionAccessWhitelistCapability )
-						)
+					dimensionAccessWhitelistCapability -> sendDimensionStatusFeedback(
+						source,
+						serverWorld,
+						DimensionAccessType.LOCKED,
+						isListed( source, dimensionAccessWhitelistCapability )
+					)
 				);
 			}
 		} );

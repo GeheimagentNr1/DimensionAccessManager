@@ -10,7 +10,7 @@ import org.apache.logging.log4j.Logger;
 public class ServerConfig {
 	
 	
-	private static final Logger LOGGER = LogManager.getLogger();
+	private static final Logger LOGGER = LogManager.getLogger( ServerConfig.class );
 	
 	private static final String MOD_NAME = ModLoadingContext.get().getActiveContainer().getModInfo().getDisplayName();
 	
@@ -30,9 +30,9 @@ public class ServerConfig {
 	
 	public static void printConfig() {
 		
-		LOGGER.info( "Loading \"{}\" Config", MOD_NAME );
+		LOGGER.info( "Loading \"{}\" Server Config", MOD_NAME );
 		LOGGER.info( "{} = {}", DEFAULT_DIMENSION_ACCESS_TYPE.getPath(), DEFAULT_DIMENSION_ACCESS_TYPE.get() );
-		LOGGER.info( "\"{}\" Config loaded", MOD_NAME );
+		LOGGER.info( "\"{}\" Server Config loaded", MOD_NAME );
 	}
 	
 	public static DimensionAccessType getDefaultDimensionAccessType() {
