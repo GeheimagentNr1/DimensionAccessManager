@@ -1,6 +1,7 @@
 package de.geheimagentnr1.dimension_access_manager.handlers;
 
 import com.mojang.authlib.GameProfile;
+import de.geheimagentnr1.dimension_access_manager.DimensionAccessManager;
 import de.geheimagentnr1.dimension_access_manager.elements.capabilities.ModCapabilities;
 import de.geheimagentnr1.dimension_access_manager.elements.capabilities.dimension_access.DimensionAccessCapability;
 import de.geheimagentnr1.dimension_access_manager.elements.capabilities.dimension_access.DimensionAccessType;
@@ -22,12 +23,12 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.server.ServerLifecycleHooks;
 
 
-@Mod.EventBusSubscriber( bus = Mod.EventBusSubscriber.Bus.FORGE )
+@Mod.EventBusSubscriber( modid = DimensionAccessManager.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE )
 public class ForgeEventManager {
 	
 	
 	@SubscribeEvent
-	public static void onWorldAttachCapabilityEvent( AttachCapabilitiesEvent<World> event ) {
+	public static void handleWorldAttachCapabilitiesEvent( AttachCapabilitiesEvent<World> event ) {
 		
 		event.addCapability( DimensionAccessCapability.registry_name, new DimensionAccessCapability() );
 		event.addCapability(
@@ -41,7 +42,7 @@ public class ForgeEventManager {
 	}
 	
 	@SubscribeEvent
-	public static void handlerRegisterCommandsEvent( RegisterCommandsEvent event ) {
+	public static void handleRegisterCommandsEvent( RegisterCommandsEvent event ) {
 		
 		ModArgumentTypes.registerArgumentTypes();
 		DimensionCommand.register( event.getDispatcher() );
@@ -49,7 +50,7 @@ public class ForgeEventManager {
 	}
 	
 	@SubscribeEvent
-	public static void handleTravelToDimension( EntityTravelToDimensionEvent event ) {
+	public static void handleEntityTravelToDimensionEvent( EntityTravelToDimensionEvent event ) {
 		
 		Entity entity = event.getEntity();
 		ServerWorld serverWorld = ServerLifecycleHooks.getCurrentServer().getWorld( event.getDimension() );
