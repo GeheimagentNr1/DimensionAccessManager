@@ -42,7 +42,7 @@ public class ForgeEventManager {
 	}
 	
 	@SubscribeEvent
-	public static void handlerServerStartingEvent( FMLServerStartingEvent event ) {
+	public static void handleServerStartingEvent( FMLServerStartingEvent event ) {
 		
 		ModArgumentTypes.registerArgumentTypes();
 		DimensionCommand.register( event.getCommandDispatcher() );
