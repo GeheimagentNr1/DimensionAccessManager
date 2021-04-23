@@ -28,24 +28,21 @@ class DimensionCommandPlayersHelper {
 	
 	private static String gameProfilesToString( Stream<GameProfile> gameProfiles ) {
 		
-		return gameProfiles.map( GameProfile::getName )
-			.collect( Collectors.joining( ", " ) );
+		return gameProfiles.map( GameProfile::getName ).collect( Collectors.joining( ", " ) );
 	}
 	
 	private static Stream<GameProfile> addTargetsToList(
 		DimensionAccessListCapability dimensionAccessListCapability,
 		Collection<GameProfile> gameProfiles ) {
 		
-		return gameProfiles.stream()
-			.filter( dimensionAccessListCapability::add );
+		return gameProfiles.stream().filter( dimensionAccessListCapability::add );
 	}
 	
 	private static Stream<GameProfile> removeTargetsFromList(
 		DimensionAccessListCapability dimensionAccessListCapability,
 		Collection<GameProfile> gameProfiles ) {
 		
-		return gameProfiles.stream()
-			.filter( dimensionAccessListCapability::remove );
+		return gameProfiles.stream().filter( dimensionAccessListCapability::remove );
 	}
 	
 	//package-private
@@ -95,12 +92,8 @@ class DimensionCommandPlayersHelper {
 				new StringTextComponent( String.format(
 					"Added to dimension \"%s\" whitelist: %s",
 					ResourceLocationHelper.serverWorldToName( serverWorld ),
-					gameProfilesToString( addTargetsToList(
-						dimensionAccessWhitelistCapability,
-						gameProfiles
-					) )
-				)
-				),
+					gameProfilesToString( addTargetsToList( dimensionAccessWhitelistCapability, gameProfiles ) )
+				) ),
 				true
 			)
 		);
@@ -118,12 +111,8 @@ class DimensionCommandPlayersHelper {
 				new StringTextComponent( String.format(
 					"Removed from dimension \"%s\" whitelist: %s",
 					ResourceLocationHelper.serverWorldToName( serverWorld ),
-					gameProfilesToString( removeTargetsFromList(
-						dimensionAccessWhitelistCapability,
-						gameProfiles
-					) )
-				)
-				),
+					gameProfilesToString( removeTargetsFromList( dimensionAccessWhitelistCapability, gameProfiles ) )
+				) ),
 				true
 			)
 		);
@@ -176,12 +165,8 @@ class DimensionCommandPlayersHelper {
 				new StringTextComponent( String.format(
 					"Added to dimension \"%s\" blacklist: %s",
 					ResourceLocationHelper.serverWorldToName( serverWorld ),
-					gameProfilesToString( addTargetsToList(
-						dimensionAccessBlacklistCapability,
-						gameProfiles
-					) )
-				)
-				),
+					gameProfilesToString( addTargetsToList( dimensionAccessBlacklistCapability, gameProfiles ) )
+				) ),
 				true
 			)
 		);
@@ -199,12 +184,8 @@ class DimensionCommandPlayersHelper {
 				new StringTextComponent( String.format(
 					"Removed from dimension \"%s\" blacklist: %s",
 					ResourceLocationHelper.serverWorldToName( serverWorld ),
-					gameProfilesToString( removeTargetsFromList(
-						dimensionAccessBlacklistCapability,
-						gameProfiles
-					) )
-				)
-				),
+					gameProfilesToString( removeTargetsFromList( dimensionAccessBlacklistCapability, gameProfiles ) )
+				) ),
 				true
 			)
 		);
