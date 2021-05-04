@@ -17,6 +17,6 @@ public class ResourceLocationHelper {
 	
 	public static String serverWorldToName( ServerWorld serverWorld ) {
 		
-		return Objects.requireNonNull( serverWorld.getDimensionKey().getRegistryName() ).toString();
+		return Objects.requireNonNull( serverWorld.getDimensionKey().getLocation() ).toString();
 	}
 }
