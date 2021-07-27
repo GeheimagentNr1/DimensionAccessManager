@@ -1,7 +1,6 @@
 package de.geheimagentnr1.dimension_access_manager.elements.capabilities.dimension_access_list;
 
 import com.mojang.authlib.GameProfile;
-import de.geheimagentnr1.dimension_access_manager.elements.capabilities.ModCapabilities;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;

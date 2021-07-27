@@ -72,7 +72,8 @@ public class DimensionCommand {
 		return Command.SINGLE_SUCCESS;
 	}
 	
-	private static int grantDimension( CommandContext<CommandSourceStack> commandContext ) throws CommandSyntaxException {
+	private static int grantDimension( CommandContext<CommandSourceStack> commandContext )
+		throws CommandSyntaxException {
 		
 		DimensionCommandRunner.run(
 			commandContext,
@@ -92,7 +93,8 @@ public class DimensionCommand {
 		return Command.SINGLE_SUCCESS;
 	}
 	
-	private static int lockDimension( CommandContext<CommandSourceStack> commandContext ) throws CommandSyntaxException {
+	private static int lockDimension( CommandContext<CommandSourceStack> commandContext )
+		throws CommandSyntaxException {
 		
 		DimensionCommandRunner.run(
 			commandContext,
@@ -138,7 +140,8 @@ public class DimensionCommand {
 		return Command.SINGLE_SUCCESS;
 	}
 	
-	private static int showWhitelist( CommandContext<CommandSourceStack> commandContext ) throws CommandSyntaxException {
+	private static int showWhitelist( CommandContext<CommandSourceStack> commandContext )
+		throws CommandSyntaxException {
 		
 		DimensionCommandRunner.run(
 			commandContext,
@@ -183,7 +186,8 @@ public class DimensionCommand {
 		return gameProfiles.size();
 	}
 	
-	private static int showBlacklist( CommandContext<CommandSourceStack> commandContext ) throws CommandSyntaxException {
+	private static int showBlacklist( CommandContext<CommandSourceStack> commandContext )
+		throws CommandSyntaxException {
 		
 		DimensionCommandRunner.run(
 			commandContext,
