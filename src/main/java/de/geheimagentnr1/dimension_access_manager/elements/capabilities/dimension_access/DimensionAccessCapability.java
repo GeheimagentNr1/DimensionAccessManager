@@ -3,9 +3,9 @@ package de.geheimagentnr1.dimension_access_manager.elements.capabilities.dimensi
 import de.geheimagentnr1.dimension_access_manager.config.ServerConfig;
 import de.geheimagentnr1.dimension_access_manager.elements.capabilities.ModCapabilities;
 import de.geheimagentnr1.dimension_access_manager.util.ResourceLocationHelper;
-import net.minecraft.nbt.IntNBT;
-import net.minecraft.util.Direction;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.core.Direction;
+import net.minecraft.nbt.IntTag;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 import net.minecraftforge.common.util.LazyOptional;
@@ -14,12 +14,12 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 
-public class DimensionAccessCapability implements ICapabilitySerializable<IntNBT> {
+public class DimensionAccessCapability implements ICapabilitySerializable<IntTag> {
 	
 	
 	public static final ResourceLocation registry_name = ResourceLocationHelper.build( "dimension_access" );
 	
-	private final LazyOptional<DimensionAccessCapability> capability = LazyOptional.of( () -> this );
+	private final LazyOptional<DimensionAccessCapability> holder = LazyOptional.of( () -> this );
 	
 	private DimensionAccessType dimensionAccess = ServerConfig.getDefaultDimensionAccessType();
 	
@@ -37,20 +37,17 @@ public class DimensionAccessCapability implements ICapabilitySerializable<IntNBT
 	@Override
 	public <T> LazyOptional<T> getCapability( @Nonnull Capability<T> cap, @Nullable Direction side ) {
 		
-		if( cap == ModCapabilities.DIMENSION_ACCESS ) {
-			return capability.cast();
-		}
-		return LazyOptional.empty();
+		return ModCapabilities.DIMENSION_ACCESS.orEmpty( cap, holder );
 	}
 	
 	@Override
-	public IntNBT serializeNBT() {
+	public IntTag serializeNBT() {
 		
-		return IntNBT.valueOf( dimensionAccess.ordinal() );
+		return IntTag.valueOf( dimensionAccess.ordinal() );
 	}
 	
 	@Override
-	public void deserializeNBT( IntNBT nbt ) {
+	public void deserializeNBT( IntTag nbt ) {
 		
 		DimensionAccessType[] dimensionAccessTypes = DimensionAccessType.values();
 		int value = nbt.getAsInt();

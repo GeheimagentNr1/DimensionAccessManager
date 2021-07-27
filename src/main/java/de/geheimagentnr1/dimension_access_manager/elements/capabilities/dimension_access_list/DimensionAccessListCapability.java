@@ -1,11 +1,12 @@
 package de.geheimagentnr1.dimension_access_manager.elements.capabilities.dimension_access_list;
 
 import com.mojang.authlib.GameProfile;
-import de.geheimagentnr1.dimension_access_manager.util.NBTType;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.ListNBT;
-import net.minecraft.nbt.NBTUtil;
-import net.minecraft.util.Direction;
+import de.geheimagentnr1.dimension_access_manager.elements.capabilities.ModCapabilities;
+import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.NbtUtils;
+import net.minecraft.nbt.Tag;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 import net.minecraftforge.common.util.LazyOptional;
@@ -16,10 +17,10 @@ import java.util.Comparator;
 import java.util.TreeSet;
 
 
-public abstract class DimensionAccessListCapability implements ICapabilitySerializable<ListNBT> {
+public abstract class DimensionAccessListCapability implements ICapabilitySerializable<ListTag> {
 	
 	
-	private final LazyOptional<? extends DimensionAccessListCapability> capability = LazyOptional.of( () -> this );
+	private final LazyOptional<? extends DimensionAccessListCapability> holder = LazyOptional.of( () -> this );
 	
 	private final TreeSet<GameProfile> gameProfiles = new TreeSet<>( Comparator.comparing( GameProfile::getId ) );
 	
@@ -42,31 +43,28 @@ public abstract class DimensionAccessListCapability implements ICapabilitySerial
 	@Override
 	public <T> LazyOptional<T> getCapability( @Nonnull Capability<T> cap, @Nullable Direction side ) {
 		
-		if( cap == getCapability() ) {
-			return capability.cast();
-		}
-		return LazyOptional.empty();
+		return getCapability() == cap ? holder.cast() : LazyOptional.empty();
 	}
 	
 	protected abstract Capability<? extends DimensionAccessListCapability> getCapability();
 	
 	@Override
-	public ListNBT serializeNBT() {
+	public ListTag serializeNBT() {
 		
-		ListNBT listNBT = new ListNBT();
+		ListTag listNBT = new ListTag();
 		gameProfiles.forEach( gameProfile -> {
-			CompoundNBT compound = new CompoundNBT();
-			listNBT.add( NBTUtil.writeGameProfile( compound, gameProfile ) );
+			CompoundTag compound = new CompoundTag();
+			listNBT.add( NbtUtils.writeGameProfile( compound, gameProfile ) );
 		} );
 		return listNBT;
 	}
 	
 	@Override
-	public void deserializeNBT( ListNBT nbt ) {
+	public void deserializeNBT( ListTag nbt ) {
 		
 		nbt.forEach( inbt -> {
-			if( inbt.getId() == NBTType.COMPOUND.getId() ) {
-				gameProfiles.add( NBTUtil.readGameProfile( (CompoundNBT)inbt ) );
+			if( inbt.getId() == Tag.TAG_COMPOUND ) {
+				gameProfiles.add( NbtUtils.readGameProfile( (CompoundTag)inbt ) );
 			}
 		} );
 	}

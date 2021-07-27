@@ -6,9 +6,9 @@ import de.geheimagentnr1.dimension_access_manager.elements.capabilities.dimensio
 import de.geheimagentnr1.dimension_access_manager.elements.capabilities.dimension_access_list.dimension_access_blacklist.DimensionAccessBlacklistCapability;
 import de.geheimagentnr1.dimension_access_manager.elements.capabilities.dimension_access_list.dimension_access_whitelist.DimensionAccessWhitelistCapability;
 import de.geheimagentnr1.dimension_access_manager.util.ResourceLocationHelper;
-import net.minecraft.command.CommandSource;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraftforge.common.util.NonNullConsumer;
 
 import java.util.Collection;
@@ -47,32 +47,32 @@ class DimensionCommandPlayersHelper {
 	
 	//package-private
 	static void runForWhitelist(
-		ServerWorld serverWorld,
+		ServerLevel serverLevel,
 		NonNullConsumer<DimensionAccessWhitelistCapability> runner ) {
 		
-		serverWorld.getCapability( ModCapabilities.DIMENSION_ACCESS_WHITELIST ).ifPresent( runner );
+		serverLevel.getCapability( ModCapabilities.DIMENSION_ACCESS_WHITELIST ).ifPresent( runner );
 	}
 	
 	//package-private
 	static void sendWhitelistList(
 		DimensionAccessWhitelistCapability dimensionAccessWhitelistCapability,
-		CommandSource source,
-		ServerWorld serverWorld ) {
+		CommandSourceStack source,
+		ServerLevel serverLevel ) {
 		
 		String gameProfiles = gameProfilesToString( dimensionAccessWhitelistCapability.getGameProfiles() );
 		if( gameProfiles.isEmpty() ) {
 			source.sendSuccess(
-				new StringTextComponent( String.format(
+				new TextComponent( String.format(
 					"Whitelist \"%s\" is empty.",
-					ResourceLocationHelper.serverWorldToName( serverWorld )
+					ResourceLocationHelper.serverLevelToName( serverLevel )
 				) ),
 				false
 			);
 		} else {
 			source.sendSuccess(
-				new StringTextComponent( String.format(
+				new TextComponent( String.format(
 					"Whitelist \"%s\": %s",
-					ResourceLocationHelper.serverWorldToName( serverWorld ),
+					ResourceLocationHelper.serverLevelToName( serverLevel ),
 					gameProfiles
 				) ),
 				false
@@ -82,16 +82,16 @@ class DimensionCommandPlayersHelper {
 	
 	//package-private
 	static void addTargetsToWhitelist(
-		CommandSource source,
-		ServerWorld serverWorld,
+		CommandSourceStack source,
+		ServerLevel serverLevel,
 		Collection<GameProfile> gameProfiles ) {
 		
 		runForWhitelist(
-			serverWorld,
+			serverLevel,
 			dimensionAccessWhitelistCapability -> source.sendSuccess(
-				new StringTextComponent( String.format(
+				new TextComponent( String.format(
 					"Added to dimension \"%s\" whitelist: %s",
-					ResourceLocationHelper.serverWorldToName( serverWorld ),
+					ResourceLocationHelper.serverLevelToName( serverLevel ),
 					gameProfilesToString( addTargetsToList( dimensionAccessWhitelistCapability, gameProfiles ) )
 				) ),
 				true
@@ -101,16 +101,16 @@ class DimensionCommandPlayersHelper {
 	
 	//package-private
 	static void removeTargetsFromWhitelist(
-		CommandSource source,
-		ServerWorld serverWorld,
+		CommandSourceStack source,
+		ServerLevel serverLevel,
 		Collection<GameProfile> gameProfiles ) {
 		
 		runForWhitelist(
-			serverWorld,
+			serverLevel,
 			dimensionAccessWhitelistCapability -> source.sendSuccess(
-				new StringTextComponent( String.format(
+				new TextComponent( String.format(
 					"Removed from dimension \"%s\" whitelist: %s",
-					ResourceLocationHelper.serverWorldToName( serverWorld ),
+					ResourceLocationHelper.serverLevelToName( serverLevel ),
 					gameProfilesToString( removeTargetsFromList( dimensionAccessWhitelistCapability, gameProfiles ) )
 				) ),
 				true
@@ -120,32 +120,32 @@ class DimensionCommandPlayersHelper {
 	
 	//package-private
 	static void runForBlacklist(
-		ServerWorld serverWorld,
+		ServerLevel serverLevel,
 		NonNullConsumer<DimensionAccessBlacklistCapability> runner ) {
 		
-		serverWorld.getCapability( ModCapabilities.DIMENSION_ACCESS_BLACKLIST ).ifPresent( runner );
+		serverLevel.getCapability( ModCapabilities.DIMENSION_ACCESS_BLACKLIST ).ifPresent( runner );
 	}
 	
 	//package-private
 	static void sendBlacklistList(
 		DimensionAccessBlacklistCapability dimensionAccessBlacklistCapability,
-		CommandSource source,
-		ServerWorld serverWorld ) {
+		CommandSourceStack source,
+		ServerLevel serverLevel ) {
 		
 		String gameProfiles = gameProfilesToString( dimensionAccessBlacklistCapability.getGameProfiles() );
 		if( gameProfiles.isEmpty() ) {
 			source.sendSuccess(
-				new StringTextComponent( String.format(
+				new TextComponent( String.format(
 					"Blacklist \"%s\" is empty.",
-					ResourceLocationHelper.serverWorldToName( serverWorld )
+					ResourceLocationHelper.serverLevelToName( serverLevel )
 				) ),
 				false
 			);
 		} else {
 			source.sendSuccess(
-				new StringTextComponent( String.format(
+				new TextComponent( String.format(
 					"Blacklist \"%s\": %s",
-					ResourceLocationHelper.serverWorldToName( serverWorld ),
+					ResourceLocationHelper.serverLevelToName( serverLevel ),
 					gameProfiles
 				) ),
 				false
@@ -155,16 +155,16 @@ class DimensionCommandPlayersHelper {
 	
 	//package-private
 	static void addTargetsToBlacklist(
-		CommandSource source,
-		ServerWorld serverWorld,
+		CommandSourceStack source,
+		ServerLevel serverLevel,
 		Collection<GameProfile> gameProfiles ) {
 		
 		runForBlacklist(
-			serverWorld,
+			serverLevel,
 			dimensionAccessBlacklistCapability -> source.sendSuccess(
-				new StringTextComponent( String.format(
+				new TextComponent( String.format(
 					"Added to dimension \"%s\" blacklist: %s",
-					ResourceLocationHelper.serverWorldToName( serverWorld ),
+					ResourceLocationHelper.serverLevelToName( serverLevel ),
 					gameProfilesToString( addTargetsToList( dimensionAccessBlacklistCapability, gameProfiles ) )
 				) ),
 				true
@@ -174,16 +174,16 @@ class DimensionCommandPlayersHelper {
 	
 	//package-private
 	static void removeTargetsFromBlacklist(
-		CommandSource source,
-		ServerWorld serverWorld,
+		CommandSourceStack source,
+		ServerLevel serverLevel,
 		Collection<GameProfile> gameProfiles ) {
 		
 		runForBlacklist(
-			serverWorld,
+			serverLevel,
 			dimensionAccessBlacklistCapability -> source.sendSuccess(
-				new StringTextComponent( String.format(
+				new TextComponent( String.format(
 					"Removed from dimension \"%s\" blacklist: %s",
-					ResourceLocationHelper.serverWorldToName( serverWorld ),
+					ResourceLocationHelper.serverLevelToName( serverLevel ),
 					gameProfilesToString( removeTargetsFromList( dimensionAccessBlacklistCapability, gameProfiles ) )
 				) ),
 				true

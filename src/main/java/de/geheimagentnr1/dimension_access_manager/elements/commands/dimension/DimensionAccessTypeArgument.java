@@ -6,7 +6,7 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import de.geheimagentnr1.dimension_access_manager.elements.capabilities.dimension_access.DimensionAccessType;
-import net.minecraft.command.ISuggestionProvider;
+import net.minecraft.commands.SharedSuggestionProvider;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -50,7 +50,7 @@ public class DimensionAccessTypeArgument implements ArgumentType<DimensionAccess
 		CommandContext<S> context,
 		SuggestionsBuilder builder ) {
 		
-		return ISuggestionProvider.suggest( values, builder );
+		return SharedSuggestionProvider.suggest( values, builder );
 	}
 	
 	@Override

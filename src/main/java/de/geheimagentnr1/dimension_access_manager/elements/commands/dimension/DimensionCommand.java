@@ -7,10 +7,10 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import de.geheimagentnr1.dimension_access_manager.elements.capabilities.dimension_access.DimensionAccessType;
-import net.minecraft.command.CommandSource;
-import net.minecraft.command.Commands;
-import net.minecraft.command.arguments.DimensionArgument;
-import net.minecraft.command.arguments.GameProfileArgument;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.Commands;
+import net.minecraft.commands.arguments.DimensionArgument;
+import net.minecraft.commands.arguments.GameProfileArgument;
 
 import java.util.Collection;
 
@@ -19,15 +19,15 @@ import java.util.Collection;
 public class DimensionCommand {
 	
 	
-	public static void register( CommandDispatcher<CommandSource> dispatcher ) {
+	public static void register( CommandDispatcher<CommandSourceStack> dispatcher ) {
 		
-		LiteralArgumentBuilder<CommandSource> dimension = Commands.literal( "dimension" );
+		LiteralArgumentBuilder<CommandSourceStack> dimension = Commands.literal( "dimension" );
 		dimension.then( Commands.argument( "dimension", DimensionArgument.dimension() )
 			.then( Commands.literal( "access" )
 				.then( Commands.literal( "status" )
 					.executes( DimensionCommand::showDimensionStatus ) ) ) );
 		
-		LiteralArgumentBuilder<CommandSource> manageDimension = dimension
+		LiteralArgumentBuilder<CommandSourceStack> manageDimension = dimension
 			.requires( source -> source.hasPermission( 3 ) );
 		manageDimension.then( Commands.argument( "dimension", DimensionArgument.dimension() )
 			.then( Commands.literal( "access" )
@@ -59,7 +59,7 @@ public class DimensionCommand {
 		dispatcher.register( dimension );
 	}
 	
-	private static int showDimensionStatus( CommandContext<CommandSource> commandContext )
+	private static int showDimensionStatus( CommandContext<CommandSourceStack> commandContext )
 		throws CommandSyntaxException {
 		
 		DimensionCommandRunner.run(
@@ -72,7 +72,7 @@ public class DimensionCommand {
 		return Command.SINGLE_SUCCESS;
 	}
 	
-	private static int grantDimension( CommandContext<CommandSource> commandContext ) throws CommandSyntaxException {
+	private static int grantDimension( CommandContext<CommandSourceStack> commandContext ) throws CommandSyntaxException {
 		
 		DimensionCommandRunner.run(
 			commandContext,
@@ -92,7 +92,7 @@ public class DimensionCommand {
 		return Command.SINGLE_SUCCESS;
 	}
 	
-	private static int lockDimension( CommandContext<CommandSource> commandContext ) throws CommandSyntaxException {
+	private static int lockDimension( CommandContext<CommandSourceStack> commandContext ) throws CommandSyntaxException {
 		
 		DimensionCommandRunner.run(
 			commandContext,
@@ -112,7 +112,7 @@ public class DimensionCommand {
 		return Command.SINGLE_SUCCESS;
 	}
 	
-	private static int showLists( CommandContext<CommandSource> commandContext ) throws CommandSyntaxException {
+	private static int showLists( CommandContext<CommandSourceStack> commandContext ) throws CommandSyntaxException {
 		
 		DimensionCommandRunner.run(
 			commandContext,
@@ -138,7 +138,7 @@ public class DimensionCommand {
 		return Command.SINGLE_SUCCESS;
 	}
 	
-	private static int showWhitelist( CommandContext<CommandSource> commandContext ) throws CommandSyntaxException {
+	private static int showWhitelist( CommandContext<CommandSourceStack> commandContext ) throws CommandSyntaxException {
 		
 		DimensionCommandRunner.run(
 			commandContext,
@@ -154,7 +154,7 @@ public class DimensionCommand {
 		return Command.SINGLE_SUCCESS;
 	}
 	
-	private static int addTargetsToWhitelist( CommandContext<CommandSource> commandContext )
+	private static int addTargetsToWhitelist( CommandContext<CommandSourceStack> commandContext )
 		throws CommandSyntaxException {
 		
 		Collection<GameProfile> gameProfiles = GameProfileArgument.getGameProfiles( commandContext, "targets" );
@@ -169,7 +169,7 @@ public class DimensionCommand {
 		return gameProfiles.size();
 	}
 	
-	private static int removeTargetsFromWhitelist( CommandContext<CommandSource> commandContext )
+	private static int removeTargetsFromWhitelist( CommandContext<CommandSourceStack> commandContext )
 		throws CommandSyntaxException {
 		
 		Collection<GameProfile> gameProfiles = GameProfileArgument.getGameProfiles( commandContext, "targets" );
@@ -183,7 +183,7 @@ public class DimensionCommand {
 		return gameProfiles.size();
 	}
 	
-	private static int showBlacklist( CommandContext<CommandSource> commandContext ) throws CommandSyntaxException {
+	private static int showBlacklist( CommandContext<CommandSourceStack> commandContext ) throws CommandSyntaxException {
 		
 		DimensionCommandRunner.run(
 			commandContext,
@@ -199,7 +199,7 @@ public class DimensionCommand {
 		return Command.SINGLE_SUCCESS;
 	}
 	
-	private static int addTargetsToBlacklist( CommandContext<CommandSource> commandContext )
+	private static int addTargetsToBlacklist( CommandContext<CommandSourceStack> commandContext )
 		throws CommandSyntaxException {
 		
 		Collection<GameProfile> gameProfiles = GameProfileArgument.getGameProfiles( commandContext, "targets" );
@@ -214,7 +214,7 @@ public class DimensionCommand {
 		return gameProfiles.size();
 	}
 	
-	private static int removeTargetsFromBlacklist( CommandContext<CommandSource> commandContext )
+	private static int removeTargetsFromBlacklist( CommandContext<CommandSourceStack> commandContext )
 		throws CommandSyntaxException {
 		
 		Collection<GameProfile> gameProfiles = GameProfileArgument.getGameProfiles( commandContext, "targets" );

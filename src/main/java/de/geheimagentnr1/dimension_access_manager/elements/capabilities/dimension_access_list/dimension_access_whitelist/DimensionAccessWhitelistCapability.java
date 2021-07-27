@@ -3,7 +3,7 @@ package de.geheimagentnr1.dimension_access_manager.elements.capabilities.dimensi
 import de.geheimagentnr1.dimension_access_manager.elements.capabilities.ModCapabilities;
 import de.geheimagentnr1.dimension_access_manager.elements.capabilities.dimension_access_list.DimensionAccessListCapability;
 import de.geheimagentnr1.dimension_access_manager.util.ResourceLocationHelper;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.capabilities.Capability;
 
 

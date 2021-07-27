@@ -7,22 +7,22 @@ import com.mojang.brigadier.context.CommandContext;
 import de.geheimagentnr1.dimension_access_manager.config.ServerConfig;
 import de.geheimagentnr1.dimension_access_manager.elements.commands.dimension.DimensionAccessTypeArgument;
 import de.geheimagentnr1.dimension_access_manager.elements.commands.dimension.DimensionCommandAccessHelper;
-import net.minecraft.command.CommandSource;
-import net.minecraft.command.Commands;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.Commands;
+import net.minecraft.network.chat.TextComponent;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.text.StringTextComponent;
 
 
 @SuppressWarnings( "SameReturnValue" )
 public class DimensionsCommand {
 	
 	
-	public static void register( CommandDispatcher<CommandSource> dispatcher ) {
+	public static void register( CommandDispatcher<CommandSourceStack> dispatcher ) {
 		
-		LiteralArgumentBuilder<CommandSource> dimensions = Commands.literal( "dimensions" );
+		LiteralArgumentBuilder<CommandSourceStack> dimensions = Commands.literal( "dimensions" );
 		dimensions.then( Commands.literal( "status" )
 			.executes( DimensionsCommand::showDimensionsStatus ) );
-		LiteralArgumentBuilder<CommandSource> manageDimensions = dimensions
+		LiteralArgumentBuilder<CommandSourceStack> manageDimensions = dimensions
 			.requires( source -> source.hasPermission( 3 ) );
 		manageDimensions.then( Commands.literal( "default" )
 			.then( Commands.literal( "defaultDimensionAccessType" )
@@ -32,21 +32,21 @@ public class DimensionsCommand {
 		dispatcher.register( dimensions );
 	}
 	
-	private static int showDimensionsStatus( CommandContext<CommandSource> context ) {
+	private static int showDimensionsStatus( CommandContext<CommandSourceStack> context ) {
 		
-		CommandSource source = context.getSource();
+		CommandSourceStack source = context.getSource();
 		MinecraftServer server = source.getServer();
-		server.getAllLevels().forEach( serverWorld ->
-			DimensionCommandAccessHelper.showDimensionStatus( source, serverWorld )
+		server.getAllLevels().forEach( serverLevel ->
+			DimensionCommandAccessHelper.showDimensionStatus( source, serverLevel )
 		);
 		return Command.SINGLE_SUCCESS;
 	}
 	
-	private static int showDefaultDimensionAccessType( CommandContext<CommandSource> context ) {
+	private static int showDefaultDimensionAccessType( CommandContext<CommandSourceStack> context ) {
 		
-		CommandSource source = context.getSource();
+		CommandSourceStack source = context.getSource();
 		source.sendSuccess(
-			new StringTextComponent( String.format(
+			new TextComponent( String.format(
 				"The default dimension access type is %s.",
 				ServerConfig.getDefaultDimensionAccessType()
 			) ),
@@ -55,14 +55,14 @@ public class DimensionsCommand {
 		return Command.SINGLE_SUCCESS;
 	}
 	
-	private static int setDefaultDimensionAccessType( CommandContext<CommandSource> context ) {
+	private static int setDefaultDimensionAccessType( CommandContext<CommandSourceStack> context ) {
 		
-		CommandSource source = context.getSource();
+		CommandSourceStack source = context.getSource();
 		ServerConfig.setDefaultDimensionAccessType(
 			DimensionAccessTypeArgument.getDimensionAccessType( context, "dimensionAccessType" )
 		);
 		source.sendSuccess(
-			new StringTextComponent( String.format(
+			new TextComponent( String.format(
 				"The default dimension access type is now %s.",
 				ServerConfig.getDefaultDimensionAccessType()
 			) ),

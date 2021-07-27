@@ -1,8 +1,8 @@
 package de.geheimagentnr1.dimension_access_manager.util;
 
 import de.geheimagentnr1.dimension_access_manager.DimensionAccessManager;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
 
 import java.util.Objects;
 
@@ -15,8 +15,8 @@ public class ResourceLocationHelper {
 		return new ResourceLocation( DimensionAccessManager.MODID, registry_name );
 	}
 	
-	public static String serverWorldToName( ServerWorld serverWorld ) {
+	public static String serverLevelToName( ServerLevel serverLevel ) {
 		
-		return Objects.requireNonNull( serverWorld.dimension().location() ).toString();
+		return Objects.requireNonNull( serverLevel.dimension().location() ).toString();
 	}
 }
