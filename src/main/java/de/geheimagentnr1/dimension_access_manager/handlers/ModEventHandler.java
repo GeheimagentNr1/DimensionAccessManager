@@ -7,6 +7,7 @@ import de.geheimagentnr1.dimension_access_manager.elements.capabilities.dimensio
 import de.geheimagentnr1.dimension_access_manager.elements.capabilities.dimension_access_list.dimension_access_whitelist.DimensionAccessWhitelistCapability;
 import de.geheimagentnr1.dimension_access_manager.elements.commands.ModArgumentTypes;
 import net.minecraftforge.common.capabilities.CapabilityManager;
+import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.config.ModConfigEvent;
@@ -21,9 +22,14 @@ public class ModEventHandler {
 	public static void handleCommonSetupEvent( FMLCommonSetupEvent event ) {
 		
 		ModArgumentTypes.registerArgumentTypes();
-		CapabilityManager.INSTANCE.register( DimensionAccessCapability.class );
-		CapabilityManager.INSTANCE.register( DimensionAccessBlacklistCapability.class );
-		CapabilityManager.INSTANCE.register( DimensionAccessWhitelistCapability.class );
+	}
+	
+	@SubscribeEvent
+	public static void handleRegisterCapabilitiesEvent( RegisterCapabilitiesEvent event ) {
+		
+		event.register( DimensionAccessCapability.class );
+		event.register( DimensionAccessBlacklistCapability.class );
+		event.register( DimensionAccessWhitelistCapability.class );
 	}
 	
 	@SubscribeEvent

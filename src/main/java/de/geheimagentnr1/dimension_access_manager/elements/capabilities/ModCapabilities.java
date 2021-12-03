@@ -4,19 +4,26 @@ import de.geheimagentnr1.dimension_access_manager.elements.capabilities.dimensio
 import de.geheimagentnr1.dimension_access_manager.elements.capabilities.dimension_access_list.dimension_access_blacklist.DimensionAccessBlacklistCapability;
 import de.geheimagentnr1.dimension_access_manager.elements.capabilities.dimension_access_list.dimension_access_whitelist.DimensionAccessWhitelistCapability;
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.CapabilityInject;
+import net.minecraftforge.common.capabilities.CapabilityManager;
+import net.minecraftforge.common.capabilities.CapabilityToken;
 
 
 @SuppressWarnings( "StaticNonFinalField" )
 public class ModCapabilities {
 	
 	
-	@CapabilityInject( DimensionAccessCapability.class )
-	public static Capability<DimensionAccessCapability> DIMENSION_ACCESS;
+	public static Capability<DimensionAccessCapability> DIMENSION_ACCESS =
+		CapabilityManager.get( new CapabilityToken<>() {
+		
+		} );
 	
-	@CapabilityInject( DimensionAccessBlacklistCapability.class )
-	public static Capability<DimensionAccessBlacklistCapability> DIMENSION_ACCESS_BLACKLIST;
+	public static Capability<DimensionAccessBlacklistCapability> DIMENSION_ACCESS_BLACKLIST =
+		CapabilityManager.get( new CapabilityToken<>() {
+		
+		} );
 	
-	@CapabilityInject( DimensionAccessWhitelistCapability.class )
-	public static Capability<DimensionAccessWhitelistCapability> DIMENSION_ACCESS_WHITELIST;
+	public static Capability<DimensionAccessWhitelistCapability> DIMENSION_ACCESS_WHITELIST =
+		CapabilityManager.get( new CapabilityToken<>() {
+		
+		} );
 }
