@@ -13,11 +13,14 @@ import net.minecraft.commands.arguments.DimensionArgument;
 import net.minecraft.commands.arguments.GameProfileArgument;
 
 import java.util.Collection;
+import java.util.function.Predicate;
 
 
 @SuppressWarnings( "SameReturnValue" )
 public class DimensionCommand {
 	
+	
+	private static final Predicate<CommandSourceStack> PERMISSION_CHECKER = source -> source.hasPermission( 3 );
 	
 	public static void register( CommandDispatcher<CommandSourceStack> dispatcher ) {
 		
@@ -25,17 +28,15 @@ public class DimensionCommand {
 		dimension.then( Commands.argument( "dimension", DimensionArgument.dimension() )
 			.then( Commands.literal( "access" )
 				.then( Commands.literal( "status" )
-					.executes( DimensionCommand::showDimensionStatus ) ) ) );
-		
-		LiteralArgumentBuilder<CommandSourceStack> manageDimension = dimension
-			.requires( source -> source.hasPermission( 3 ) );
-		manageDimension.then( Commands.argument( "dimension", DimensionArgument.dimension() )
-			.then( Commands.literal( "access" )
+					.executes( DimensionCommand::showDimensionStatus ) )
 				.then( Commands.literal( "grant" )
+					.requires( PERMISSION_CHECKER )
 					.executes( DimensionCommand::grantDimension ) )
 				.then( Commands.literal( "lock" )
+					.requires( PERMISSION_CHECKER )
 					.executes( DimensionCommand::lockDimension ) ) )
 			.then( Commands.literal( "players" )
+				.requires( PERMISSION_CHECKER )
 				.then( Commands.literal( "list" )
 					.executes( DimensionCommand::showLists ) )
 				.then( Commands.literal( "whitelist" )
