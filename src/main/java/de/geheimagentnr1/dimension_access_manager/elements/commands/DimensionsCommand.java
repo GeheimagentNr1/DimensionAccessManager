@@ -22,15 +22,13 @@ public class DimensionsCommand {
 		LiteralArgumentBuilder<CommandSourceStack> dimensions = Commands.literal( "dimensions" );
 		dimensions.then( Commands.literal( "status" )
 			.executes( DimensionsCommand::showDimensionsStatus ) );
-		LiteralArgumentBuilder<CommandSourceStack> opManageDimensions = Commands.literal( "dimensions" )
-			.requires( source -> source.hasPermission( 3 ) );
-		opManageDimensions.then( Commands.literal( "default" )
+		dimensions.then( Commands.literal( "default" )
+			.requires( source -> source.hasPermission( 3 ) )
 			.then( Commands.literal( "defaultDimensionAccessType" )
 				.executes( DimensionsCommand::showDefaultDimensionAccessType )
 				.then( Commands.argument( "dimensionAccessType", DimensionAccessTypeArgument.dimensionAccessType() )
 					.executes( DimensionsCommand::setDefaultDimensionAccessType ) ) ) );
 		dispatcher.register( dimensions );
-		dispatcher.register( opManageDimensions );
 	}
 	
 	private static int showDimensionsStatus( CommandContext<CommandSourceStack> context ) {
