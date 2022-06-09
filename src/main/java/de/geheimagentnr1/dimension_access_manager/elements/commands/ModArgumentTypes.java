@@ -2,8 +2,9 @@ package de.geheimagentnr1.dimension_access_manager.elements.commands;
 
 import de.geheimagentnr1.dimension_access_manager.DimensionAccessManager;
 import de.geheimagentnr1.dimension_access_manager.elements.commands.dimension.DimensionAccessTypeArgument;
-import net.minecraft.commands.synchronization.ArgumentTypes;
-import net.minecraft.commands.synchronization.EmptyArgumentSerializer;
+import net.minecraft.commands.synchronization.ArgumentTypeInfos;
+import net.minecraft.commands.synchronization.SingletonArgumentInfo;
+import net.minecraft.core.Registry;
 
 
 public class ModArgumentTypes {
@@ -11,10 +12,13 @@ public class ModArgumentTypes {
 	
 	public static void registerArgumentTypes() {
 		
-		ArgumentTypes.register(
+		Registry.register(
+			Registry.COMMAND_ARGUMENT_TYPE,
 			DimensionAccessManager.MODID + ":" + DimensionAccessTypeArgument.registry_name,
-			DimensionAccessTypeArgument.class,
-			new EmptyArgumentSerializer<>( DimensionAccessTypeArgument::dimensionAccessType )
+			ArgumentTypeInfos.registerByClass(
+				DimensionAccessTypeArgument.class,
+				SingletonArgumentInfo.contextFree( DimensionAccessTypeArgument::new )
+			)
 		);
 	}
 }

@@ -6,7 +6,7 @@ import de.geheimagentnr1.dimension_access_manager.elements.capabilities.dimensio
 import de.geheimagentnr1.dimension_access_manager.elements.capabilities.dimension_access_list.DimensionAccessListCapability;
 import de.geheimagentnr1.dimension_access_manager.util.ResourceLocationHelper;
 import net.minecraft.commands.CommandSourceStack;
-import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
@@ -68,7 +68,7 @@ public class DimensionCommandAccessHelper {
 		
 		if( isListed ) {
 			source.sendSuccess(
-				new TextComponent( String.format(
+				Component.literal( String.format(
 					"\"%s\": Access is %s. For you %s",
 					ResourceLocationHelper.serverLevelToName( serverLevel ),
 					dimensionStatus.getLowerCase(),
@@ -80,7 +80,7 @@ public class DimensionCommandAccessHelper {
 			);
 		} else {
 			source.sendSuccess(
-				new TextComponent( String.format(
+				Component.literal( String.format(
 					"\"%s\": Access is %s.",
 					ResourceLocationHelper.serverLevelToName( serverLevel ),
 					dimensionStatus.getLowerCase()
@@ -97,7 +97,7 @@ public class DimensionCommandAccessHelper {
 		DimensionAccessCapability dimensionAccessCapability ) {
 		
 		source.sendSuccess(
-			new TextComponent( String.format(
+			Component.literal( String.format(
 				"%s is now %s.",
 				ResourceLocationHelper.serverLevelToName( serverLevel ),
 				dimensionAccessCapability.getDimensionAccess().getLowerCase()

@@ -32,7 +32,7 @@ public class DimensionAccessTypeArgument implements ArgumentType<DimensionAccess
 		return context.getArgument( name, DimensionAccessType.class );
 	}
 	
-	private DimensionAccessTypeArgument() {
+	public DimensionAccessTypeArgument() {
 		
 		values = Arrays.stream( DimensionAccessType.values() )
 			.map( Enum::name )

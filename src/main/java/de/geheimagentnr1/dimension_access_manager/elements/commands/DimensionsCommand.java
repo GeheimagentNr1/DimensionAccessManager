@@ -9,7 +9,7 @@ import de.geheimagentnr1.dimension_access_manager.elements.commands.dimension.Di
 import de.geheimagentnr1.dimension_access_manager.elements.commands.dimension.DimensionCommandAccessHelper;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
-import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.MinecraftServer;
 
 
@@ -45,7 +45,7 @@ public class DimensionsCommand {
 		
 		CommandSourceStack source = context.getSource();
 		source.sendSuccess(
-			new TextComponent( String.format(
+			Component.literal( String.format(
 				"The default dimension access type is %s.",
 				ServerConfig.getDefaultDimensionAccessType()
 			) ),
@@ -61,7 +61,7 @@ public class DimensionsCommand {
 			DimensionAccessTypeArgument.getDimensionAccessType( context, "dimensionAccessType" )
 		);
 		source.sendSuccess(
-			new TextComponent( String.format(
+			Component.literal( String.format(
 				"The default dimension access type is now %s.",
 				ServerConfig.getDefaultDimensionAccessType()
 			) ),
