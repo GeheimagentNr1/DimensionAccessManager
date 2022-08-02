@@ -1,12 +1,5 @@
 package de.geheimagentnr1.dimension_access_manager.elements.commands;
 
-import de.geheimagentnr1.dimension_access_manager.DimensionAccessManager;
-import de.geheimagentnr1.dimension_access_manager.elements.commands.dimension.DimensionAccessTypeArgument;
-import net.minecraft.commands.synchronization.ArgumentTypeInfos;
-import net.minecraft.commands.synchronization.SingletonArgumentInfo;
-import net.minecraft.core.Registry;
-
-
 public class ModArgumentTypes {
 	
 	
