@@ -562,7 +562,7 @@
   {
     "project": "fmlcore",
     "description": "Modifactions to Minecraft to enable mod developers.",
-    "version": "1.18.2-40.0.12",
+    "version": "1.18.2-40.2.1",
     "developers": [],
     "url": "https://github.com/MinecraftForge/MinecraftForge",
     "year": null,
@@ -572,12 +572,12 @@
         "license_url": "https://github.com/MinecraftForge/MinecraftForge/blob/1.13-pre/LICENSE.txt"
       }
     ],
-    "dependency": "net.minecraftforge:fmlcore:1.18.2-40.0.12"
+    "dependency": "net.minecraftforge:fmlcore:1.18.2-40.2.1"
   },
   {
     "project": "fmlloader",
     "description": "Modifactions to Minecraft to enable mod developers.",
-    "version": "1.18.2-40.0.12",
+    "version": "1.18.2-40.2.1",
     "developers": [],
     "url": "https://github.com/MinecraftForge/MinecraftForge",
     "year": null,
@@ -587,22 +587,22 @@
         "license_url": "https://github.com/MinecraftForge/MinecraftForge/blob/1.13-pre/LICENSE.txt"
       }
     ],
-    "dependency": "net.minecraftforge:fmlloader:1.18.2-40.0.12"
+    "dependency": "net.minecraftforge:fmlloader:1.18.2-40.2.1"
   },
   {
     "project": "forge",
     "description": null,
-    "version": "1.18.2-40.0.12_mapped_official_1.18.2",
+    "version": "1.18.2-40.2.1_mapped_official_1.18.2",
     "developers": [],
     "url": null,
     "year": null,
     "licenses": [],
-    "dependency": "net.minecraftforge:forge:1.18.2-40.0.12_mapped_official_1.18.2"
+    "dependency": "net.minecraftforge:forge:1.18.2-40.2.1_mapped_official_1.18.2"
   },
   {
     "project": "Forge Service Provider Interface",
     "description": "API for services which can plug into forge, or which are used by forge in other places",
-    "version": "4.0.11",
+    "version": "4.0.15-4.x",
     "developers": [
       "cpw"
     ],
@@ -614,7 +614,7 @@
         "license_url": "https://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt"
       }
     ],
-    "dependency": "net.minecraftforge:forgespi:4.0.11"
+    "dependency": "net.minecraftforge:forgespi:4.0.15-4.x"
   },
   {
     "project": "Gson",
@@ -716,6 +716,21 @@
     "dependency": "com.google.j2objc:j2objc-annotations:1.3"
   },
   {
+    "project": "JarJar",
+    "description": "Jar in Jar Utilities including the required NIO FileSystems.",
+    "version": "0.3.0",
+    "developers": [],
+    "url": "https://github.com/MinecraftForge/JarJar",
+    "year": null,
+    "licenses": [
+      {
+        "license": "LGPL 2.1",
+        "license_url": "https://github.com/MinecraftForge/JarJar/blob/main/LICENSE"
+      }
+    ],
+    "dependency": "net.minecraftforge:JarJar:0.3.0"
+  },
+  {
     "project": "Java Native Access",
     "description": "Java Native Access",
     "version": "5.10.0",
@@ -789,7 +804,7 @@
   {
     "project": "javafmllanguage",
     "description": "Modifactions to Minecraft to enable mod developers.",
-    "version": "1.18.2-40.0.12",
+    "version": "1.18.2-40.2.1",
     "developers": [],
     "url": "https://github.com/MinecraftForge/MinecraftForge",
     "year": null,
@@ -799,7 +814,7 @@
         "license_url": "https://github.com/MinecraftForge/MinecraftForge/blob/1.13-pre/LICENSE.txt"
       }
     ],
-    "dependency": "net.minecraftforge:javafmllanguage:1.18.2-40.0.12"
+    "dependency": "net.minecraftforge:javafmllanguage:1.18.2-40.2.1"
   },
   {
     "project": "JetBrains Java Annotations",
@@ -889,6 +904,21 @@
     "year": null,
     "licenses": [],
     "dependency": "com.mojang:logging:1.0.0"
+  },
+  {
+    "project": "lowcodelanguage",
+    "description": "Modifactions to Minecraft to enable mod developers.",
+    "version": "1.18.2-40.2.1",
+    "developers": [],
+    "url": "https://github.com/MinecraftForge/MinecraftForge",
+    "year": null,
+    "licenses": [
+      {
+        "license": "LGPL 2.1",
+        "license_url": "https://github.com/MinecraftForge/MinecraftForge/blob/1.13-pre/LICENSE.txt"
+      }
+    ],
+    "dependency": "net.minecraftforge:lowcodelanguage:1.18.2-40.2.1"
   },
   {
     "project": "LWJGL",
@@ -1037,7 +1067,7 @@
   {
     "project": "mclanguage",
     "description": "Modifactions to Minecraft to enable mod developers.",
-    "version": "1.18.2-40.0.12",
+    "version": "1.18.2-40.2.1",
     "developers": [],
     "url": "https://github.com/MinecraftForge/MinecraftForge",
     "year": null,
@@ -1047,7 +1077,7 @@
         "license_url": "https://github.com/MinecraftForge/MinecraftForge/blob/1.13-pre/LICENSE.txt"
       }
     ],
-    "dependency": "net.minecraftforge:mclanguage:1.18.2-40.0.12"
+    "dependency": "net.minecraftforge:mclanguage:1.18.2-40.2.1"
   },
   {
     "project": "MergeTool",
@@ -1143,6 +1173,23 @@
     "dependency": "com.electronwill.night-config:toml:3.6.4"
   },
   {
+    "project": "NoException",
+    "description": "Makes exception handling concise and beautiful, yet architecturally clean and flexible.",
+    "version": "1.7.1",
+    "developers": [
+      "Robert Važan"
+    ],
+    "url": "https://noexception.machinezoo.com/",
+    "year": "2017",
+    "licenses": [
+      {
+        "license": "Apache License 2.0",
+        "license_url": "https://github.com/robertvazan/noexception/blob/master/LICENSE"
+      }
+    ],
+    "dependency": "com.machinezoo.noexception:noexception:1.7.1"
+  },
+  {
     "project": "OpenJDK Nashorn",
     "description": "Nashorn is an Open Source JavaScript (ECMAScript 5.1 and some 6 features) engine for the JVM.",
     "version": "15.3",
@@ -1202,14 +1249,14 @@
   {
     "project": "Secure Modular Jar handler",
     "description": "Making the Java modular system provide security information",
-    "version": "1.0.3",
+    "version": "1.0.5",
     "developers": [
       "cpw"
     ],
     "url": "https://github.com/McModLauncher/securejarhandler",
     "year": null,
     "licenses": [],
-    "dependency": "cpw.mods:securejarhandler:1.0.3"
+    "dependency": "cpw.mods:securejarhandler:1.0.5"
   },
   {
     "project": "SLF4J API Module",
@@ -1225,6 +1272,21 @@
       }
     ],
     "dependency": "org.slf4j:slf4j-api:1.8.0-beta4"
+  },
+  {
+    "project": "SLF4J Simple Binding",
+    "description": "SLF4J Simple binding",
+    "version": "1.7.30",
+    "developers": [],
+    "url": "http://www.slf4j.org",
+    "year": null,
+    "licenses": [
+      {
+        "license": "MIT License",
+        "license_url": "http://www.opensource.org/licenses/mit-license.php"
+      }
+    ],
+    "dependency": "org.slf4j:slf4j-simple:1.7.30"
   },
   {
     "project": "SRG Utils",
