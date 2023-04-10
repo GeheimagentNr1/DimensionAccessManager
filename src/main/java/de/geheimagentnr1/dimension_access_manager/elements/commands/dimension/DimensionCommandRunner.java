@@ -4,7 +4,6 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.arguments.DimensionArgument;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 
 
@@ -17,7 +16,6 @@ interface DimensionCommandRunner {
 	void run(
 		CommandContext<CommandSourceStack> context,
 		CommandSourceStack source,
-		MinecraftServer server,
 		ServerLevel serverLevel );
 	
 	//public
@@ -25,9 +23,8 @@ interface DimensionCommandRunner {
 		throws CommandSyntaxException {
 		
 		CommandSourceStack source = context.getSource();
-		MinecraftServer server = source.getServer();
 		ServerLevel serverLevel = DimensionArgument.getDimension( context, "dimension" );
 		
-		runner.run( context, source, server, serverLevel );
+		runner.run( context, source, serverLevel );
 	}
 }
