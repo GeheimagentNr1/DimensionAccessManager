@@ -68,7 +68,7 @@ public class DimensionCommandAccessHelper {
 		
 		if( isListed ) {
 			source.sendSuccess(
-				Component.literal( String.format(
+				() -> Component.literal( String.format(
 					"\"%s\": Access is %s. For you %s",
 					ResourceLocationHelper.serverLevelToName( serverLevel ),
 					dimensionStatus.getLowerCase(),
@@ -80,7 +80,7 @@ public class DimensionCommandAccessHelper {
 			);
 		} else {
 			source.sendSuccess(
-				Component.literal( String.format(
+				() -> Component.literal( String.format(
 					"\"%s\": Access is %s.",
 					ResourceLocationHelper.serverLevelToName( serverLevel ),
 					dimensionStatus.getLowerCase()
@@ -97,7 +97,7 @@ public class DimensionCommandAccessHelper {
 		DimensionAccessCapability dimensionAccessCapability ) {
 		
 		source.sendSuccess(
-			Component.literal( String.format(
+			() -> Component.literal( String.format(
 				"%s is now %s.",
 				ResourceLocationHelper.serverLevelToName( serverLevel ),
 				dimensionAccessCapability.getDimensionAccess().getLowerCase()

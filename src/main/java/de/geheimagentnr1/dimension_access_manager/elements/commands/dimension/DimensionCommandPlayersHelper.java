@@ -62,7 +62,7 @@ class DimensionCommandPlayersHelper {
 		String gameProfiles = gameProfilesToString( dimensionAccessWhitelistCapability.getGameProfiles() );
 		if( gameProfiles.isEmpty() ) {
 			source.sendSuccess(
-				Component.literal( String.format(
+				() -> Component.literal( String.format(
 					"Whitelist \"%s\" is empty.",
 					ResourceLocationHelper.serverLevelToName( serverLevel )
 				) ),
@@ -70,7 +70,7 @@ class DimensionCommandPlayersHelper {
 			);
 		} else {
 			source.sendSuccess(
-				Component.literal( String.format(
+				() -> Component.literal( String.format(
 					"Whitelist \"%s\": %s",
 					ResourceLocationHelper.serverLevelToName( serverLevel ),
 					gameProfiles
@@ -89,7 +89,7 @@ class DimensionCommandPlayersHelper {
 		runForWhitelist(
 			serverLevel,
 			dimensionAccessWhitelistCapability -> source.sendSuccess(
-				Component.literal( String.format(
+				() -> Component.literal( String.format(
 					"Added to dimension \"%s\" whitelist: %s",
 					ResourceLocationHelper.serverLevelToName( serverLevel ),
 					gameProfilesToString( addTargetsToList( dimensionAccessWhitelistCapability, gameProfiles ) )
@@ -108,7 +108,7 @@ class DimensionCommandPlayersHelper {
 		runForWhitelist(
 			serverLevel,
 			dimensionAccessWhitelistCapability -> source.sendSuccess(
-				Component.literal( String.format(
+				() -> Component.literal( String.format(
 					"Removed from dimension \"%s\" whitelist: %s",
 					ResourceLocationHelper.serverLevelToName( serverLevel ),
 					gameProfilesToString( removeTargetsFromList( dimensionAccessWhitelistCapability, gameProfiles ) )
@@ -135,7 +135,7 @@ class DimensionCommandPlayersHelper {
 		String gameProfiles = gameProfilesToString( dimensionAccessBlacklistCapability.getGameProfiles() );
 		if( gameProfiles.isEmpty() ) {
 			source.sendSuccess(
-				Component.literal( String.format(
+				() -> Component.literal( String.format(
 					"Blacklist \"%s\" is empty.",
 					ResourceLocationHelper.serverLevelToName( serverLevel )
 				) ),
@@ -143,7 +143,7 @@ class DimensionCommandPlayersHelper {
 			);
 		} else {
 			source.sendSuccess(
-				Component.literal( String.format(
+				() -> Component.literal( String.format(
 					"Blacklist \"%s\": %s",
 					ResourceLocationHelper.serverLevelToName( serverLevel ),
 					gameProfiles
@@ -162,7 +162,7 @@ class DimensionCommandPlayersHelper {
 		runForBlacklist(
 			serverLevel,
 			dimensionAccessBlacklistCapability -> source.sendSuccess(
-				Component.literal( String.format(
+				() -> Component.literal( String.format(
 					"Added to dimension \"%s\" blacklist: %s",
 					ResourceLocationHelper.serverLevelToName( serverLevel ),
 					gameProfilesToString( addTargetsToList( dimensionAccessBlacklistCapability, gameProfiles ) )
@@ -181,7 +181,7 @@ class DimensionCommandPlayersHelper {
 		runForBlacklist(
 			serverLevel,
 			dimensionAccessBlacklistCapability -> source.sendSuccess(
-				Component.literal( String.format(
+				() -> Component.literal( String.format(
 					"Removed from dimension \"%s\" blacklist: %s",
 					ResourceLocationHelper.serverLevelToName( serverLevel ),
 					gameProfilesToString( removeTargetsFromList( dimensionAccessBlacklistCapability, gameProfiles ) )

@@ -45,7 +45,7 @@ public class DimensionsCommand {
 		
 		CommandSourceStack source = context.getSource();
 		source.sendSuccess(
-			Component.literal( String.format(
+			() -> Component.literal( String.format(
 				"The default dimension access type is %s.",
 				ServerConfig.getDefaultDimensionAccessType()
 			) ),
@@ -61,7 +61,7 @@ public class DimensionsCommand {
 			DimensionAccessTypeArgument.getDimensionAccessType( context, "dimensionAccessType" )
 		);
 		source.sendSuccess(
-			Component.literal( String.format(
+			() -> Component.literal( String.format(
 				"The default dimension access type is now %s.",
 				ServerConfig.getDefaultDimensionAccessType()
 			) ),
