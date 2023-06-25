@@ -5,6 +5,7 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.arguments.DimensionArgument;
 import net.minecraft.server.level.ServerLevel;
+import org.jetbrains.annotations.NotNull;
 
 
 //package-private
@@ -14,12 +15,12 @@ interface DimensionCommandRunner {
 	
 	//public
 	void run(
-		CommandContext<CommandSourceStack> context,
-		CommandSourceStack source,
-		ServerLevel serverLevel );
+		@NotNull CommandContext<CommandSourceStack> context,
+		@NotNull CommandSourceStack source,
+		@NotNull ServerLevel serverLevel );
 	
 	//public
-	static void run( CommandContext<CommandSourceStack> context, DimensionCommandRunner runner )
+	static void run( @NotNull CommandContext<CommandSourceStack> context, @NotNull DimensionCommandRunner runner )
 		throws CommandSyntaxException {
 		
 		CommandSourceStack source = context.getSource();

@@ -1,14 +1,9 @@
 package de.geheimagentnr1.dimension_access_manager.elements.capabilities.dimension_access;
 
-import java.util.Locale;
+import de.geheimagentnr1.minecraft_forge_api.util.SimpleStringRepresentable;
 
 
-public enum DimensionAccessType {
+public enum DimensionAccessType implements SimpleStringRepresentable {
 	GRANTED,
-	LOCKED;
-	
-	public String getLowerCase() {
-		
-		return name().toLowerCase( Locale.ENGLISH );
-	}
+	LOCKED
 }

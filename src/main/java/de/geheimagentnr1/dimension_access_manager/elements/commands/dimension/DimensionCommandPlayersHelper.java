@@ -1,15 +1,16 @@
 package de.geheimagentnr1.dimension_access_manager.elements.commands.dimension;
 
 import com.mojang.authlib.GameProfile;
-import de.geheimagentnr1.dimension_access_manager.elements.capabilities.ModCapabilities;
+import de.geheimagentnr1.dimension_access_manager.elements.capabilities.ModCapabilitiesRegisterFactory;
 import de.geheimagentnr1.dimension_access_manager.elements.capabilities.dimension_access_list.DimensionAccessListCapability;
 import de.geheimagentnr1.dimension_access_manager.elements.capabilities.dimension_access_list.dimension_access_blacklist.DimensionAccessBlacklistCapability;
 import de.geheimagentnr1.dimension_access_manager.elements.capabilities.dimension_access_list.dimension_access_whitelist.DimensionAccessWhitelistCapability;
-import de.geheimagentnr1.dimension_access_manager.util.ResourceLocationHelper;
+import de.geheimagentnr1.minecraft_forge_api.util.ResourceLocationHelper;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraftforge.common.util.NonNullConsumer;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
 import java.util.TreeSet;
@@ -21,43 +22,47 @@ import java.util.stream.Stream;
 class DimensionCommandPlayersHelper {
 	
 	
-	private static String gameProfilesToString( TreeSet<GameProfile> gameProfiles ) {
+	@NotNull
+	private static String gameProfilesToString( @NotNull TreeSet<GameProfile> gameProfiles ) {
 		
 		return gameProfilesToString( gameProfiles.stream() );
 	}
 	
-	private static String gameProfilesToString( Stream<GameProfile> gameProfiles ) {
+	@NotNull
+	private static String gameProfilesToString( @NotNull Stream<GameProfile> gameProfiles ) {
 		
 		return gameProfiles.map( GameProfile::getName ).collect( Collectors.joining( ", " ) );
 	}
 	
+	@NotNull
 	private static Stream<GameProfile> addTargetsToList(
-		DimensionAccessListCapability dimensionAccessListCapability,
-		Collection<GameProfile> gameProfiles ) {
+		@NotNull DimensionAccessListCapability dimensionAccessListCapability,
+		@NotNull Collection<GameProfile> gameProfiles ) {
 		
 		return gameProfiles.stream().filter( dimensionAccessListCapability::add );
 	}
 	
+	@NotNull
 	private static Stream<GameProfile> removeTargetsFromList(
-		DimensionAccessListCapability dimensionAccessListCapability,
-		Collection<GameProfile> gameProfiles ) {
+		@NotNull DimensionAccessListCapability dimensionAccessListCapability,
+		@NotNull Collection<GameProfile> gameProfiles ) {
 		
 		return gameProfiles.stream().filter( dimensionAccessListCapability::remove );
 	}
 	
 	//package-private
 	static void runForWhitelist(
-		ServerLevel serverLevel,
-		NonNullConsumer<DimensionAccessWhitelistCapability> runner ) {
+		@NotNull ServerLevel serverLevel,
+		@NotNull NonNullConsumer<DimensionAccessWhitelistCapability> runner ) {
 		
-		serverLevel.getCapability( ModCapabilities.DIMENSION_ACCESS_WHITELIST ).ifPresent( runner );
+		serverLevel.getCapability( ModCapabilitiesRegisterFactory.DIMENSION_ACCESS_WHITELIST ).ifPresent( runner );
 	}
 	
 	//package-private
 	static void sendWhitelistList(
-		DimensionAccessWhitelistCapability dimensionAccessWhitelistCapability,
-		CommandSourceStack source,
-		ServerLevel serverLevel ) {
+		@NotNull DimensionAccessWhitelistCapability dimensionAccessWhitelistCapability,
+		@NotNull CommandSourceStack source,
+		@NotNull ServerLevel serverLevel ) {
 		
 		String gameProfiles = gameProfilesToString( dimensionAccessWhitelistCapability.getGameProfiles() );
 		if( gameProfiles.isEmpty() ) {
@@ -82,9 +87,9 @@ class DimensionCommandPlayersHelper {
 	
 	//package-private
 	static void addTargetsToWhitelist(
-		CommandSourceStack source,
-		ServerLevel serverLevel,
-		Collection<GameProfile> gameProfiles ) {
+		@NotNull CommandSourceStack source,
+		@NotNull ServerLevel serverLevel,
+		@NotNull Collection<GameProfile> gameProfiles ) {
 		
 		runForWhitelist(
 			serverLevel,
@@ -101,9 +106,9 @@ class DimensionCommandPlayersHelper {
 	
 	//package-private
 	static void removeTargetsFromWhitelist(
-		CommandSourceStack source,
-		ServerLevel serverLevel,
-		Collection<GameProfile> gameProfiles ) {
+		@NotNull CommandSourceStack source,
+		@NotNull ServerLevel serverLevel,
+		@NotNull Collection<GameProfile> gameProfiles ) {
 		
 		runForWhitelist(
 			serverLevel,
@@ -120,17 +125,17 @@ class DimensionCommandPlayersHelper {
 	
 	//package-private
 	static void runForBlacklist(
-		ServerLevel serverLevel,
-		NonNullConsumer<DimensionAccessBlacklistCapability> runner ) {
+		@NotNull ServerLevel serverLevel,
+		@NotNull NonNullConsumer<DimensionAccessBlacklistCapability> runner ) {
 		
-		serverLevel.getCapability( ModCapabilities.DIMENSION_ACCESS_BLACKLIST ).ifPresent( runner );
+		serverLevel.getCapability( ModCapabilitiesRegisterFactory.DIMENSION_ACCESS_BLACKLIST ).ifPresent( runner );
 	}
 	
 	//package-private
 	static void sendBlacklistList(
-		DimensionAccessBlacklistCapability dimensionAccessBlacklistCapability,
-		CommandSourceStack source,
-		ServerLevel serverLevel ) {
+		@NotNull DimensionAccessBlacklistCapability dimensionAccessBlacklistCapability,
+		@NotNull CommandSourceStack source,
+		@NotNull ServerLevel serverLevel ) {
 		
 		String gameProfiles = gameProfilesToString( dimensionAccessBlacklistCapability.getGameProfiles() );
 		if( gameProfiles.isEmpty() ) {
@@ -155,9 +160,9 @@ class DimensionCommandPlayersHelper {
 	
 	//package-private
 	static void addTargetsToBlacklist(
-		CommandSourceStack source,
-		ServerLevel serverLevel,
-		Collection<GameProfile> gameProfiles ) {
+		@NotNull CommandSourceStack source,
+		@NotNull ServerLevel serverLevel,
+		@NotNull Collection<GameProfile> gameProfiles ) {
 		
 		runForBlacklist(
 			serverLevel,
@@ -174,9 +179,9 @@ class DimensionCommandPlayersHelper {
 	
 	//package-private
 	static void removeTargetsFromBlacklist(
-		CommandSourceStack source,
-		ServerLevel serverLevel,
-		Collection<GameProfile> gameProfiles ) {
+		@NotNull CommandSourceStack source,
+		@NotNull ServerLevel serverLevel,
+		@NotNull Collection<GameProfile> gameProfiles ) {
 		
 		runForBlacklist(
 			serverLevel,

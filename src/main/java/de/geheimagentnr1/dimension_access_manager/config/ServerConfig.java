@@ -1,47 +1,54 @@
 package de.geheimagentnr1.dimension_access_manager.config;
 
 import de.geheimagentnr1.dimension_access_manager.elements.capabilities.dimension_access.DimensionAccessType;
-import net.minecraftforge.common.ForgeConfigSpec;
-import net.minecraftforge.fml.ModLoadingContext;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import de.geheimagentnr1.minecraft_forge_api.AbstractMod;
+import de.geheimagentnr1.minecraft_forge_api.config.AbstractConfig;
+import net.minecraftforge.fml.config.ModConfig;
+import org.jetbrains.annotations.NotNull;
 
 
-public class ServerConfig {
+public class ServerConfig extends AbstractConfig {
 	
 	
-	private static final Logger LOGGER = LogManager.getLogger( ServerConfig.class );
+	@NotNull
+	private static final String DEFAULT_DIMENSION_ACCESS_TYPE_KEY = "default_dimension_access_type";
 	
-	private static final String MOD_NAME = ModLoadingContext.get().getActiveContainer().getModInfo().getDisplayName();
-	
-	private static final ForgeConfigSpec.Builder BUILDER = new ForgeConfigSpec.Builder();
-	
-	public static final ForgeConfigSpec CONFIG;
-	
-	private static final ForgeConfigSpec.EnumValue<DimensionAccessType> DEFAULT_DIMENSION_ACCESS_TYPE;
-	
-	static {
+	public ServerConfig( @NotNull AbstractMod _abstractMod ) {
 		
-		DEFAULT_DIMENSION_ACCESS_TYPE = BUILDER
-			.comment( "Defines if new dimensions are GRANTED or LOCKED by default." )
-			.defineEnum( "default_dimension_access_type", DimensionAccessType.GRANTED );
-		CONFIG = BUILDER.build();
+		super( _abstractMod );
 	}
 	
-	public static void printConfig() {
+	@NotNull
+	@Override
+	public ModConfig.Type type() {
 		
-		LOGGER.info( "Loading \"{}\" Server Config", MOD_NAME );
-		LOGGER.info( "{} = {}", DEFAULT_DIMENSION_ACCESS_TYPE.getPath(), DEFAULT_DIMENSION_ACCESS_TYPE.get() );
-		LOGGER.info( "\"{}\" Server Config loaded", MOD_NAME );
+		return ModConfig.Type.SERVER;
 	}
 	
-	public static DimensionAccessType getDefaultDimensionAccessType() {
+	@Override
+	public boolean isEarlyLoad() {
 		
-		return DEFAULT_DIMENSION_ACCESS_TYPE.get();
+		return false;
 	}
 	
-	public static void setDefaultDimensionAccessType( DimensionAccessType _defaultDimensionAccessType ) {
+	@Override
+	protected void registerConfigValues() {
 		
-		DEFAULT_DIMENSION_ACCESS_TYPE.set( _defaultDimensionAccessType );
+		registerConfigValue(
+			"Defines if new dimensions are GRANTED or LOCKED by default.",
+			DEFAULT_DIMENSION_ACCESS_TYPE_KEY,
+			( builder, path ) -> builder.defineEnum( path, DimensionAccessType.GRANTED )
+		);
+	}
+	
+	@NotNull
+	public DimensionAccessType getDefaultDimensionAccessType() {
+		
+		return getValue( DimensionAccessType.class, DEFAULT_DIMENSION_ACCESS_TYPE_KEY );
+	}
+	
+	public void setDefaultDimensionAccessType( @NotNull DimensionAccessType _defaultDimensionAccessType ) {
+		
+		setValue( DimensionAccessType.class, DEFAULT_DIMENSION_ACCESS_TYPE_KEY, _defaultDimensionAccessType );
 	}
 }

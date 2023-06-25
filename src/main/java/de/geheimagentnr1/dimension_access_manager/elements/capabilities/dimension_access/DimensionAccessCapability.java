@@ -1,45 +1,59 @@
 package de.geheimagentnr1.dimension_access_manager.elements.capabilities.dimension_access;
 
 import de.geheimagentnr1.dimension_access_manager.config.ServerConfig;
-import de.geheimagentnr1.dimension_access_manager.elements.capabilities.ModCapabilities;
-import de.geheimagentnr1.dimension_access_manager.util.ResourceLocationHelper;
+import de.geheimagentnr1.dimension_access_manager.elements.capabilities.ModCapabilitiesRegisterFactory;
+import lombok.RequiredArgsConstructor;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.IntTag;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 import net.minecraftforge.common.util.LazyOptional;
+import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 
+@RequiredArgsConstructor
 public class DimensionAccessCapability implements ICapabilitySerializable<IntTag> {
 	
 	
-	public static final ResourceLocation registry_name = ResourceLocationHelper.build( "dimension_access" );
+	@NotNull
+	public static final String registry_name = "dimension_access";
 	
+	@NotNull
 	private final LazyOptional<DimensionAccessCapability> holder = LazyOptional.of( () -> this );
 	
-	private DimensionAccessType dimensionAccess = ServerConfig.getDefaultDimensionAccessType();
+	@NotNull
+	private final ServerConfig serverConfig;
 	
+	@NotNull
+	private DimensionAccessType dimensionAccess;
+	
+	public DimensionAccessCapability( @NotNull final ServerConfig _serverConfig ) {
+		
+		serverConfig = _serverConfig;
+		dimensionAccess = serverConfig.getDefaultDimensionAccessType();
+	}
+	
+	@NotNull
 	public DimensionAccessType getDimensionAccess() {
 		
 		return dimensionAccess;
 	}
 	
-	public void setDimensionAccess( DimensionAccessType _dimensionAccess ) {
+	public void setDimensionAccess( @NotNull DimensionAccessType _dimensionAccess ) {
 		
 		dimensionAccess = _dimensionAccess;
 	}
 	
-	@Nonnull
+	@NotNull
 	@Override
-	public <T> LazyOptional<T> getCapability( @Nonnull Capability<T> cap, @Nullable Direction side ) {
+	public <T> LazyOptional<T> getCapability( @NotNull Capability<T> cap, @Nullable Direction side ) {
 		
-		return ModCapabilities.DIMENSION_ACCESS.orEmpty( cap, holder );
+		return ModCapabilitiesRegisterFactory.DIMENSION_ACCESS.orEmpty( cap, holder );
 	}
 	
+	@NotNull
 	@Override
 	public IntTag serializeNBT() {
 		
@@ -47,7 +61,7 @@ public class DimensionAccessCapability implements ICapabilitySerializable<IntTag
 	}
 	
 	@Override
-	public void deserializeNBT( IntTag nbt ) {
+	public void deserializeNBT( @NotNull IntTag nbt ) {
 		
 		DimensionAccessType[] dimensionAccessTypes = DimensionAccessType.values();
 		int value = nbt.getAsInt();

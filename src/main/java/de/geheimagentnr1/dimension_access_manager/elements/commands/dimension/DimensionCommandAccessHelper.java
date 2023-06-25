@@ -1,28 +1,31 @@
 package de.geheimagentnr1.dimension_access_manager.elements.commands.dimension;
 
-import de.geheimagentnr1.dimension_access_manager.elements.capabilities.ModCapabilities;
+import de.geheimagentnr1.dimension_access_manager.elements.capabilities.ModCapabilitiesRegisterFactory;
 import de.geheimagentnr1.dimension_access_manager.elements.capabilities.dimension_access.DimensionAccessCapability;
 import de.geheimagentnr1.dimension_access_manager.elements.capabilities.dimension_access.DimensionAccessType;
 import de.geheimagentnr1.dimension_access_manager.elements.capabilities.dimension_access_list.DimensionAccessListCapability;
-import de.geheimagentnr1.dimension_access_manager.util.ResourceLocationHelper;
+import de.geheimagentnr1.minecraft_forge_api.util.ResourceLocationHelper;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraftforge.common.util.NonNullConsumer;
+import org.jetbrains.annotations.NotNull;
 
 
 public class DimensionCommandAccessHelper {
 	
 	
 	//package-private
-	static void runForAccess( ServerLevel serverLevel, NonNullConsumer<DimensionAccessCapability> runner ) {
+	static void runForAccess(
+		@NotNull ServerLevel serverLevel,
+		@NotNull NonNullConsumer<DimensionAccessCapability> runner ) {
 		
-		serverLevel.getCapability( ModCapabilities.DIMENSION_ACCESS ).ifPresent( runner );
+		serverLevel.getCapability( ModCapabilitiesRegisterFactory.DIMENSION_ACCESS ).ifPresent( runner );
 	}
 	
-	public static void showDimensionStatus( CommandSourceStack source, ServerLevel serverLevel ) {
+	public static void showDimensionStatus( @NotNull CommandSourceStack source, @NotNull ServerLevel serverLevel ) {
 		
 		runForAccess( serverLevel, dimensionAccessCapability -> {
 			if( dimensionAccessCapability.getDimensionAccess() == DimensionAccessType.GRANTED ) {
@@ -50,8 +53,8 @@ public class DimensionCommandAccessHelper {
 	}
 	
 	private static boolean isListed(
-		CommandSourceStack source,
-		DimensionAccessListCapability dimensionAccessListCapability ) {
+		@NotNull CommandSourceStack source,
+		@NotNull DimensionAccessListCapability dimensionAccessListCapability ) {
 		
 		Entity entity = source.getEntity();
 		if( entity instanceof ServerPlayer ) {
@@ -61,9 +64,9 @@ public class DimensionCommandAccessHelper {
 	}
 	
 	private static void sendDimensionStatusFeedback(
-		CommandSourceStack source,
-		ServerLevel serverLevel,
-		DimensionAccessType dimensionStatus,
+		@NotNull CommandSourceStack source,
+		@NotNull ServerLevel serverLevel,
+		@NotNull DimensionAccessType dimensionStatus,
 		boolean isListed ) {
 		
 		if( isListed ) {
@@ -71,10 +74,10 @@ public class DimensionCommandAccessHelper {
 				() -> Component.literal( String.format(
 					"\"%s\": Access is %s. For you %s",
 					ResourceLocationHelper.serverLevelToName( serverLevel ),
-					dimensionStatus.getLowerCase(),
+					dimensionStatus.getSerializedName(),
 					( dimensionStatus == DimensionAccessType.GRANTED
 						? DimensionAccessType.LOCKED
-						: DimensionAccessType.GRANTED ).getLowerCase()
+						: DimensionAccessType.GRANTED ).getSerializedName()
 				) ),
 				false
 			);
@@ -83,7 +86,7 @@ public class DimensionCommandAccessHelper {
 				() -> Component.literal( String.format(
 					"\"%s\": Access is %s.",
 					ResourceLocationHelper.serverLevelToName( serverLevel ),
-					dimensionStatus.getLowerCase()
+					dimensionStatus.getSerializedName()
 				) ),
 				false
 			);
@@ -92,15 +95,15 @@ public class DimensionCommandAccessHelper {
 	
 	//package-private
 	static void sendDimensionAccessChangedFeedback(
-		CommandSourceStack source,
-		ServerLevel serverLevel,
-		DimensionAccessCapability dimensionAccessCapability ) {
+		@NotNull CommandSourceStack source,
+		@NotNull ServerLevel serverLevel,
+		@NotNull DimensionAccessCapability dimensionAccessCapability ) {
 		
 		source.sendSuccess(
 			() -> Component.literal( String.format(
 				"%s is now %s.",
 				ResourceLocationHelper.serverLevelToName( serverLevel ),
-				dimensionAccessCapability.getDimensionAccess().getLowerCase()
+				dimensionAccessCapability.getDimensionAccess().getSerializedName()
 			) ),
 			true
 		);

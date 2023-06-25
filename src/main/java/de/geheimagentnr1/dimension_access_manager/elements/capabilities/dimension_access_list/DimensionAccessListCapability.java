@@ -9,8 +9,8 @@ import net.minecraft.nbt.Tag;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 import net.minecraftforge.common.util.LazyOptional;
+import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Comparator;
 import java.util.TreeSet;
@@ -19,32 +19,35 @@ import java.util.TreeSet;
 public abstract class DimensionAccessListCapability implements ICapabilitySerializable<ListTag> {
 	
 	
+	@NotNull
 	private final LazyOptional<? extends DimensionAccessListCapability> holder = LazyOptional.of( () -> this );
 	
+	@NotNull
 	private final TreeSet<GameProfile> gameProfiles = new TreeSet<>( Comparator.comparing( GameProfile::getId ) );
 	
-	public boolean contains( GameProfile gameProfile ) {
+	public boolean contains( @NotNull GameProfile gameProfile ) {
 		
 		return gameProfiles.contains( gameProfile );
 	}
 	
-	public boolean add( GameProfile gameProfile ) {
+	public boolean add( @NotNull GameProfile gameProfile ) {
 		
 		return gameProfiles.add( gameProfile );
 	}
 	
-	public boolean remove( GameProfile gameProfile ) {
+	public boolean remove( @NotNull GameProfile gameProfile ) {
 		
 		return gameProfiles.remove( gameProfile );
 	}
 	
-	@Nonnull
+	@NotNull
 	@Override
-	public <T> LazyOptional<T> getCapability( @Nonnull Capability<T> cap, @Nullable Direction side ) {
+	public <T> LazyOptional<T> getCapability( @NotNull Capability<T> cap, @Nullable Direction side ) {
 		
 		return getCapability() == cap ? holder.cast() : LazyOptional.empty();
 	}
 	
+	@NotNull
 	protected abstract Capability<? extends DimensionAccessListCapability> getCapability();
 	
 	@Override
@@ -59,7 +62,7 @@ public abstract class DimensionAccessListCapability implements ICapabilitySerial
 	}
 	
 	@Override
-	public void deserializeNBT( ListTag nbt ) {
+	public void deserializeNBT( @NotNull ListTag nbt ) {
 		
 		nbt.forEach( inbt -> {
 			if( inbt.getId() == Tag.TAG_COMPOUND ) {
@@ -68,6 +71,7 @@ public abstract class DimensionAccessListCapability implements ICapabilitySerial
 		} );
 	}
 	
+	@NotNull
 	public TreeSet<GameProfile> getGameProfiles() {
 		
 		return gameProfiles;
