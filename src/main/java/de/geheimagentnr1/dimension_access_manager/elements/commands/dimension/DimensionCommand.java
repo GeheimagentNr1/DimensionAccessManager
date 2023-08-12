@@ -6,11 +6,13 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import de.geheimagentnr1.dimension_access_manager.config.ServerConfig;
 import de.geheimagentnr1.dimension_access_manager.elements.capabilities.dimension_access.DimensionAccessType;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.DimensionArgument;
 import net.minecraft.commands.arguments.GameProfileArgument;
+import net.minecraft.server.level.ServerLevel;
 
 import java.util.Collection;
 import java.util.function.Predicate;
@@ -20,7 +22,8 @@ import java.util.function.Predicate;
 public class DimensionCommand {
 	
 	
-	private static final Predicate<CommandSourceStack> PERMISSION_CHECKER = source -> source.hasPermission( 3 );
+	private static final Predicate<CommandSourceStack> PERMISSION_CHECKER = source ->
+		source.hasPermission( ServerConfig.getDimensionCommandPermissionLevel() );
 	
 	public static void register( CommandDispatcher<CommandSourceStack> dispatcher ) {
 		
@@ -65,9 +68,9 @@ public class DimensionCommand {
 		
 		DimensionCommandRunner.run(
 			commandContext,
-			( context, source, server, serverWorld ) -> DimensionCommandAccessHelper.showDimensionStatus(
+			( context, source, serverLevel ) -> DimensionCommandAccessHelper.showDimensionStatus(
 				source,
-				serverWorld
+				serverLevel
 			)
 		);
 		return Command.SINGLE_SUCCESS;
@@ -78,16 +81,16 @@ public class DimensionCommand {
 		
 		DimensionCommandRunner.run(
 			commandContext,
-			( context, source, server, serverWorld ) -> DimensionCommandAccessHelper.runForAccess(
-				serverWorld,
+			( context, source, serverLevel ) -> DimensionCommandAccessHelper.runForAccess(
+				serverLevel,
 				dimensionAccessCapability -> {
 					dimensionAccessCapability.setDimensionAccess( DimensionAccessType.GRANTED );
 					DimensionCommandAccessHelper.sendDimensionAccessChangedFeedback(
 						source,
-						serverWorld,
+						serverLevel,
 						dimensionAccessCapability
 					);
-					server.saveAllChunks( false, true, true );
+					saveChanges( serverLevel );
 				}
 			)
 		);
@@ -99,16 +102,16 @@ public class DimensionCommand {
 		
 		DimensionCommandRunner.run(
 			commandContext,
-			( context, source, server, serverWorld ) -> DimensionCommandAccessHelper.runForAccess(
-				serverWorld,
+			( context, source, serverLevel ) -> DimensionCommandAccessHelper.runForAccess(
+				serverLevel,
 				dimensionAccessCapability -> {
 					dimensionAccessCapability.setDimensionAccess( DimensionAccessType.LOCKED );
 					DimensionCommandAccessHelper.sendDimensionAccessChangedFeedback(
 						source,
-						serverWorld,
+						serverLevel,
 						dimensionAccessCapability
 					);
-					server.saveAllChunks( false, true, true );
+					saveChanges( serverLevel );
 				}
 			)
 		);
@@ -119,21 +122,21 @@ public class DimensionCommand {
 		
 		DimensionCommandRunner.run(
 			commandContext,
-			( context, source, server, serverWorld ) -> {
+			( context, source, serverLevel ) -> {
 				DimensionCommandPlayersHelper.runForWhitelist(
-					serverWorld,
+					serverLevel,
 					dimensionAccessWhitelistCapability -> DimensionCommandPlayersHelper.sendWhitelistList(
 						dimensionAccessWhitelistCapability,
 						source,
-						serverWorld
+						serverLevel
 					)
 				);
 				DimensionCommandPlayersHelper.runForBlacklist(
-					serverWorld,
+					serverLevel,
 					dimensionAccessBlacklistCapability -> DimensionCommandPlayersHelper.sendBlacklistList(
 						dimensionAccessBlacklistCapability,
 						source,
-						serverWorld
+						serverLevel
 					)
 				);
 			}
@@ -146,12 +149,12 @@ public class DimensionCommand {
 		
 		DimensionCommandRunner.run(
 			commandContext,
-			( context, source, server, serverWorld ) -> DimensionCommandPlayersHelper.runForWhitelist(
-				serverWorld,
+			( context, source, serverLevel ) -> DimensionCommandPlayersHelper.runForWhitelist(
+				serverLevel,
 				dimensionAccessWhitelistCapability -> DimensionCommandPlayersHelper.sendWhitelistList(
 					dimensionAccessWhitelistCapability,
 					source,
-					serverWorld
+					serverLevel
 				)
 			)
 		);
@@ -164,10 +167,10 @@ public class DimensionCommand {
 		Collection<GameProfile> gameProfiles = GameProfileArgument.getGameProfiles( commandContext, "targets" );
 		DimensionCommandRunner.run(
 			commandContext,
-			( context, source, server, serverWorld ) -> {
-				DimensionCommandPlayersHelper.removeTargetsFromBlacklist( source, serverWorld, gameProfiles );
-				DimensionCommandPlayersHelper.addTargetsToWhitelist( source, serverWorld, gameProfiles );
-				server.saveAllChunks( false, true, true );
+			( context, source, serverLevel ) -> {
+				DimensionCommandPlayersHelper.removeTargetsFromBlacklist( source, serverLevel, gameProfiles );
+				DimensionCommandPlayersHelper.addTargetsToWhitelist( source, serverLevel, gameProfiles );
+				saveChanges( serverLevel );
 			}
 		);
 		return gameProfiles.size();
@@ -179,9 +182,9 @@ public class DimensionCommand {
 		Collection<GameProfile> gameProfiles = GameProfileArgument.getGameProfiles( commandContext, "targets" );
 		DimensionCommandRunner.run(
 			commandContext,
-			( context, source, server, serverWorld ) -> {
-				DimensionCommandPlayersHelper.removeTargetsFromWhitelist( source, serverWorld, gameProfiles );
-				server.saveAllChunks( false, true, true );
+			( context, source, serverLevel ) -> {
+				DimensionCommandPlayersHelper.removeTargetsFromWhitelist( source, serverLevel, gameProfiles );
+				saveChanges( serverLevel );
 			}
 		);
 		return gameProfiles.size();
@@ -192,12 +195,12 @@ public class DimensionCommand {
 		
 		DimensionCommandRunner.run(
 			commandContext,
-			( context, source, server, serverWorld ) -> DimensionCommandPlayersHelper.runForBlacklist(
-				serverWorld,
+			( context, source, serverLevel ) -> DimensionCommandPlayersHelper.runForBlacklist(
+				serverLevel,
 				dimensionAccessBlacklistCapability -> DimensionCommandPlayersHelper.sendBlacklistList(
 					dimensionAccessBlacklistCapability,
 					source,
-					serverWorld
+					serverLevel
 				)
 			)
 		);
@@ -210,10 +213,10 @@ public class DimensionCommand {
 		Collection<GameProfile> gameProfiles = GameProfileArgument.getGameProfiles( commandContext, "targets" );
 		DimensionCommandRunner.run(
 			commandContext,
-			( context, source, server, serverWorld ) -> {
-				DimensionCommandPlayersHelper.removeTargetsFromWhitelist( source, serverWorld, gameProfiles );
-				DimensionCommandPlayersHelper.addTargetsToBlacklist( source, serverWorld, gameProfiles );
-				server.saveAllChunks( false, true, true );
+			( context, source, serverLevel ) -> {
+				DimensionCommandPlayersHelper.removeTargetsFromWhitelist( source, serverLevel, gameProfiles );
+				DimensionCommandPlayersHelper.addTargetsToBlacklist( source, serverLevel, gameProfiles );
+				saveChanges( serverLevel );
 			}
 		);
 		return gameProfiles.size();
@@ -225,11 +228,16 @@ public class DimensionCommand {
 		Collection<GameProfile> gameProfiles = GameProfileArgument.getGameProfiles( commandContext, "targets" );
 		DimensionCommandRunner.run(
 			commandContext,
-			( context, source, server, serverWorld ) -> {
-				DimensionCommandPlayersHelper.removeTargetsFromBlacklist( source, serverWorld, gameProfiles );
-				server.saveAllChunks( false, true, true );
+			( context, source, serverLevel ) -> {
+				DimensionCommandPlayersHelper.removeTargetsFromBlacklist( source, serverLevel, gameProfiles );
+				saveChanges( serverLevel );
 			}
 		);
 		return gameProfiles.size();
+	}
+	
+	private static void saveChanges( ServerLevel serverLevel ) {
+		
+		serverLevel.save( null, false, false );
 	}
 }
