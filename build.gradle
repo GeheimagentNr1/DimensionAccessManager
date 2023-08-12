@@ -269,10 +269,6 @@ publishing {
             name "local-test-repo"
             url local_repository_path
         }
-        maven {
-            name "minecraft-mods-repo"
-            url "https://secretsoft.jfrog.io/artifactory/minecraft-mods/"
-        }
     }
 }
 
