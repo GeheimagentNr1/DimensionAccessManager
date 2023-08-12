@@ -5,8 +5,10 @@ import com.mojang.brigadier.Command;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import de.geheimagentnr1.dimension_access_manager.config.ServerConfig;
 import de.geheimagentnr1.dimension_access_manager.elements.capabilities.dimension_access.DimensionAccessType;
 import de.geheimagentnr1.minecraft_forge_api.elements.commands.CommandInterface;
+import lombok.RequiredArgsConstructor;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.DimensionArgument;
@@ -19,29 +21,32 @@ import java.util.function.Predicate;
 
 
 @SuppressWarnings( "SameReturnValue" )
+@RequiredArgsConstructor
 public class DimensionCommand implements CommandInterface {
 	
 	
 	@NotNull
-	private static final Predicate<CommandSourceStack> PERMISSION_CHECKER = source -> source.hasPermission( 3 );
+	private final ServerConfig serverConfig;
 	
 	@NotNull
 	@Override
 	public LiteralArgumentBuilder<CommandSourceStack> build() {
 		
+		Predicate<CommandSourceStack> permissionChecker = source ->
+			source.hasPermission( serverConfig.getDimensionCommandPermissionLevel() );
 		LiteralArgumentBuilder<CommandSourceStack> dimension = Commands.literal( "dimension" );
 		dimension.then( Commands.argument( "dimension", DimensionArgument.dimension() )
 			.then( Commands.literal( "access" )
 				.then( Commands.literal( "status" )
 					.executes( this::showDimensionStatus ) )
 				.then( Commands.literal( "grant" )
-					.requires( PERMISSION_CHECKER )
+					.requires( permissionChecker )
 					.executes( this::grantDimension ) )
 				.then( Commands.literal( "lock" )
-					.requires( PERMISSION_CHECKER )
+					.requires( permissionChecker )
 					.executes( this::lockDimension ) ) )
 			.then( Commands.literal( "players" )
-				.requires( PERMISSION_CHECKER )
+				.requires( permissionChecker )
 				.then( Commands.literal( "list" )
 					.executes( this::showLists ) )
 				.then( Commands.literal( "whitelist" )

@@ -13,6 +13,9 @@ public class ServerConfig extends AbstractConfig {
 	@NotNull
 	private static final String DEFAULT_DIMENSION_ACCESS_TYPE_KEY = "default_dimension_access_type";
 	
+	@NotNull
+	private static final String DIMENSION_COMMAND_PERMISSION_LEVEL_KEY = "dimension_command_permmsion_level";
+	
 	public ServerConfig( @NotNull AbstractMod _abstractMod ) {
 		
 		super( _abstractMod );
@@ -39,6 +42,11 @@ public class ServerConfig extends AbstractConfig {
 			DEFAULT_DIMENSION_ACCESS_TYPE_KEY,
 			( builder, path ) -> builder.defineEnum( path, DimensionAccessType.GRANTED )
 		);
+		registerConfigValue(
+			"Defines which permission level is required to run the /dimension command",
+			DIMENSION_COMMAND_PERMISSION_LEVEL_KEY,
+			( builder, path ) -> builder.defineInRange( path, 3, 0, 4 )
+		);
 	}
 	
 	@NotNull
@@ -50,5 +58,11 @@ public class ServerConfig extends AbstractConfig {
 	public void setDefaultDimensionAccessType( @NotNull DimensionAccessType _defaultDimensionAccessType ) {
 		
 		setValue( DimensionAccessType.class, DEFAULT_DIMENSION_ACCESS_TYPE_KEY, _defaultDimensionAccessType );
+	}
+	
+	@NotNull
+	public Integer getDimensionCommandPermissionLevel() {
+		
+		return getValue( Integer.class, DIMENSION_COMMAND_PERMISSION_LEVEL_KEY );
 	}
 }

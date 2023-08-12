@@ -22,7 +22,7 @@ public class ModCommandsRegisterFactory extends CommandsRegisterFactory {
 	public List<CommandInterface> commands() {
 		
 		return List.of(
-			new DimensionCommand(),
+			new DimensionCommand( serverConfig ),
 			new DimensionsCommand( serverConfig )
 		);
 	}
