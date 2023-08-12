@@ -29,7 +29,7 @@ public class ServerConfig {
 			.defineEnum( "default_dimension_access_type", DimensionAccessType.GRANTED );
 		DIMENSION_COMMAND_PERMISSION_LEVEL = BUILDER
 			.comment( "Defines which permission level is required to run the /dimension command" )
-			.defineInRange( "dimension_command_permmsion_level", 3, 0, 4 );
+			.defineInRange( "dimension_command_permission_level", 3, 0, 4 );
 		CONFIG = BUILDER.build();
 	}
 	
