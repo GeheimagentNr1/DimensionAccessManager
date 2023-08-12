@@ -14,7 +14,7 @@ public class ServerConfig extends AbstractConfig {
 	private static final String DEFAULT_DIMENSION_ACCESS_TYPE_KEY = "default_dimension_access_type";
 	
 	@NotNull
-	private static final String DIMENSION_COMMAND_PERMISSION_LEVEL_KEY = "dimension_command_permmsion_level";
+	private static final String DIMENSION_COMMAND_PERMISSION_LEVEL_KEY = "dimension_command_permission_level";
 	
 	public ServerConfig( @NotNull AbstractMod _abstractMod ) {
 		
