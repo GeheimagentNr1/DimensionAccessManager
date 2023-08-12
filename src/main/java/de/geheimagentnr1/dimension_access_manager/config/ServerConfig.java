@@ -20,11 +20,16 @@ public class ServerConfig {
 	
 	private static final ForgeConfigSpec.EnumValue<DimensionAccessType> DEFAULT_DIMENSION_ACCESS_TYPE;
 	
+	private static final ForgeConfigSpec.IntValue DIMENSION_COMMAND_PERMISSION_LEVEL;
+	
 	static {
 		
 		DEFAULT_DIMENSION_ACCESS_TYPE = BUILDER
 			.comment( "Defines if new dimensions are GRANTED or LOCKED by default." )
 			.defineEnum( "default_dimension_access_type", DimensionAccessType.GRANTED );
+		DIMENSION_COMMAND_PERMISSION_LEVEL = BUILDER
+			.comment( "Defines which permission level is required to run the /dimension command" )
+			.defineInRange( "dimension_command_permmsion_level", 3, 0, 4 );
 		CONFIG = BUILDER.build();
 	}
 	
@@ -32,6 +37,7 @@ public class ServerConfig {
 		
 		LOGGER.info( "Loading \"{}\" Server Config", MOD_NAME );
 		LOGGER.info( "{} = {}", DEFAULT_DIMENSION_ACCESS_TYPE.getPath(), DEFAULT_DIMENSION_ACCESS_TYPE.get() );
+		LOGGER.info( "{} = {}", DIMENSION_COMMAND_PERMISSION_LEVEL.getPath(), DIMENSION_COMMAND_PERMISSION_LEVEL.get() );
 		LOGGER.info( "\"{}\" Server Config loaded", MOD_NAME );
 	}
 	
@@ -43,5 +49,10 @@ public class ServerConfig {
 	public static void setDefaultDimensionAccessType( DimensionAccessType _defaultDimensionAccessType ) {
 		
 		DEFAULT_DIMENSION_ACCESS_TYPE.set( _defaultDimensionAccessType );
+	}
+	
+	public static Integer getDimensionCommandPermissionLevel() {
+		
+		return DIMENSION_COMMAND_PERMISSION_LEVEL.get();
 	}
 }

@@ -6,6 +6,7 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import de.geheimagentnr1.dimension_access_manager.config.ServerConfig;
 import de.geheimagentnr1.dimension_access_manager.elements.capabilities.dimension_access.DimensionAccessType;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
@@ -21,7 +22,8 @@ import java.util.function.Predicate;
 public class DimensionCommand {
 	
 	
-	private static final Predicate<CommandSourceStack> PERMISSION_CHECKER = source -> source.hasPermission( 3 );
+	private static final Predicate<CommandSourceStack> PERMISSION_CHECKER = source ->
+		source.hasPermission( ServerConfig.getDimensionCommandPermissionLevel() );
 	
 	public static void register( CommandDispatcher<CommandSourceStack> dispatcher ) {
 		
