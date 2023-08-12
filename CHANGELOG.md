@@ -1,1 +1,1 @@
-- Change that saving, after grant/lock and player changes, only saves the data of the changed level and not all chunks and all levels
+- Impove #2: Add configuration for the permission level needed for the /dimension command
