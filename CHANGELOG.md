@@ -1,1 +1,1 @@
-- Impove #2: Add configuration for the permission level needed for the /dimension command
+Ported to 1.20.2 
