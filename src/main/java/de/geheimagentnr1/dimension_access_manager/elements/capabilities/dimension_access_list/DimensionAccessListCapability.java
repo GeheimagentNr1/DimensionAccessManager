@@ -1,6 +1,8 @@
 package de.geheimagentnr1.dimension_access_manager.elements.capabilities.dimension_access_list;
 
 import com.mojang.authlib.GameProfile;
+import com.mojang.authlib.minecraft.client.ObjectMapper;
+import de.geheimagentnr1.dimension_access_manager.utils.GameProfileUtils;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -17,7 +19,7 @@ import java.util.TreeSet;
 
 
 public abstract class DimensionAccessListCapability implements ICapabilitySerializable<ListTag> {
-	
+
 	
 	@NotNull
 	private final LazyOptional<? extends DimensionAccessListCapability> holder = LazyOptional.of( () -> this );
@@ -56,7 +58,7 @@ public abstract class DimensionAccessListCapability implements ICapabilitySerial
 		ListTag listNBT = new ListTag();
 		gameProfiles.forEach( gameProfile -> {
 			CompoundTag compound = new CompoundTag();
-			listNBT.add( NbtUtils.writeGameProfile( compound, gameProfile ) );
+			listNBT.add( GameProfileUtils.writeGameProfile( compound, gameProfile ) );
 		} );
 		return listNBT;
 	}
@@ -66,7 +68,7 @@ public abstract class DimensionAccessListCapability implements ICapabilitySerial
 		
 		nbt.forEach( inbt -> {
 			if( inbt.getId() == Tag.TAG_COMPOUND ) {
-				gameProfiles.add( NbtUtils.readGameProfile( (CompoundTag)inbt ) );
+				gameProfiles.add( GameProfileUtils.readGameProfile( (CompoundTag)inbt ) );
 			}
 		} );
 	}
