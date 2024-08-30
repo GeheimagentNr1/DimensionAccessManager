@@ -4,6 +4,7 @@ import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.minecraft.client.ObjectMapper;
 import de.geheimagentnr1.dimension_access_manager.utils.GameProfileUtils;
 import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.NbtUtils;
@@ -53,7 +54,7 @@ public abstract class DimensionAccessListCapability implements ICapabilitySerial
 	protected abstract Capability<? extends DimensionAccessListCapability> getCapability();
 	
 	@Override
-	public ListTag serializeNBT() {
+	public ListTag serializeNBT( HolderLookup.Provider provider ) {
 		
 		ListTag listNBT = new ListTag();
 		gameProfiles.forEach( gameProfile -> {
@@ -64,7 +65,7 @@ public abstract class DimensionAccessListCapability implements ICapabilitySerial
 	}
 	
 	@Override
-	public void deserializeNBT( @NotNull ListTag nbt ) {
+	public void deserializeNBT( HolderLookup.Provider provider, ListTag nbt ) {
 		
 		nbt.forEach( inbt -> {
 			if( inbt.getId() == Tag.TAG_COMPOUND ) {

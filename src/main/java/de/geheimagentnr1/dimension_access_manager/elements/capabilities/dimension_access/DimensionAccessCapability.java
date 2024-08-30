@@ -4,6 +4,7 @@ import de.geheimagentnr1.dimension_access_manager.config.ServerConfig;
 import de.geheimagentnr1.dimension_access_manager.elements.capabilities.ModCapabilitiesRegisterFactory;
 import lombok.RequiredArgsConstructor;
 import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.IntTag;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
@@ -53,15 +54,14 @@ public class DimensionAccessCapability implements ICapabilitySerializable<IntTag
 		return ModCapabilitiesRegisterFactory.DIMENSION_ACCESS.orEmpty( cap, holder );
 	}
 	
-	@NotNull
 	@Override
-	public IntTag serializeNBT() {
+	public IntTag serializeNBT( HolderLookup.Provider provider ) {
 		
 		return IntTag.valueOf( dimensionAccess.ordinal() );
 	}
 	
 	@Override
-	public void deserializeNBT( @NotNull IntTag nbt ) {
+	public void deserializeNBT( HolderLookup.Provider provider, IntTag nbt ) {
 		
 		DimensionAccessType[] dimensionAccessTypes = DimensionAccessType.values();
 		int value = nbt.getAsInt();
