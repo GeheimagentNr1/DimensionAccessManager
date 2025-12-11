@@ -1,19 +1,19 @@
 package de.geheimagentnr1.dimension_access_manager.elements.commands.dimension;
 
 import com.mojang.authlib.GameProfile;
-import de.geheimagentnr1.dimension_access_manager.elements.capabilities.ModCapabilitiesRegisterFactory;
+import de.geheimagentnr1.dimension_access_manager.elements.capabilities.ModAttachmentTypes;
 import de.geheimagentnr1.dimension_access_manager.elements.capabilities.dimension_access_list.DimensionAccessListCapability;
 import de.geheimagentnr1.dimension_access_manager.elements.capabilities.dimension_access_list.dimension_access_blacklist.DimensionAccessBlacklistCapability;
 import de.geheimagentnr1.dimension_access_manager.elements.capabilities.dimension_access_list.dimension_access_whitelist.DimensionAccessWhitelistCapability;
-import de.geheimagentnr1.minecraft_forge_api.util.ResourceLocationHelper;
+import de.geheimagentnr1.dimension_access_manager.util.ResourceLocationHelper;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraftforge.common.util.NonNullConsumer;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
 import java.util.TreeSet;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -53,9 +53,10 @@ class DimensionCommandPlayersHelper {
 	//package-private
 	static void runForWhitelist(
 		@NotNull ServerLevel serverLevel,
-		@NotNull NonNullConsumer<DimensionAccessWhitelistCapability> runner ) {
+		@NotNull Consumer<DimensionAccessWhitelistCapability> runner ) {
 		
-		serverLevel.getCapability( ModCapabilitiesRegisterFactory.DIMENSION_ACCESS_WHITELIST ).ifPresent( runner );
+		DimensionAccessWhitelistCapability capability = serverLevel.getData( ModAttachmentTypes.DIMENSION_ACCESS_WHITELIST );
+		runner.accept( capability );
 	}
 	
 	//package-private
@@ -126,9 +127,10 @@ class DimensionCommandPlayersHelper {
 	//package-private
 	static void runForBlacklist(
 		@NotNull ServerLevel serverLevel,
-		@NotNull NonNullConsumer<DimensionAccessBlacklistCapability> runner ) {
+		@NotNull Consumer<DimensionAccessBlacklistCapability> runner ) {
 		
-		serverLevel.getCapability( ModCapabilitiesRegisterFactory.DIMENSION_ACCESS_BLACKLIST ).ifPresent( runner );
+		DimensionAccessBlacklistCapability capability = serverLevel.getData( ModAttachmentTypes.DIMENSION_ACCESS_BLACKLIST );
+		runner.accept( capability );
 	}
 	
 	//package-private

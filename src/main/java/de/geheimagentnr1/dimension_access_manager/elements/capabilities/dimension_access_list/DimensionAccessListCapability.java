@@ -1,29 +1,20 @@
 package de.geheimagentnr1.dimension_access_manager.elements.capabilities.dimension_access_list;
 
 import com.mojang.authlib.GameProfile;
-import com.mojang.authlib.minecraft.client.ObjectMapper;
 import de.geheimagentnr1.dimension_access_manager.utils.GameProfileUtils;
-import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
-import net.minecraft.nbt.NbtUtils;
 import net.minecraft.nbt.Tag;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.ICapabilitySerializable;
-import net.minecraftforge.common.util.LazyOptional;
+import net.neoforged.neoforge.common.util.INBTSerializable;
 import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nullable;
 import java.util.Comparator;
 import java.util.TreeSet;
 
 
-public abstract class DimensionAccessListCapability implements ICapabilitySerializable<ListTag> {
+public abstract class DimensionAccessListCapability implements INBTSerializable<ListTag> {
 
-	
-	@NotNull
-	private final LazyOptional<? extends DimensionAccessListCapability> holder = LazyOptional.of( () -> this );
 	
 	@NotNull
 	private final TreeSet<GameProfile> gameProfiles = new TreeSet<>( Comparator.comparing( GameProfile::getId ) );
@@ -43,16 +34,6 @@ public abstract class DimensionAccessListCapability implements ICapabilitySerial
 		return gameProfiles.remove( gameProfile );
 	}
 	
-	@NotNull
-	@Override
-	public <T> LazyOptional<T> getCapability( @NotNull Capability<T> cap, @Nullable Direction side ) {
-		
-		return getCapability() == cap ? holder.cast() : LazyOptional.empty();
-	}
-	
-	@NotNull
-	protected abstract Capability<? extends DimensionAccessListCapability> getCapability();
-	
 	@Override
 	public ListTag serializeNBT( HolderLookup.Provider provider ) {
 		
@@ -69,7 +50,10 @@ public abstract class DimensionAccessListCapability implements ICapabilitySerial
 		
 		nbt.forEach( inbt -> {
 			if( inbt.getId() == Tag.TAG_COMPOUND ) {
-				gameProfiles.add( GameProfileUtils.readGameProfile( (CompoundTag)inbt ) );
+				GameProfile profile = GameProfileUtils.readGameProfile( (CompoundTag)inbt );
+				if( profile != null ) {
+					gameProfiles.add( profile );
+				}
 			}
 		} );
 	}

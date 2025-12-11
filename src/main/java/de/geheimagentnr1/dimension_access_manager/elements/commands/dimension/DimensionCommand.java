@@ -7,7 +7,6 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import de.geheimagentnr1.dimension_access_manager.config.ServerConfig;
 import de.geheimagentnr1.dimension_access_manager.elements.capabilities.dimension_access.DimensionAccessType;
-import de.geheimagentnr1.minecraft_forge_api.elements.commands.CommandInterface;
 import lombok.RequiredArgsConstructor;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
@@ -22,14 +21,13 @@ import java.util.function.Predicate;
 
 @SuppressWarnings( "SameReturnValue" )
 @RequiredArgsConstructor
-public class DimensionCommand implements CommandInterface {
+public class DimensionCommand {
 	
 	
 	@NotNull
 	private final ServerConfig serverConfig;
 	
 	@NotNull
-	@Override
 	public LiteralArgumentBuilder<CommandSourceStack> build() {
 		
 		Predicate<CommandSourceStack> permissionChecker = source ->

@@ -6,7 +6,6 @@ import com.mojang.brigadier.context.CommandContext;
 import de.geheimagentnr1.dimension_access_manager.config.ServerConfig;
 import de.geheimagentnr1.dimension_access_manager.elements.commands.dimension.DimensionAccessTypeArgument;
 import de.geheimagentnr1.dimension_access_manager.elements.commands.dimension.DimensionCommandAccessHelper;
-import de.geheimagentnr1.minecraft_forge_api.elements.commands.CommandInterface;
 import lombok.RequiredArgsConstructor;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
@@ -17,14 +16,13 @@ import org.jetbrains.annotations.NotNull;
 
 @SuppressWarnings( "SameReturnValue" )
 @RequiredArgsConstructor
-public class DimensionsCommand implements CommandInterface {
+public class DimensionsCommand {
 	
 	
 	@NotNull
 	private final ServerConfig serverConfig;
 	
 	@NotNull
-	@Override
 	public LiteralArgumentBuilder<CommandSourceStack> build() {
 		
 		LiteralArgumentBuilder<CommandSourceStack> dimensions = Commands.literal( "dimensions" );

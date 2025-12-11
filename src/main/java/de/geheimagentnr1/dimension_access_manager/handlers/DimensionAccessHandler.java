@@ -1,64 +1,52 @@
 package de.geheimagentnr1.dimension_access_manager.handlers;
 
 import com.mojang.authlib.GameProfile;
-import de.geheimagentnr1.dimension_access_manager.elements.capabilities.ModCapabilitiesRegisterFactory;
+import de.geheimagentnr1.dimension_access_manager.elements.capabilities.ModAttachmentTypes;
+import de.geheimagentnr1.dimension_access_manager.elements.capabilities.dimension_access.DimensionAccessCapability;
 import de.geheimagentnr1.dimension_access_manager.elements.capabilities.dimension_access.DimensionAccessType;
-import de.geheimagentnr1.minecraft_forge_api.events.ForgeEventHandlerInterface;
-import lombok.RequiredArgsConstructor;
+import de.geheimagentnr1.dimension_access_manager.elements.capabilities.dimension_access_list.dimension_access_blacklist.DimensionAccessBlacklistCapability;
+import de.geheimagentnr1.dimension_access_manager.elements.capabilities.dimension_access_list.dimension_access_whitelist.DimensionAccessWhitelistCapability;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
-import net.minecraftforge.event.entity.EntityTravelToDimensionEvent;
-import net.minecraftforge.eventbus.api.Event;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.server.ServerLifecycleHooks;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.neoforge.event.entity.EntityTravelToDimensionEvent;
+import net.neoforged.neoforge.server.ServerLifecycleHooks;
 import org.jetbrains.annotations.NotNull;
 
 
-@RequiredArgsConstructor
-public class DimensionAccessHandler implements ForgeEventHandlerInterface {
+public class DimensionAccessHandler {
 	
 	
 	@SubscribeEvent
-	@Override
 	public void handleEntityTravelToDimensionEvent( @NotNull EntityTravelToDimensionEvent event ) {
 		
 		Entity entity = event.getEntity();
 		ServerLevel serverLevel = ServerLifecycleHooks.getCurrentServer().getLevel( event.getDimension() );
 		
 		if( serverLevel != null ) {
-			if( entity instanceof ServerPlayer ) {
-				GameProfile gameProfile = ( (ServerPlayer)entity ).getGameProfile();
-				serverLevel.getCapability( ModCapabilitiesRegisterFactory.DIMENSION_ACCESS ).ifPresent(
-					dimensionAccessCapability -> {
-						if( dimensionAccessCapability.getDimensionAccess() == DimensionAccessType.GRANTED ) {
-							serverLevel.getCapability( ModCapabilitiesRegisterFactory.DIMENSION_ACCESS_BLACKLIST )
-								.ifPresent(
-									dimensionAccessBlacklistCapability -> {
-										if( dimensionAccessBlacklistCapability.contains( gameProfile ) ) {
-											event.setResult( Event.Result.DENY );
-											event.setCanceled( true );
-										}
-									} );
-						} else {
-							serverLevel.getCapability( ModCapabilitiesRegisterFactory.DIMENSION_ACCESS_WHITELIST )
-								.ifPresent(
-									dimensionAccessWhitelistCapability -> {
-										if( !dimensionAccessWhitelistCapability.contains( gameProfile ) ) {
-											event.setResult( Event.Result.DENY );
-											event.setCanceled( true );
-										}
-									} );
-						}
-					} );
+			DimensionAccessCapability dimensionAccessCapability = serverLevel.getData( ModAttachmentTypes.DIMENSION_ACCESS );
+			
+			if( entity instanceof ServerPlayer serverPlayer ) {
+				GameProfile gameProfile = serverPlayer.getGameProfile();
+				
+				if( dimensionAccessCapability.getDimensionAccess() == DimensionAccessType.GRANTED ) {
+					DimensionAccessBlacklistCapability blacklistCapability = 
+						serverLevel.getData( ModAttachmentTypes.DIMENSION_ACCESS_BLACKLIST );
+					if( blacklistCapability.contains( gameProfile ) ) {
+						event.setCanceled( true );
+					}
+				} else {
+					DimensionAccessWhitelistCapability whitelistCapability = 
+						serverLevel.getData( ModAttachmentTypes.DIMENSION_ACCESS_WHITELIST );
+					if( !whitelistCapability.contains( gameProfile ) ) {
+						event.setCanceled( true );
+					}
+				}
 			} else {
-				serverLevel.getCapability( ModCapabilitiesRegisterFactory.DIMENSION_ACCESS ).ifPresent(
-					dimensionAccessCapability -> {
-						if( dimensionAccessCapability.getDimensionAccess() == DimensionAccessType.LOCKED ) {
-							event.setResult( Event.Result.DENY );
-							event.setCanceled( true );
-						}
-					} );
+				if( dimensionAccessCapability.getDimensionAccess() == DimensionAccessType.LOCKED ) {
+					event.setCanceled( true );
+				}
 			}
 		}
 	}

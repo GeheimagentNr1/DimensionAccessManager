@@ -1,36 +1,39 @@
 package de.geheimagentnr1.dimension_access_manager;
 
 import de.geheimagentnr1.dimension_access_manager.config.ServerConfig;
-import de.geheimagentnr1.dimension_access_manager.elements.capabilities.ModCapabilitiesRegisterFactory;
+import de.geheimagentnr1.dimension_access_manager.elements.capabilities.ModAttachmentTypes;
 import de.geheimagentnr1.dimension_access_manager.elements.commands.ModArgumentTypesRegisterFactory;
 import de.geheimagentnr1.dimension_access_manager.elements.commands.ModCommandsRegisterFactory;
 import de.geheimagentnr1.dimension_access_manager.handlers.DimensionAccessHandler;
-import de.geheimagentnr1.minecraft_forge_api.AbstractMod;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.fml.ModContainer;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.config.ModConfig;
+import net.neoforged.neoforge.common.NeoForge;
 import org.jetbrains.annotations.NotNull;
 
 
 @Mod( DimensionAccessManager.MODID )
-public class DimensionAccessManager extends AbstractMod {
+public class DimensionAccessManager {
 	
 	
 	@NotNull
-	static final String MODID = "dimension_access_manager";
+	public static final String MODID = "dimension_access_manager";
 	
-	@NotNull
-	@Override
-	public String getModId() {
+	public DimensionAccessManager( @NotNull IEventBus modEventBus, @NotNull ModContainer modContainer ) {
 		
-		return MODID;
-	}
-	
-	@Override
-	protected void initMod() {
+		ServerConfig serverConfig = new ServerConfig();
+		modContainer.registerConfig( ModConfig.Type.SERVER, serverConfig.getSpec() );
 		
-		ServerConfig serverConfig = registerConfig( ServerConfig::new );
-		registerEventHandler( new ModCapabilitiesRegisterFactory( this, serverConfig ) );
-		registerEventHandler( new ModArgumentTypesRegisterFactory() );
-		registerEventHandler( new ModCommandsRegisterFactory( serverConfig ) );
-		registerEventHandler( new DimensionAccessHandler() );
+		// Register DeferredRegisters
+		ModAttachmentTypes.ATTACHMENT_TYPES.register( modEventBus );
+		ModArgumentTypesRegisterFactory.ARGUMENT_TYPES.register( modEventBus );
+		
+		// Register event handlers on NeoForge event bus
+		ModCommandsRegisterFactory commandsRegisterFactory = new ModCommandsRegisterFactory( serverConfig );
+		NeoForge.EVENT_BUS.register( commandsRegisterFactory );
+		
+		DimensionAccessHandler dimensionAccessHandler = new DimensionAccessHandler();
+		NeoForge.EVENT_BUS.register( dimensionAccessHandler );
 	}
 }

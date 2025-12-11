@@ -1,17 +1,18 @@
 package de.geheimagentnr1.dimension_access_manager.elements.commands.dimension;
 
-import de.geheimagentnr1.dimension_access_manager.elements.capabilities.ModCapabilitiesRegisterFactory;
+import de.geheimagentnr1.dimension_access_manager.elements.capabilities.ModAttachmentTypes;
 import de.geheimagentnr1.dimension_access_manager.elements.capabilities.dimension_access.DimensionAccessCapability;
 import de.geheimagentnr1.dimension_access_manager.elements.capabilities.dimension_access.DimensionAccessType;
 import de.geheimagentnr1.dimension_access_manager.elements.capabilities.dimension_access_list.DimensionAccessListCapability;
-import de.geheimagentnr1.minecraft_forge_api.util.ResourceLocationHelper;
+import de.geheimagentnr1.dimension_access_manager.util.ResourceLocationHelper;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
-import net.minecraftforge.common.util.NonNullConsumer;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.function.Consumer;
 
 
 public class DimensionCommandAccessHelper {
@@ -20,9 +21,10 @@ public class DimensionCommandAccessHelper {
 	//package-private
 	static void runForAccess(
 		@NotNull ServerLevel serverLevel,
-		@NotNull NonNullConsumer<DimensionAccessCapability> runner ) {
+		@NotNull Consumer<DimensionAccessCapability> runner ) {
 		
-		serverLevel.getCapability( ModCapabilitiesRegisterFactory.DIMENSION_ACCESS ).ifPresent( runner );
+		DimensionAccessCapability capability = serverLevel.getData( ModAttachmentTypes.DIMENSION_ACCESS );
+		runner.accept( capability );
 	}
 	
 	public static void showDimensionStatus( @NotNull CommandSourceStack source, @NotNull ServerLevel serverLevel ) {
