@@ -18,20 +18,38 @@ Keine Mod-Abhängigkeiten - eigenständiger Mod.
 
 ```
 src/main/java/de/geheimagentnr1/dimension_access_manager/
-├── DimensionAccessManager.java                # Haupt-Mod-Klasse
+├── DimensionAccessManager.java                                    # Haupt-Mod-Klasse
 ├── config/
-│   └── ServerConfig.java                      # Server-Konfiguration
+│   └── ServerConfig.java                                          # Server-Konfiguration
 ├── elements/
 │   ├── capabilities/
-│   │   └── ModAttachmentTypes.java            # Data Attachments
-│   └── commands/
-│       ├── DimensionsCommand.java             # /dimensions Command
-│       ├── ModArgumentTypesRegisterFactory.java
-│       └── ModCommandsRegisterFactory.java
+│   │   ├── ModAttachmentTypes.java                                # Data Attachments Registry
+│   │   ├── dimension_access/
+│   │   │   ├── DimensionAccessCapability.java
+│   │   │   └── DimensionAccessType.java
+│   │   └── dimension_access_list/
+│   │       ├── DimensionAccessListCapability.java
+│   │       ├── dimension_access_blacklist/
+│   │       │   └── DimensionAccessBlacklistCapability.java
+│   │       └── dimension_access_whitelist/
+│   │           └── DimensionAccessWhitelistCapability.java
+│   ├── commands/
+│   │   ├── DimensionsCommand.java                                 # /dimensions Command
+│   │   ├── ModArgumentTypesRegisterFactory.java
+│   │   ├── ModCommandsRegisterFactory.java
+│   │   └── dimension/
+│   │       ├── DimensionAccessTypeArgument.java
+│   │       ├── DimensionCommand.java
+│   │       ├── DimensionCommandAccessHelper.java
+│   │       ├── DimensionCommandPlayersHelper.java
+│   │       └── DimensionCommandRunner.java
+│   └── gametests/
+│       └── DimensionAccessManagerGameTests.java
 ├── handlers/
-│   └── DimensionAccessHandler.java            # Zugangs-Handler
-└── util/
-    ├── ResourceLocationHelper.java
+│   └── DimensionAccessHandler.java                                # Zugangs-Handler
+├── util/
+│   └── ResourceLocationHelper.java
+└── utils/
     └── GameProfileUtils.java
 ```
 
@@ -108,3 +126,7 @@ Der Workflow `.github/workflows/build-and-test.yml` führt automatisch aus:
 | Commands | ✅ | GameTest |
 | Block/Item-Verhalten | ✅ | GameTest |
 | Multi-MC-Version | ⚠️ Pro Branch | CI Matrix |
+
+## Referenzen
+
+- [NeoForge Migration Primer](https://docs.neoforged.net/primer/docs/) — Dokumentiert API-Aenderungen zwischen Minecraft/NeoForge-Versionen; nuetzlich fuer die Pruefung von Breaking Changes beim Upgrade auf neue Versionen
