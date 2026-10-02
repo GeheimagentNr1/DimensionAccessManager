@@ -45,6 +45,7 @@ public class ServerConfig {
 	public void setDefaultDimensionAccessType( @NotNull DimensionAccessType _defaultDimensionAccessType ) {
 		
 		defaultDimensionAccessType.set( _defaultDimensionAccessType );
+		defaultDimensionAccessType.save();
 	}
 	
 	@NotNull
