@@ -48,20 +48,12 @@ neoForge {
         client {
             client()
             gameDirectory = project.file('run/client')
-            systemProperty 'neoforge.enabledGameTestNamespaces', mod_id
         }
 
         server {
             server()
             gameDirectory = project.file('run/server')
             programArgument '--nogui'
-            systemProperty 'neoforge.enabledGameTestNamespaces', mod_id
-        }
-
-        gameTestServer {
-            type = "gameTestServer"
-            gameDirectory = project.file('run/testserver')
-            systemProperty 'neoforge.enabledGameTestNamespaces', mod_id
         }
 
         data {
