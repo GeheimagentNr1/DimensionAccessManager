@@ -36,7 +36,7 @@ public class DimensionAccessCapability implements INBTSerializable<IntTag> {
 	public void deserializeNBT( HolderLookup.Provider provider, IntTag nbt ) {
 		
 		DimensionAccessType[] dimensionAccessTypes = DimensionAccessType.values();
-		int value = nbt.getAsInt();
+		int value = nbt.intValue();
 		if( value >= 0 && value < dimensionAccessTypes.length ) {
 			dimensionAccess = dimensionAccessTypes[value];
 		} else {

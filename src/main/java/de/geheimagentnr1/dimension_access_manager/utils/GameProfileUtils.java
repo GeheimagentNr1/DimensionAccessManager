@@ -3,10 +3,12 @@ package de.geheimagentnr1.dimension_access_manager.utils;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 import net.minecraft.Util;
+import net.minecraft.core.UUIDUtil;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 
 import javax.annotation.Nullable;
+import java.util.Optional;
 import java.util.UUID;
 
 
@@ -16,31 +18,27 @@ public class GameProfileUtils {
 	@Nullable
 	public static GameProfile readGameProfile( CompoundTag pTag ) {
 		
-		UUID uuid = pTag.hasUUID( "Id" ) ? pTag.getUUID( "Id" ) : Util.NIL_UUID;
-		String s = pTag.getString( "Name" );
+		UUID uuid = pTag.read( "Id", UUIDUtil.CODEC ).orElse( Util.NIL_UUID );
+		String s = pTag.getStringOr( "Name", "" );
 		
 		try {
 			GameProfile gameProfile = new GameProfile( uuid, s );
-			if( pTag.contains( "Properties", 10 ) ) {
-				CompoundTag properties = pTag.getCompound( "Properties" );
-				
-				for( String key : properties.getAllKeys() ) {
-					ListTag values = properties.getList( key, 10 );
+			pTag.getCompound( "Properties" ).ifPresent( properties -> {
+				for( String key : properties.keySet() ) {
+					ListTag values = properties.getListOrEmpty( key );
 					
 					for( int i = 0; i < values.size(); ++i ) {
-						CompoundTag valueTag = values.getCompound( i );
-						String value = valueTag.getString( "Value" );
-						if( valueTag.contains( "Signature", 8 ) ) {
-							gameProfile.getProperties().put(
-								key,
-								new Property( key, value, valueTag.getString( "Signature" ) )
-							);
+						CompoundTag valueTag = values.getCompoundOrEmpty( i );
+						String value = valueTag.getStringOr( "Value", "" );
+						Optional<String> signature = valueTag.getString( "Signature" );
+						if( signature.isPresent() ) {
+							gameProfile.getProperties().put( key, new Property( key, value, signature.get() ) );
 						} else {
 							gameProfile.getProperties().put( key, new Property( key, value ) );
 						}
 					}
 				}
-			}
+			} );
 			return gameProfile;
 		} catch( Throwable throwable ) {
 			return null;
@@ -53,7 +51,7 @@ public class GameProfileUtils {
 			pTag.putString( "Name", pGameProfile.getName() );
 		}
 		if( !pGameProfile.getId().equals( Util.NIL_UUID ) ) {
-			pTag.putUUID( "Id", pGameProfile.getId() );
+			pTag.store( "Id", UUIDUtil.CODEC, pGameProfile.getId() );
 		}
 		if( !pGameProfile.getProperties().isEmpty() ) {
 			CompoundTag properties = new CompoundTag();
