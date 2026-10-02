@@ -1,12 +1,12 @@
 package de.geheimagentnr1.dimension_access_manager.elements.capabilities.dimension_access;
 
-import net.minecraft.core.HolderLookup;
-import net.minecraft.nbt.IntTag;
-import net.neoforged.neoforge.common.util.INBTSerializable;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
+import net.neoforged.neoforge.common.util.ValueIOSerializable;
 import org.jetbrains.annotations.NotNull;
 
 
-public class DimensionAccessCapability implements INBTSerializable<IntTag> {
+public class DimensionAccessCapability implements ValueIOSerializable {
 	
 	
 	@NotNull
@@ -27,16 +27,21 @@ public class DimensionAccessCapability implements INBTSerializable<IntTag> {
 	}
 	
 	@Override
-	public IntTag serializeNBT( HolderLookup.Provider provider ) {
+	public void serialize( @NotNull ValueOutput output ) {
 		
-		return IntTag.valueOf( dimensionAccess.ordinal() );
+		output.putInt( "dimension_access", dimensionAccess.ordinal() );
 	}
 	
 	@Override
-	public void deserializeNBT( HolderLookup.Provider provider, IntTag nbt ) {
+	public void deserialize( @NotNull ValueInput input ) {
+		
+		deserializeLegacy( input.getIntOr( "dimension_access", DimensionAccessType.GRANTED.ordinal() ) );
+	}
+	
+	//Format up to 1.21.5 (INBTSerializable<IntTag>), see LegacyAttachmentMigrationHandler
+	public void deserializeLegacy( int value ) {
 		
 		DimensionAccessType[] dimensionAccessTypes = DimensionAccessType.values();
-		int value = nbt.intValue();
 		if( value >= 0 && value < dimensionAccessTypes.length ) {
 			dimensionAccess = dimensionAccessTypes[value];
 		} else {

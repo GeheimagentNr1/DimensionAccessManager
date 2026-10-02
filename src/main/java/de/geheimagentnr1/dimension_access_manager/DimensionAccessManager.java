@@ -5,6 +5,7 @@ import de.geheimagentnr1.dimension_access_manager.elements.capabilities.ModAttac
 import de.geheimagentnr1.dimension_access_manager.elements.commands.ModArgumentTypesRegisterFactory;
 import de.geheimagentnr1.dimension_access_manager.elements.commands.ModCommandsRegisterFactory;
 import de.geheimagentnr1.dimension_access_manager.handlers.DimensionAccessHandler;
+import de.geheimagentnr1.dimension_access_manager.handlers.LegacyAttachmentMigrationHandler;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
@@ -35,5 +36,6 @@ public class DimensionAccessManager {
 		
 		DimensionAccessHandler dimensionAccessHandler = new DimensionAccessHandler();
 		NeoForge.EVENT_BUS.register( dimensionAccessHandler );
+		NeoForge.EVENT_BUS.register( new LegacyAttachmentMigrationHandler() );
 	}
 }

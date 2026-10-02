@@ -2,18 +2,18 @@ package de.geheimagentnr1.dimension_access_manager.elements.capabilities.dimensi
 
 import com.mojang.authlib.GameProfile;
 import de.geheimagentnr1.dimension_access_manager.utils.GameProfileUtils;
-import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
-import net.minecraft.nbt.Tag;
-import net.neoforged.neoforge.common.util.INBTSerializable;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
+import net.neoforged.neoforge.common.util.ValueIOSerializable;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Comparator;
 import java.util.TreeSet;
 
 
-public abstract class DimensionAccessListCapability implements INBTSerializable<ListTag> {
+public abstract class DimensionAccessListCapability implements ValueIOSerializable {
 
 	
 	@NotNull
@@ -35,27 +35,35 @@ public abstract class DimensionAccessListCapability implements INBTSerializable<
 	}
 	
 	@Override
-	public ListTag serializeNBT( HolderLookup.Provider provider ) {
+	public void serialize( @NotNull ValueOutput output ) {
 		
-		ListTag listNBT = new ListTag();
-		gameProfiles.forEach( gameProfile -> {
-			CompoundTag compound = new CompoundTag();
-			listNBT.add( GameProfileUtils.writeGameProfile( compound, gameProfile ) );
-		} );
-		return listNBT;
+		ValueOutput.TypedOutputList<CompoundTag> list = output.list( "game_profiles", CompoundTag.CODEC );
+		gameProfiles.forEach( gameProfile -> list.add( GameProfileUtils.writeGameProfile( new CompoundTag(), gameProfile ) ) );
 	}
 	
 	@Override
-	public void deserializeNBT( HolderLookup.Provider provider, ListTag nbt ) {
+	public void deserialize( @NotNull ValueInput input ) {
+		
+		gameProfiles.clear();
+		input.listOrEmpty( "game_profiles", CompoundTag.CODEC ).forEach( this::addGameProfile );
+	}
+	
+	//Format up to 1.21.5 (INBTSerializable<ListTag>), see LegacyAttachmentMigrationHandler
+	public void deserializeLegacy( @NotNull ListTag nbt ) {
 		
 		nbt.forEach( inbt -> {
-			if( inbt.getId() == Tag.TAG_COMPOUND ) {
-				GameProfile profile = GameProfileUtils.readGameProfile( (CompoundTag)inbt );
-				if( profile != null ) {
-					gameProfiles.add( profile );
-				}
+			if( inbt instanceof CompoundTag compound ) {
+				addGameProfile( compound );
 			}
 		} );
+	}
+	
+	private void addGameProfile( @NotNull CompoundTag compound ) {
+		
+		GameProfile profile = GameProfileUtils.readGameProfile( compound );
+		if( profile != null ) {
+			gameProfiles.add( profile );
+		}
 	}
 	
 	@NotNull
