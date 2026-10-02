@@ -29,7 +29,7 @@ public class DimensionsCommand {
 		dimensions.then( Commands.literal( "status" )
 			.executes( this::showDimensionsStatus ) );
 		dimensions.then( Commands.literal( "default" )
-			.requires( source -> source.hasPermission( 3 ) )
+			.requires( Commands.hasPermission( Commands.LEVEL_ADMINS ) )
 			.then( Commands.literal( "defaultDimensionAccessType" )
 				.executes( this::showDefaultDimensionAccessType )
 				.then( Commands.argument( "dimensionAccessType", DimensionAccessTypeArgument.dimensionAccessType() )

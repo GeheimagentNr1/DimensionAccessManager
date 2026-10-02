@@ -1,6 +1,6 @@
 package de.geheimagentnr1.dimension_access_manager.utils;
 
-import net.minecraft.Util;
+import net.minecraft.util.Util;
 import net.minecraft.core.UUIDUtil;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.players.NameAndId;

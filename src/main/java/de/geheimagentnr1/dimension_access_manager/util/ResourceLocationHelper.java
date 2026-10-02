@@ -10,6 +10,6 @@ public class ResourceLocationHelper {
 	@NotNull
 	public static String serverLevelToName( @NotNull ServerLevel serverLevel ) {
 		
-		return serverLevel.dimension().location().toString();
+		return serverLevel.dimension().identifier().toString();
 	}
 }

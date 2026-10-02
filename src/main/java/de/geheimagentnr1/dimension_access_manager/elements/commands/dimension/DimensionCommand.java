@@ -12,6 +12,9 @@ import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.DimensionArgument;
 import net.minecraft.commands.arguments.GameProfileArgument;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.permissions.Permission;
+import net.minecraft.server.permissions.PermissionCheck;
+import net.minecraft.server.permissions.PermissionLevel;
 import net.minecraft.server.players.NameAndId;
 import org.jetbrains.annotations.NotNull;
 
@@ -27,11 +30,21 @@ public class DimensionCommand {
 	@NotNull
 	private final ServerConfig serverConfig;
 	
+	//The configured level (0 - 4) as permission check, like the Commands.LEVEL_* constants
+	@NotNull
+	private static PermissionCheck permissionCheck( int level ) {
+		
+		PermissionLevel permissionLevel = PermissionLevel.byId( level );
+		return permissionLevel == PermissionLevel.ALL
+			? Commands.LEVEL_ALL
+			: new PermissionCheck.Require( new Permission.HasCommandLevel( permissionLevel ) );
+	}
+	
 	@NotNull
 	public LiteralArgumentBuilder<CommandSourceStack> build() {
 		
 		Predicate<CommandSourceStack> permissionChecker = source ->
-			source.hasPermission( serverConfig.getDimensionCommandPermissionLevel() );
+			Commands.hasPermission( permissionCheck( serverConfig.getDimensionCommandPermissionLevel() ) ).test( source );
 		LiteralArgumentBuilder<CommandSourceStack> dimension = Commands.literal( "dimension" );
 		dimension.then( Commands.argument( "dimension", DimensionArgument.dimension() )
 			.then( Commands.literal( "access" )
