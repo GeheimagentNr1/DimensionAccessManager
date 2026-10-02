@@ -5,7 +5,7 @@
 **Dimension Access Manager** ist ein NeoForge Minecraft Mod.
 - **Mod ID**: `dimension_access_manager`
 - **Package**: `de.geheimagentnr1.dimension_access_manager`
-- **Java Version**: 21
+- **Java Version**: 21 (`develop_26.1`: 25, `jdk-25.0.4.7-hotspot`)
 - **NeoForge Version**: je Branch, siehe Tabelle
 
 Verwaltet den Zugang zu Dimensionen für Spieler.
@@ -18,6 +18,7 @@ Verwaltet den Zugang zu Dimensionen für Spieler.
 | `develop_1.21.6` | 1.21.6 - 1.21.8 | `[1.21.6,1.21.9)` | `21.6.20-beta` | `ValueIOSerializable` + `LegacyAttachmentMigrationHandler` (alte Int-/Listen-Attachments) |
 | `develop_1.21.9` | 1.21.9 - 1.21.10 | `[1.21.9,1.21.11)` | `21.9.16-beta` | Spielerlisten als `NameAndId` (Format `Name` + `Id`) |
 | `develop_1.21.11` | 1.21.11 | `[1.21.11,1.21.12)` | `21.11.45` | `Identifier`, konfigurierbare Rechtestufe über `PermissionLevel.byId(..)` |
+| `develop_26.1` | 26.1 - 26.3 | `[26.1,27)` | `26.1.0.19-beta` (Java 25) | 26.x-Tooling; Migration aus der alten `neoforge_data_attachments.dat` (Int/Liste und Compound) |
 
 Alle 4.0.2, released 2026-10-02. Lokaler Branch `wip_1.21.2_first_attempt_base` sichert einen früheren, verworfenen Codec-Versuch (las die UUID im falschen Format); `develop_1.21.3` ist ein alter Forge-Stand. Details: [`../Docs/migrations/1.21.1-to-1.21.2.md`](../Docs/migrations/1.21.1-to-1.21.2.md) 4g.
 
