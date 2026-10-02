@@ -1,9 +1,9 @@
 package de.geheimagentnr1.dimension_access_manager.elements.capabilities.dimension_access_list;
 
-import com.mojang.authlib.GameProfile;
 import de.geheimagentnr1.dimension_access_manager.utils.GameProfileUtils;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
+import net.minecraft.server.players.NameAndId;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.neoforged.neoforge.common.util.ValueIOSerializable;
@@ -17,19 +17,19 @@ public abstract class DimensionAccessListCapability implements ValueIOSerializab
 
 	
 	@NotNull
-	private final TreeSet<GameProfile> gameProfiles = new TreeSet<>( Comparator.comparing( GameProfile::getId ) );
+	private final TreeSet<NameAndId> gameProfiles = new TreeSet<>( Comparator.comparing( NameAndId::id ) );
 	
-	public boolean contains( @NotNull GameProfile gameProfile ) {
+	public boolean contains( @NotNull NameAndId gameProfile ) {
 		
 		return gameProfiles.contains( gameProfile );
 	}
 	
-	public boolean add( @NotNull GameProfile gameProfile ) {
+	public boolean add( @NotNull NameAndId gameProfile ) {
 		
 		return gameProfiles.add( gameProfile );
 	}
 	
-	public boolean remove( @NotNull GameProfile gameProfile ) {
+	public boolean remove( @NotNull NameAndId gameProfile ) {
 		
 		return gameProfiles.remove( gameProfile );
 	}
@@ -60,14 +60,14 @@ public abstract class DimensionAccessListCapability implements ValueIOSerializab
 	
 	private void addGameProfile( @NotNull CompoundTag compound ) {
 		
-		GameProfile profile = GameProfileUtils.readGameProfile( compound );
+		NameAndId profile = GameProfileUtils.readGameProfile( compound );
 		if( profile != null ) {
 			gameProfiles.add( profile );
 		}
 	}
 	
 	@NotNull
-	public TreeSet<GameProfile> getGameProfiles() {
+	public TreeSet<NameAndId> getGameProfiles() {
 		
 		return gameProfiles;
 	}

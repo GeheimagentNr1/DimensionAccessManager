@@ -1,6 +1,5 @@
 package de.geheimagentnr1.dimension_access_manager.elements.commands.dimension;
 
-import com.mojang.authlib.GameProfile;
 import de.geheimagentnr1.dimension_access_manager.elements.capabilities.ModAttachmentTypes;
 import de.geheimagentnr1.dimension_access_manager.elements.capabilities.dimension_access_list.DimensionAccessListCapability;
 import de.geheimagentnr1.dimension_access_manager.elements.capabilities.dimension_access_list.dimension_access_blacklist.DimensionAccessBlacklistCapability;
@@ -9,6 +8,7 @@ import de.geheimagentnr1.dimension_access_manager.util.ResourceLocationHelper;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.players.NameAndId;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
@@ -23,29 +23,29 @@ class DimensionCommandPlayersHelper {
 	
 	
 	@NotNull
-	private static String gameProfilesToString( @NotNull TreeSet<GameProfile> gameProfiles ) {
+	private static String gameProfilesToString( @NotNull TreeSet<NameAndId> gameProfiles ) {
 		
 		return gameProfilesToString( gameProfiles.stream() );
 	}
 	
 	@NotNull
-	private static String gameProfilesToString( @NotNull Stream<GameProfile> gameProfiles ) {
+	private static String gameProfilesToString( @NotNull Stream<NameAndId> gameProfiles ) {
 		
-		return gameProfiles.map( GameProfile::getName ).collect( Collectors.joining( ", " ) );
+		return gameProfiles.map( NameAndId::name ).collect( Collectors.joining( ", " ) );
 	}
 	
 	@NotNull
-	private static Stream<GameProfile> addTargetsToList(
+	private static Stream<NameAndId> addTargetsToList(
 		@NotNull DimensionAccessListCapability dimensionAccessListCapability,
-		@NotNull Collection<GameProfile> gameProfiles ) {
+		@NotNull Collection<NameAndId> gameProfiles ) {
 		
 		return gameProfiles.stream().filter( dimensionAccessListCapability::add );
 	}
 	
 	@NotNull
-	private static Stream<GameProfile> removeTargetsFromList(
+	private static Stream<NameAndId> removeTargetsFromList(
 		@NotNull DimensionAccessListCapability dimensionAccessListCapability,
-		@NotNull Collection<GameProfile> gameProfiles ) {
+		@NotNull Collection<NameAndId> gameProfiles ) {
 		
 		return gameProfiles.stream().filter( dimensionAccessListCapability::remove );
 	}
@@ -90,7 +90,7 @@ class DimensionCommandPlayersHelper {
 	static void addTargetsToWhitelist(
 		@NotNull CommandSourceStack source,
 		@NotNull ServerLevel serverLevel,
-		@NotNull Collection<GameProfile> gameProfiles ) {
+		@NotNull Collection<NameAndId> gameProfiles ) {
 		
 		runForWhitelist(
 			serverLevel,
@@ -109,7 +109,7 @@ class DimensionCommandPlayersHelper {
 	static void removeTargetsFromWhitelist(
 		@NotNull CommandSourceStack source,
 		@NotNull ServerLevel serverLevel,
-		@NotNull Collection<GameProfile> gameProfiles ) {
+		@NotNull Collection<NameAndId> gameProfiles ) {
 		
 		runForWhitelist(
 			serverLevel,
@@ -164,7 +164,7 @@ class DimensionCommandPlayersHelper {
 	static void addTargetsToBlacklist(
 		@NotNull CommandSourceStack source,
 		@NotNull ServerLevel serverLevel,
-		@NotNull Collection<GameProfile> gameProfiles ) {
+		@NotNull Collection<NameAndId> gameProfiles ) {
 		
 		runForBlacklist(
 			serverLevel,
@@ -183,7 +183,7 @@ class DimensionCommandPlayersHelper {
 	static void removeTargetsFromBlacklist(
 		@NotNull CommandSourceStack source,
 		@NotNull ServerLevel serverLevel,
-		@NotNull Collection<GameProfile> gameProfiles ) {
+		@NotNull Collection<NameAndId> gameProfiles ) {
 		
 		runForBlacklist(
 			serverLevel,

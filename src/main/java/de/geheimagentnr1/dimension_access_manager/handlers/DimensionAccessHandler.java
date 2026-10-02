@@ -1,6 +1,5 @@
 package de.geheimagentnr1.dimension_access_manager.handlers;
 
-import com.mojang.authlib.GameProfile;
 import de.geheimagentnr1.dimension_access_manager.elements.capabilities.ModAttachmentTypes;
 import de.geheimagentnr1.dimension_access_manager.elements.capabilities.dimension_access.DimensionAccessCapability;
 import de.geheimagentnr1.dimension_access_manager.elements.capabilities.dimension_access.DimensionAccessType;
@@ -8,6 +7,7 @@ import de.geheimagentnr1.dimension_access_manager.elements.capabilities.dimensio
 import de.geheimagentnr1.dimension_access_manager.elements.capabilities.dimension_access_list.dimension_access_whitelist.DimensionAccessWhitelistCapability;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.players.NameAndId;
 import net.minecraft.world.entity.Entity;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.event.entity.EntityTravelToDimensionEvent;
@@ -28,7 +28,7 @@ public class DimensionAccessHandler {
 			DimensionAccessCapability dimensionAccessCapability = serverLevel.getData( ModAttachmentTypes.DIMENSION_ACCESS );
 			
 			if( entity instanceof ServerPlayer serverPlayer ) {
-				GameProfile gameProfile = serverPlayer.getGameProfile();
+				NameAndId gameProfile = new NameAndId( serverPlayer.getGameProfile() );
 				
 				if( dimensionAccessCapability.getDimensionAccess() == DimensionAccessType.GRANTED ) {
 					DimensionAccessBlacklistCapability blacklistCapability = 

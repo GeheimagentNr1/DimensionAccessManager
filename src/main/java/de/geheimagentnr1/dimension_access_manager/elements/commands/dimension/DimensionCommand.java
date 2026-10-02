@@ -1,6 +1,5 @@
 package de.geheimagentnr1.dimension_access_manager.elements.commands.dimension;
 
-import com.mojang.authlib.GameProfile;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
@@ -13,6 +12,7 @@ import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.DimensionArgument;
 import net.minecraft.commands.arguments.GameProfileArgument;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.players.NameAndId;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
@@ -169,7 +169,7 @@ public class DimensionCommand {
 	private int addTargetsToWhitelist( @NotNull CommandContext<CommandSourceStack> commandContext )
 		throws CommandSyntaxException {
 		
-		Collection<GameProfile> gameProfiles = GameProfileArgument.getGameProfiles( commandContext, "targets" );
+		Collection<NameAndId> gameProfiles = GameProfileArgument.getGameProfiles( commandContext, "targets" );
 		DimensionCommandRunner.run(
 			commandContext,
 			( context, source, serverLevel ) -> {
@@ -184,7 +184,7 @@ public class DimensionCommand {
 	private int removeTargetsFromWhitelist( @NotNull CommandContext<CommandSourceStack> commandContext )
 		throws CommandSyntaxException {
 		
-		Collection<GameProfile> gameProfiles = GameProfileArgument.getGameProfiles( commandContext, "targets" );
+		Collection<NameAndId> gameProfiles = GameProfileArgument.getGameProfiles( commandContext, "targets" );
 		DimensionCommandRunner.run(
 			commandContext,
 			( context, source, serverLevel ) -> {
@@ -215,7 +215,7 @@ public class DimensionCommand {
 	private int addTargetsToBlacklist( @NotNull CommandContext<CommandSourceStack> commandContext )
 		throws CommandSyntaxException {
 		
-		Collection<GameProfile> gameProfiles = GameProfileArgument.getGameProfiles( commandContext, "targets" );
+		Collection<NameAndId> gameProfiles = GameProfileArgument.getGameProfiles( commandContext, "targets" );
 		DimensionCommandRunner.run(
 			commandContext,
 			( context, source, serverLevel ) -> {
@@ -230,7 +230,7 @@ public class DimensionCommand {
 	private int removeTargetsFromBlacklist( @NotNull CommandContext<CommandSourceStack> commandContext )
 		throws CommandSyntaxException {
 		
-		Collection<GameProfile> gameProfiles = GameProfileArgument.getGameProfiles( commandContext, "targets" );
+		Collection<NameAndId> gameProfiles = GameProfileArgument.getGameProfiles( commandContext, "targets" );
 		DimensionCommandRunner.run(
 			commandContext,
 			( context, source, serverLevel ) -> {

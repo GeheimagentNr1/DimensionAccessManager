@@ -9,6 +9,7 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.players.NameAndId;
 import net.minecraft.world.entity.Entity;
 import org.jetbrains.annotations.NotNull;
 
@@ -60,7 +61,7 @@ public class DimensionCommandAccessHelper {
 		
 		Entity entity = source.getEntity();
 		if( entity instanceof ServerPlayer ) {
-			return dimensionAccessListCapability.contains( ( (ServerPlayer)entity ).getGameProfile() );
+			return dimensionAccessListCapability.contains( new NameAndId( ( (ServerPlayer)entity ).getGameProfile() ) );
 		}
 		return false;
 	}
