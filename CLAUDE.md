@@ -2,13 +2,24 @@
 
 ## Projekt-Übersicht
 
-**Dimension Access Manager** ist ein NeoForge Minecraft Mod für Minecraft 1.21.1.
+**Dimension Access Manager** ist ein NeoForge Minecraft Mod.
 - **Mod ID**: `dimension_access_manager`
 - **Package**: `de.geheimagentnr1.dimension_access_manager`
 - **Java Version**: 21
-- **NeoForge Version**: 21.1.x
+- **NeoForge Version**: je Branch, siehe Tabelle
 
 Verwaltet den Zugang zu Dimensionen für Spieler.
+
+| Branch | MC | Range | NeoForge (kompiliert gegen) | Hinweis |
+|---|---|---|---|---|
+| `develop_1.21.1` | 1.21.1 | `[1.21.1,1.21.2)` | 21.1.x | Fix-Release `1.21.1-4.0.2` (Config-`save()`) |
+| `develop_1.21.2` | 1.21.2 - 1.21.4 | `[1.21.2,1.21.5)` | `21.2.1-beta` | `INBTSerializable` unverändert |
+| `develop_1.21.5` | 1.21.5 | `[1.21.5,1.21.6)` | `21.5.98` | `CompoundTag`-API mit `Optional`, UUID über `UUIDUtil.CODEC` (gleiches Format) |
+| `develop_1.21.6` | 1.21.6 - 1.21.8 | `[1.21.6,1.21.9)` | `21.6.20-beta` | `ValueIOSerializable` + `LegacyAttachmentMigrationHandler` (alte Int-/Listen-Attachments) |
+| `develop_1.21.9` | 1.21.9 - 1.21.10 | `[1.21.9,1.21.11)` | `21.9.16-beta` | Spielerlisten als `NameAndId` (Format `Name` + `Id`) |
+| `develop_1.21.11` | 1.21.11 | `[1.21.11,1.21.12)` | `21.11.45` | `Identifier`, konfigurierbare Rechtestufe über `PermissionLevel.byId(..)` |
+
+Alle 4.0.2, released 2026-10-02. Lokaler Branch `wip_1.21.2_first_attempt_base` sichert einen früheren, verworfenen Codec-Versuch (las die UUID im falschen Format); `develop_1.21.3` ist ein alter Forge-Stand. Details: [`../Docs/migrations/1.21.1-to-1.21.2.md`](../Docs/migrations/1.21.1-to-1.21.2.md) 4g.
 
 ## Abhängigkeiten
 
@@ -43,10 +54,9 @@ src/main/java/de/geheimagentnr1/dimension_access_manager/
 │   │       ├── DimensionCommandAccessHelper.java
 │   │       ├── DimensionCommandPlayersHelper.java
 │   │       └── DimensionCommandRunner.java
-│   └── gametests/
-│       └── DimensionAccessManagerGameTests.java
 ├── handlers/
-│   └── DimensionAccessHandler.java                                # Zugangs-Handler
+│   ├── DimensionAccessHandler.java                                # Zugangs-Handler
+│   └── LegacyAttachmentMigrationHandler.java                      # ab 1.21.6: alte Attachments übernehmen
 ├── util/
 │   └── ResourceLocationHelper.java
 └── utils/
@@ -86,7 +96,7 @@ Verschiedene Java-Versionen sind unter `C:\Program Files\Eclipse Adoptium` insta
 
 ```powershell
 # Java 21 für MC 1.20.5+ (NeoForge)
-$env:JAVA_HOME = "C:\Program Files\Eclipse Adoptium\jdk-21.0.9.10-hotspot"
+$env:JAVA_HOME = "C:\Program Files\Eclipse Adoptium\jdk-21.0.12.8-hotspot"
 ./gradlew build
 ```
 
@@ -102,20 +112,17 @@ Tests liegen unter `src/test/java/`. Ergebnisse: `build/reports/tests/test/index
 
 ### NeoForge GameTest Framework
 
-Für Integration Tests in einer echten Minecraft-Umgebung:
+Ab den 1.21.2+-Branches keine GameTests mehr (trivialer Smoke-Test samt Run-Config und CI-Job entfernt).
 
-```bash
-./gradlew runGameTestServer
-```
+### Automatischer Test (RCON)
 
-GameTest-Klassen werden mit `@GameTestHolder` annotiert und liegen unter `src/main/java/.../elements/gametests/`.
+Nether sperren, Spieler auf Nether-Whitelist und End-Blacklist, `/dimensions default defaultDimensionAccessType LOCKED` (Großbuchstaben); dann abfragen, Neustart, erneut abfragen. Für Format-Upgrades die Welt eines älteren Packs kopieren. Ingame: Reise in den Nether/ins Ende per Portal oder `/execute in .. run tp @s ~ ~ ~` wird gemäß White-/Blacklist erlaubt bzw. blockiert.
 
 ### CI/CD (GitHub Actions)
 
 Der Workflow `.github/workflows/build-and-test.yml` führt automatisch aus:
 1. **Build**: Kompiliert den Mod
 2. **Unit Tests**: Führt JUnit Tests aus
-3. **GameTests**: Startet GameTestServer (optional)
 
 ### Was kann automatisiert getestet werden?
 
