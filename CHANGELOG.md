@@ -1,1 +1,1 @@
-- Impove #2: Add configuration for the permission level needed for the /dimension command
+- Fix dedicated servers not starting with Forge 47.4.16 and newer ("Attempted to load class net/minecraft/client/multiplayer/MultiPlayerGameMode for invalid dist DEDICATED_SERVER")
