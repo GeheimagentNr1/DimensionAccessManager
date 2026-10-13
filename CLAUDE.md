@@ -1,146 +1,54 @@
 # CLAUDE.md - Dimension Access Manager
 
-## Projekt-Übersicht
+Dimension Access Manager sperrt oder öffnet Dimensionen pro Welt: jede Dimension ist `GRANTED` (mit Blacklist) oder `LOCKED` (mit Whitelist), Reisen von Spielern und Entities werden entsprechend abgebrochen. Mod-ID `dimension_access_manager`, Package `de.geheimagentnr1.dimension_access_manager`. In der Workspace-Übersicht als **Client+Server** geführt (kein `@Mod( dist = .. )`); die Logik läuft rein serverseitig, der Mod registriert aber einen eigenen Befehls-Argument-Typ (`DimensionAccessTypeArgument`).
 
-**Dimension Access Manager** ist ein NeoForge Minecraft Mod.
-- **Mod ID**: `dimension_access_manager`
-- **Package**: `de.geheimagentnr1.dimension_access_manager`
-- **Java Version**: 21 (`develop_26.1`: 25, `jdk-25.0.4.7-hotspot`)
-- **NeoForge Version**: je Branch, siehe Tabelle
+Diese Datei ist auf allen `develop_*`-Branches identisch; Quelle: `../Docs/mod-claude/DimensionAccessManager.md` (Änderungen dort, dann `Docs/tools/sync_mod_claude_md.sh`). Versionsstand: [`../Docs/VERSIONEN.md`](../Docs/VERSIONEN.md).
 
-Verwaltet den Zugang zu Dimensionen für Spieler.
+## Versionen
 
-| Branch | MC | Range | NeoForge (kompiliert gegen) | Hinweis |
-|---|---|---|---|---|
-| `develop_1.21.1` | 1.21.1 | `[1.21.1,1.21.2)` | 21.1.x | Fix-Release `1.21.1-4.0.2` (Config-`save()`) |
-| `develop_1.21.2` | 1.21.2 - 1.21.4 | `[1.21.2,1.21.5)` | `21.2.1-beta` | `INBTSerializable` unverändert |
-| `develop_1.21.5` | 1.21.5 | `[1.21.5,1.21.6)` | `21.5.98` | `CompoundTag`-API mit `Optional`, UUID über `UUIDUtil.CODEC` (gleiches Format) |
-| `develop_1.21.6` | 1.21.6 - 1.21.8 | `[1.21.6,1.21.9)` | `21.6.20-beta` | `ValueIOSerializable` + `LegacyAttachmentMigrationHandler` (alte Int-/Listen-Attachments) |
-| `develop_1.21.9` | 1.21.9 - 1.21.10 | `[1.21.9,1.21.11)` | `21.9.16-beta` | Spielerlisten als `NameAndId` (Format `Name` + `Id`) |
-| `develop_1.21.11` | 1.21.11 | `[1.21.11,1.21.12)` | `21.11.45` | `Identifier`, konfigurierbare Rechtestufe über `PermissionLevel.byId(..)` |
-| `develop_26.1` | 26.1 - 26.3 | `[26.1,27)` | `26.1.0.19-beta` (Java 25) | 26.x-Tooling; Migration aus der alten `neoforge_data_attachments.dat` (Int/Liste und Compound) |
-
-Alle 4.0.2, released 2026-10-02. Lokaler Branch `wip_1.21.2_first_attempt_base` sichert einen früheren, verworfenen Codec-Versuch (las die UUID im falschen Format); `develop_1.21.3` ist ein alter Forge-Stand. Details: [`../Docs/migrations/1.21.1-to-1.21.2.md`](../Docs/migrations/1.21.1-to-1.21.2.md) 4g.
+- Forge: `develop_1.18.2` .. `develop_1.21`, `develop_1.21.1_forge` (letzter Forge-Stand 1.21.1); `develop_1.21.3` ist ein alter Forge-Stand.
+- NeoForge: sieben Jars - `develop_1.21.1`, `develop_1.21.2` (1.21.2 - 1.21.4), `develop_1.21.5`, `develop_1.21.6` (1.21.6 - 1.21.8), `develop_1.21.9` (1.21.9 - 1.21.10), `develop_1.21.11`, `develop_26.1` (ein Jar 26.1 - 26.3). Schnitte wegen Level-Attachment-API, `NameAndId` und Rechtesystem, Details: [`../Docs/migrations/1.21.1-to-1.21.2.md`](../Docs/migrations/1.21.1-to-1.21.2.md) Abschnitt 4g.
+- Ranges, Tags und Java-Versionen pro Branch: [`../Docs/VERSIONEN.md`](../Docs/VERSIONEN.md).
 
 ## Abhängigkeiten
 
-Keine Mod-Abhängigkeiten - eigenständiger Mod.
+- Keine Mod-Abhängigkeiten. Forge 1.20.1 - 1.21.1-Forge: MinecraftForgeAPI per `jarJar` gebündelt (`AbstractMod`, `AbstractConfig`), siehe [`../Docs/forge/README.md`](../Docs/forge/README.md).
 
-## Projektstruktur
+## Architektur
 
-```
-src/main/java/de/geheimagentnr1/dimension_access_manager/
-├── DimensionAccessManager.java                                    # Haupt-Mod-Klasse
-├── config/
-│   └── ServerConfig.java                                          # Server-Konfiguration
-├── elements/
-│   ├── capabilities/
-│   │   ├── ModAttachmentTypes.java                                # Data Attachments Registry
-│   │   ├── dimension_access/
-│   │   │   ├── DimensionAccessCapability.java
-│   │   │   └── DimensionAccessType.java
-│   │   └── dimension_access_list/
-│   │       ├── DimensionAccessListCapability.java
-│   │       ├── dimension_access_blacklist/
-│   │       │   └── DimensionAccessBlacklistCapability.java
-│   │       └── dimension_access_whitelist/
-│   │           └── DimensionAccessWhitelistCapability.java
-│   ├── commands/
-│   │   ├── DimensionsCommand.java                                 # /dimensions Command
-│   │   ├── ModArgumentTypesRegisterFactory.java
-│   │   ├── ModCommandsRegisterFactory.java
-│   │   └── dimension/
-│   │       ├── DimensionAccessTypeArgument.java
-│   │       ├── DimensionCommand.java
-│   │       ├── DimensionCommandAccessHelper.java
-│   │       ├── DimensionCommandPlayersHelper.java
-│   │       └── DimensionCommandRunner.java
-├── handlers/
-│   ├── DimensionAccessHandler.java                                # Zugangs-Handler
-│   └── LegacyAttachmentMigrationHandler.java                      # ab 1.21.6: alte Attachments übernehmen
-├── util/
-│   └── ResourceLocationHelper.java
-└── utils/
-    └── GameProfileUtils.java
-```
+- `DimensionAccessManager` - Mod-Klasse; registriert Server-Config, `ModAttachmentTypes`, `ModArgumentTypesRegisterFactory`, Befehle und Handler.
+- `elements/capabilities/` - pro Dimension (Level) drei Daten: `DimensionAccessCapability` (`DimensionAccessType` GRANTED/LOCKED), `DimensionAccessWhitelistCapability`, `DimensionAccessBlacklistCapability` (Spielerlisten). NeoForge: Level-Attachments in `ModAttachmentTypes`; Forge: Capabilities über `ModCapabilitiesRegisterFactory`.
+- `elements/commands/` - `DimensionsCommand` (`/dimensions`), `dimension/DimensionCommand` (`/dimension`) mit Helfern (`DimensionCommandAccessHelper`, `DimensionCommandPlayersHelper`, `DimensionCommandRunner`) und `DimensionAccessTypeArgument`.
+- `handlers/DimensionAccessHandler` - bricht `EntityTravelToDimensionEvent` ab: Spieler bei GRANTED nur, wenn auf der Blacklist, bei LOCKED, wenn nicht auf der Whitelist; andere Entities bei LOCKED immer.
+- `handlers/LegacyAttachmentMigrationHandler` (ab 1.21.6) - übernimmt alte Attachment-Daten einmalig in `LevelEvent.Load` (siehe Fallstricke).
+- `utils/GameProfileUtils`, `util/ResourceLocationHelper` - Hilfsklassen.
 
-## Besonderheiten
+## Funktionen, Befehle, Konfiguration
 
-- **Data Attachments**: Nutzt NeoForge Data Attachments für Spieler-Daten
-- **Commands**: Custom Commands für Dimensions-Verwaltung
-- **Custom Argument Types**: Eigene Command-Argument-Typen
+- `/dimensions status` - alle Dimensionen mit Zugriffsart (ohne Rechte).
+- `/dimensions default defaultDimensionAccessType [GRANTED|LOCKED]` - Standard für neue Dimensionen anzeigen/setzen (Rechtestufe 3, ab 1.21.11 `LEVEL_ADMINS`); Werte in Großbuchstaben.
+- `/dimension <dim> access status` (ohne Rechte), `/dimension <dim> access grant|lock`, `/dimension <dim> players list`, `... players whitelist|blacklist list|add|remove <spieler>` - Rechtestufe aus der Config. Hinzufügen zur Whitelist entfernt den Spieler von der Blacklist.
+- Config `world/serverconfig/dimension_access_manager-server.toml`: `default_dimension_access_type` (Standard `GRANTED`), `dimension_command_permission_level` (0 - 4, Standard 3; Änderungen wirken ohne Neustart).
+- Weltdaten: Level-Attachments pro Dimension (Zugriffsart + Listen mit `Name` und `Id`).
 
-## Code-Stil
+## Fallstricke
 
-- **Annotations**: `@NotNull` aus `org.jetbrains.annotations`
-- **Lombok**: Projekt nutzt Lombok
-- **Formatierung**: Leerzeichen nach `(` und vor `)` bei Methodenaufrufen
+- **Config `save()`**: `ConfigValue.set(..)` speichert nicht - `setDefaultDimensionAccessType` ruft `save()` (gefixt in 4.0.2, auch Fix-Release `1.21.1-4.0.2`).
+- **Attachment-Format**: bis NeoForge 21.5 `INBTSerializable` (Int bzw. Liste), ab 1.21.6 `ValueIOSerializable` (Compound) - alte Daten werden nicht mehr gelesen, deshalb `LegacyAttachmentMigrationHandler`. Ab 26.1 liegt die Datei unter `dimensions/<ns>/<path>/data/neoforge/data_attachments.dat`, das Welt-Upgrade lässt die alte `neoforge_data_attachments.dat` liegen - der Handler übernimmt beide Alt-Formate. Eine einmalige ERROR-Zeile „Expected … COMPOUND“ beim ersten Laden alter Welten ist erwartet.
+- **Kein Codec-Umbau der Listen**: ein früherer Versuch las die UUID als String statt Int-Array - bestehende Listen wären verloren gegangen. UUIDs über `UUIDUtil.CODEC` (gleiches Format).
+- **1.21.9**: `GameProfile` ist ein Record, Listen intern als `NameAndId`; alte `Properties` werden ignoriert. **1.21.11**: `hasPermission(int)` entfernt, Rechtestufe per `PermissionLevel.byId(..)`. Siehe [`../Docs/migrations/BREAKING_CHANGES.md`](../Docs/migrations/BREAKING_CHANGES.md).
+- GameTest-Smoke-Test nur auf `develop_1.21.1`; ab 1.21.2 entfernt.
 
-## Build & Test
+## Testen
 
-```bash
-./gradlew build
-./gradlew runClient
-./gradlew runServer
-```
+- Per RCON: Nether sperren, Spieler auf Nether-Whitelist und End-Blacklist, `/dimensions default defaultDimensionAccessType LOCKED`; abfragen, Neustart, erneut abfragen (Config-Datei prüfen).
+- Format-Upgrades: Welt eines älteren Packs mit gesetzten Daten kopieren und abfragen (Kette 1.21.4 → 1.21.5 → 1.21.6 → 1.21.9 → 1.21.11 → 26.1 verifiziert).
+- Ingame: Reise in Nether/Ende per Portal oder `/execute in .. run tp @s ~ ~ ~` wird gemäß White-/Blacklist erlaubt bzw. blockiert.
+- Allgemeine Regeln: [`../Docs/testing/README.md`](../Docs/testing/README.md).
 
-## Deployment
+## Links
 
-- **CurseForge**: `./gradlew curseforge`
-- **Modrinth**: `./gradlew modrinth`
-
-## Testing
-
-### Java-Versionen
-
-Verschiedene Java-Versionen sind unter `C:\Program Files\Eclipse Adoptium` installiert. Für einen Gradle-Build muss die passende Java-Version gewählt werden:
-
-```powershell
-# Java 21 für MC 1.20.5+ (NeoForge)
-$env:JAVA_HOME = "C:\Program Files\Eclipse Adoptium\jdk-21.0.12.8-hotspot"
-./gradlew build
-```
-
-### Unit Tests (JUnit 5)
-
-Für reine Logik-Tests ohne Minecraft-Abhängigkeiten:
-
-```bash
-./gradlew test
-```
-
-Tests liegen unter `src/test/java/`. Ergebnisse: `build/reports/tests/test/index.html`
-
-### NeoForge GameTest Framework
-
-Ab den 1.21.2+-Branches keine GameTests mehr (trivialer Smoke-Test samt Run-Config und CI-Job entfernt).
-
-### Automatischer Test (RCON)
-
-Nether sperren, Spieler auf Nether-Whitelist und End-Blacklist, `/dimensions default defaultDimensionAccessType LOCKED` (Großbuchstaben); dann abfragen, Neustart, erneut abfragen. Für Format-Upgrades die Welt eines älteren Packs kopieren. Ingame: Reise in den Nether/ins Ende per Portal oder `/execute in .. run tp @s ~ ~ ~` wird gemäß White-/Blacklist erlaubt bzw. blockiert.
-
-### CI/CD (GitHub Actions)
-
-Der Workflow `.github/workflows/build-and-test.yml` führt automatisch aus:
-1. **Build**: Kompiliert den Mod
-2. **Unit Tests**: Führt JUnit Tests aus
-
-### Was kann automatisiert getestet werden?
-
-| Aspekt | Automatisiert? | Methode |
-|--------|----------------|---------|
-| Utility-Klassen | ✅ | JUnit |
-| Config-Parsing | ✅ | JUnit |
-| Commands | ✅ | GameTest |
-| Block/Item-Verhalten | ✅ | GameTest |
-| Multi-MC-Version | ⚠️ Pro Branch | CI Matrix |
-
-## Referenzen
-
-- [NeoForge Migration Primer](https://docs.neoforged.net/primer/docs/) — Dokumentiert API-Aenderungen zwischen Minecraft/NeoForge-Versionen; nuetzlich fuer die Pruefung von Breaking Changes beim Upgrade auf neue Versionen
-
----
-
-## Wissensdatenbank
-
-Versionsübergreifende Migrations- und Entwicklungs-Erkenntnisse (Breaking Changes, Fixes, Testumgebungs-Patterns) werden zentral in [`../Docs/`](../Docs/) gepflegt. Bei neuen relevanten Erkenntnissen dort ergänzen, nicht nur hier.
+- Wiki: https://github.com/GeheimagentNr1/DimensionAccessManager/wiki
+- CurseForge: https://www.curseforge.com/minecraft/mc-mods/dimension-access-manager (Projekt-ID 388197)
+- Modrinth: https://modrinth.com/mod/dimension-access-manager (Projekt-ID `8KrgVqz6`)
+- [`../Docs/migrations/1.21.1-to-1.21.2.md`](../Docs/migrations/1.21.1-to-1.21.2.md) (4g), [`../Docs/migrations/1.21.11-to-26.1.md`](../Docs/migrations/1.21.11-to-26.1.md), [`../Docs/releasing/release-process.md`](../Docs/releasing/release-process.md)
